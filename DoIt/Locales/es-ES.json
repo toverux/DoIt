@@ -1,0 +1,10 @@
+{
+  "DoIt.Common.BASE_ERROR": "Do It: Command Palette & Toolbar ha encontrado un error inesperado. Por favor, reporta el problema al autor del mod.",
+  "DoIt.Common.RECOVERABLE_ERROR": "El error es recuperable y deberías ser capaz de ignorarlo y continuar jugando.",
+  "DoIt.Common.FATAL_ERROR": "El error es fatal y puede tener efectos secundarios no deseados: guarda tu ciudad, reinicia el juego y desactiva el mod si se repite.",
+  "Options.SECTION[DoIt.DoIt.Mod]": "Do It: Command Palette & Toolbar",
+  "Options.GROUP[DoIt.DoIt.Mod.Advanced]": "Ajustes avanzados",
+  "Options.OPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "Restablecer ajustes",
+  "Options.OPTION_DESCRIPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "Restablecer todos los ajustes del mod a sus valores por defecto.",
+  "Options.WARNING[DoIt.DoIt.Mod.Settings.ResetSettings]": "¿Restablecer todos los ajustes del mod a sus valores por defecto?"
+}

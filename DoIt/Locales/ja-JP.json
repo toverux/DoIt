@@ -1,0 +1,10 @@
+{
+  "DoIt.Common.BASE_ERROR": "Do It: Command Palette & Toolbarで予期しないエラーが発生しました。MOD作者に問題を報告してください。",
+  "DoIt.Common.RECOVERABLE_ERROR": "このエラーは回復可能です。無視してそのままプレイを続けられます。",
+  "DoIt.Common.FATAL_ERROR": "このエラーは致命的で、予期しない影響が出るおそれがあります。都市をセーブしてゲームを再起動し、再発した場合はMODを無効にしてください。",
+  "Options.SECTION[DoIt.DoIt.Mod]": "Do It: Command Palette & Toolbar",
+  "Options.GROUP[DoIt.DoIt.Mod.Advanced]": "高度な設定",
+  "Options.OPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "設定をリセット",
+  "Options.OPTION_DESCRIPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "すべてのMOD設定を初期値に戻します。",
+  "Options.WARNING[DoIt.DoIt.Mod.Settings.ResetSettings]": "すべてのMOD設定を初期値に戻しますか？"
+}

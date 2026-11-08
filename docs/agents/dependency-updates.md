@@ -7,7 +7,7 @@ A declined adoption stays out until its reason no longer holds, and a docs pass 
 ## react, react-dom, @types/react, @types/react-dom
 
 - **Skipped**: 18.3.1 (types 18.3.31 / 18.3.7) → 19.3.1 (types 19.3.0 / 19.3.0)
-- **Reason**: React is a `window` external (`windowExternals` in `Greenfield/UI/build.ts`), so the mod binds to the React the game supplies at runtime rather than to its own copy. The game ships 18.3.1, and the packages here only exist to type and compile against it.
+- **Reason**: React is a `window` external (`windowExternals` in `DoIt/UI/build.ts`), so the mod binds to the React the game supplies at runtime rather than to its own copy. The game ships 18.3.1, and the packages here only exist to type and compile against it.
 - **Blocked until**: Cities: Skylines II itself ships a different React. The pin follows the game, never the registry.
 - **Date**: 2026-10-23
 
@@ -21,7 +21,7 @@ A declined adoption stays out until its reason no longer holds, and a docs pass 
 ## change-case
 
 - **Skipped**: 4.1.2 → 5.4.4
-- **Reason**: `Greenfield/UI/build.ts` names the CSS module exports with change-case so they match the `.module.scss.d.ts` typed-scss-modules generates with its own change-case 4. Version 5 drops `camelCaseTransformMerge` and splits around digits differently, so the bundle's names would drift from the declared ones.
+- **Reason**: `DoIt/UI/build.ts` names the CSS module exports with change-case so they match the `.module.scss.d.ts` typed-scss-modules generates with its own change-case 4. Version 5 drops `camelCaseTransformMerge` and splits around digits differently, so the bundle's names would drift from the declared ones.
 - **Blocked until**: typed-scss-modules depends on change-case 5.
 - **Date**: 2026-11-05
 

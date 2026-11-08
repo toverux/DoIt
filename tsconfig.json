@@ -3,10 +3,9 @@
     "oxfmt.config.ts",
     "oxlint.config.ts",
     "scripts/**/*",
-    "template/**/*",
-    "Greenfield/UI/build.ts",
-    "Greenfield/UI/src/**/*",
-    "Greenfield/UI/cs2-types"
+    "DoIt/UI/build.ts",
+    "DoIt/UI/src/**/*",
+    "DoIt/UI/cs2-types"
   ],
   "compilerOptions": {
     "target": "ESNext",

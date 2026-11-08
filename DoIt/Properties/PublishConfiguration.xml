@@ -1,0 +1,16 @@
+<Publish>
+  <ModId Value="" />
+  <DisplayName Value="Do It: Command Palette &amp; Toolbar" />
+  <ShortDescription Value="A command palette over many game and mod actions, and a toolbar to pin the ones you use most." />
+  <LongDescription># Do It: Command Palette &amp; Toolbar
+
+A command palette over many game and mod actions, and a toolbar to pin the ones you use most.</LongDescription>
+  <Thumbnail Value="Properties/Thumbnail.png" />
+  <Tag Value="Code Mod" />
+  <ForumLink Value="" />
+  <ExternalLink Type="github" Url="https://github.com/toverux/DoIt" />
+  <ModVersion Value="2026.0.0" />
+  <GameVersion Value="1.6.*" />
+  <ChangeLog>- First release.</ChangeLog>
+  <AccessLevel Value="Public" />
+</Publish>

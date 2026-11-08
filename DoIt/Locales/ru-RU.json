@@ -1,0 +1,10 @@
+{
+  "DoIt.Common.BASE_ERROR": "Do It: Command Palette & Toolbar столкнулся с непредвиденной ошибкой. Пожалуйста, сообщите о проблеме автору мода.",
+  "DoIt.Common.RECOVERABLE_ERROR": "Ошибка не критическая, вы можете её проигнорировать и продолжить игру.",
+  "DoIt.Common.FATAL_ERROR": "Ошибка фатальная и может привести к непредвиденным последствиям: сохраните город, перезапустите игру и отключите мод, если это повторится.",
+  "Options.SECTION[DoIt.DoIt.Mod]": "Do It: Command Palette & Toolbar",
+  "Options.GROUP[DoIt.DoIt.Mod.Advanced]": "Дополнительные настройки",
+  "Options.OPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "Сброс настроек",
+  "Options.OPTION_DESCRIPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "Сбросить все настройки мода к значениям по умолчанию.",
+  "Options.WARNING[DoIt.DoIt.Mod.Settings.ResetSettings]": "Сбросить все настройки мода к значениям по умолчанию?"
+}

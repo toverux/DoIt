@@ -5,6 +5,6 @@ import { defineConfig } from 'oxfmt';
 export default defineConfig({
   // Agent prose (the skills and rules) keeps its own layout rules.
   // The cs2 types are the game's own files, copied as they are.
-  ignorePatterns: ['.claude', '.config', 'Greenfield/UI/cs2-types'],
+  ignorePatterns: ['.claude', '.agents/skills', '.agents/rules', '.config', 'DoIt/UI/cs2-types'],
   ...config
 });

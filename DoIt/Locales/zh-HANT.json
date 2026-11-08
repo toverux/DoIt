@@ -1,0 +1,10 @@
+{
+  "DoIt.Common.BASE_ERROR": "Do It: Command Palette & Toolbar 發生了未預期的錯誤。請向模組作者回報這個問題。",
+  "DoIt.Common.RECOVERABLE_ERROR": "此錯誤可以復原，你應該可以忽略它並繼續遊玩。",
+  "DoIt.Common.FATAL_ERROR": "這是致命錯誤，可能造成非預期的副作用：請儲存你的城市、重新啟動遊戲，若再次發生，請停用此模組。",
+  "Options.SECTION[DoIt.DoIt.Mod]": "Do It: Command Palette & Toolbar",
+  "Options.GROUP[DoIt.DoIt.Mod.Advanced]": "進階設定",
+  "Options.OPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "重置設定",
+  "Options.OPTION_DESCRIPTION[DoIt.DoIt.Mod.Settings.ResetSettings]": "將所有模組設定重置為預設值。",
+  "Options.WARNING[DoIt.DoIt.Mod.Settings.ResetSettings]": "要將所有模組設定重置為預設值嗎？"
+}

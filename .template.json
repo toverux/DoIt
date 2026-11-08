@@ -1,0 +1,21 @@
+{
+  "template": "https://github.com/CitiesSkylinesModding/greenfield-mod-template",
+  "templateCommit": "165d431761aa9c395f7da9e39fdc7e3f431ae58f",
+  "initialCommit": "cad4cd8462bfb356be4b8204d08fe791e9abd6fd",
+  "parts": {
+    "sample-slice": false,
+    "ui-tests": true,
+    "game-tests": true,
+    "crowdin": true,
+    "linux-setup": true,
+    "float64": false,
+    "jb": true
+  },
+  "names": {
+    "Greenfield": "DoIt",
+    "greenfield": "doIt",
+    "gfd": "doit"
+  },
+  "skills": ".agents/skills",
+  "rules": ".agents/rules"
+}

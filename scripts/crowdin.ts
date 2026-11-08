@@ -7,7 +7,7 @@ const API_URL = 'https://api.crowdin.com/api/v2';
 const PAGE_SIZE = 500;
 
 // Where the locale files live, and which one is the source the others translate.
-export const LOCALES_DIRECTORY = 'Greenfield/Locales';
+export const LOCALES_DIRECTORY = 'DoIt/Locales';
 export const SOURCE_FILE_NAME = 'en-US.json';
 
 export interface Project {
@@ -64,7 +64,7 @@ export async function sourceFile(): Promise<{ readonly id: number }> {
 
 // Every source string by key, with its Crowdin id, its master's where it duplicates another
 // string's text, and its text. The JSON parser stores each key as its quoted source text, so
-// `"Greenfield.Common.BASE_ERROR"` is the identifier of the key `Greenfield.Common.BASE_ERROR`.
+// `"DoIt.Common.BASE_ERROR"` is the identifier of the key `DoIt.Common.BASE_ERROR`.
 export async function sourceStrings(): Promise<
   Map<string, { readonly id: number; readonly masterId: number; readonly text: string }>
 > {
