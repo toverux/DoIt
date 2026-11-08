@@ -1,0 +1,286 @@
+# https://mise.jdx.dev -- Manages the languages, env vars, and tasks per project, reproducibly.
+
+# Every task body is a single command or a bun script, with no POSIX shell syntax (line
+# continuations, pipes, variables): mise runs inline tasks through `cmd /c` on Windows.
+
+# hard: the oldest mise that reads this file, the first with task `lock`. soft: the one the template
+# last passed on.
+min_version = { hard = "2026.11.0", soft = "2026.11.1" }
+
+[tools]
+bun = "1.4.4"
+dotnet = "10.0.403"
+oxipng = "10.2.1"
+
+[env]
+# The Crowdin project `mise l10n:pull` and `mise l10n:push` work on, by its numeric ID. The token
+# they also need, CROWDIN_PERSONAL_TOKEN, is a secret: export it, or set it in mise.local.toml,
+# which git ignores.
+CROWDIN_PROJECT_ID = ""
+
+# DEVELOPMENT TASKS
+# =================
+
+[tasks."dev:deps-upgrade"]
+description = "Upgrades mise-en-place, proposes upgrades for tools managed by mise, npm dependencies upgrades, and skills update."
+run = [
+  "mise self-update",
+  "mise up --interactive --bump",
+  # using `mise exec bun` makes sure bun is found if a bun upgrade was just made
+  "mise exec bun -- bun update --interactive",
+  # refreshes every transitive dependency within its range, which the interactive pick leaves locked
+  "mise exec bun -- bun update",
+  # folds the transitive versions the updates left side by side onto one where the ranges allow
+  "mise exec bun -- bun dedupe"
+]
+
+[tasks."dev"]
+description = "Watches and rebuilds the UI: the bundle and the CSS module type definitions."
+# Grouping task with no `run`: mise runs independent `depends` in parallel, so both watchers run
+# side by side.
+depends = ["dev:bundle", "dev:css-types"]
+
+[tasks."dev:bundle"]
+description = "Watches and rebuilds the UI bundle."
+run = "bun Greenfield/UI/build.ts --watch"
+
+[tasks."dev:css-types"]
+description = "Watches and regenerates the CSS module type definitions."
+# `build:css-types` does the full initial generation once; `--ignoreInitial` then makes this
+# watcher skip its redundant startup pass and only react to later file additions/changes.
+depends = ["build:css-types"]
+run = 'bun --bun typed-scss-modules "Greenfield/UI/src/**/*.module.scss" --exportType named --nameFormat camel --ignoreInitial --watch'
+
+# CHECK TASKS
+# ===========
+
+# check:* are READ-ONLY (idempotent, CI-safe): they verify and write nothing of the source tree.
+# The in-place auto-fixers live under fix:* (see FIX TASKS).
+# Run `mise fix` locally to apply, `mise check` to verify.
+# The `build:css-types` dependency is the one exception, and not a source write: it regenerates the
+# gitignored *.module.scss.d.ts that `bun check` and oxlint need to resolve the `styles.*` imports.
+
+[tasks."check"]
+description = "Verify read-only: typescript, oxlint, and oxfmt. Writes nothing, run `mise fix` to auto-fix."
+run = ["mise check:tsc", "mise check:oxlint", "mise check:oxfmt"]
+
+[tasks."check:tsc"]
+description = "Type-checks the UI with `bun check`, Bun's port of tsc (read-only)."
+depends = "build:css-types"
+raw = true
+run = "bun check"
+
+[tasks."check:oxfmt"]
+description = "Verifies formatting with `bun fmt`, on the oxfmt configuration (read-only, `mise fix:oxfmt` writes)."
+raw = true
+run = "bun fmt --check"
+
+[tasks."check:oxlint"]
+description = "Lints with oxlint, warnings denied (read-only, `mise fix:oxlint` auto-fixes)."
+depends = "build:css-types"
+raw = true
+run = "bun --bun oxlint --deny-warnings"
+
+# No check:cs: jb cleanupcode (the C# formatter, see fix:cs) has no read-only/dry-run mode, so there
+# is no read-only C# verify. Run `mise fix:cs` and commit; Rider formats live with the same engine,
+# the same Greenfield.slnx.DotSettings profile, and the same root .editorconfig.
+# The build itself gates the :warning IDE rules (EnforceCodeStyleInBuild, see
+# Directory.Build.props).
+
+# CHECK TASKS (AGENTS)
+# ====================
+
+[tasks."check:agents"]
+description = "Verify read-only (typescript, oxlint, oxfmt), output optimized for AI agents. Writes nothing."
+run = ["mise check:agents:tsc", "mise check:agents:oxlint", "mise check:oxfmt"]
+
+[tasks."check:agents:tsc"]
+description = "Type-checks the UI with `bun check`, output optimized for AI agents."
+depends = "build:css-types"
+raw = true
+run = "bun check --no-pretty"
+
+[tasks."check:agents:oxlint"]
+description = "Lints with oxlint (read-only, warnings denied), output optimized for AI agents."
+depends = "build:css-types"
+run = "bun --bun oxlint --deny-warnings --format agent"
+
+# FIX TASKS
+# =========
+
+# fix:* WRITE in place (the counterparts to the read-only check:*). For local dev.
+
+[tasks."fix"]
+description = "Auto-fix in place: oxlint --fix, oxfmt, then the C# cleanup. `mise check` is the read-only counterpart, minus the C# part it cannot verify."
+# Sequential, lint then format, so formatting settles after lint rewrites.
+run = ["mise fix:oxlint", "mise fix:oxfmt", "mise fix:cs"]
+
+[tasks."fix:oxlint"]
+description = "Auto-fixes lint issues with oxlint (writes, `mise check:oxlint` only reports)."
+depends = "build:css-types"
+raw = true
+run = "bun --bun oxlint --fix"
+
+[tasks."fix:oxfmt"]
+description = "Formats code in place with `bun fmt`, on the oxfmt configuration (writes, `mise check:oxfmt` only verifies)."
+raw = true
+run = "bun fmt"
+
+[tasks."fix:cs"]
+description = "Formats the C# code in place with jb (ReSharper) cleanupcode."
+raw = true
+# jb cleanupcode (same engine as Rider) with the custom "AutoCleanup" profile: applies the
+# resharper_* wrapping dotnet format cannot, and the minor code-style fixes that keep the :warning
+# IDE rules satisfied.
+# Skips the UI build and the mod post-processor (cleanup needs the C# semantics, not the deployed
+# mod), and turns the build's style gate off: jb refuses to run on a project whose design-time build
+# fails, and the violations are what it fixes.
+# Excludes the generated build output, and the toolchain's Mod.props/Mod.targets the csproj links,
+# which jb would otherwise rewrite in the toolchain folder.
+# `jb` is a local tool pinned in .config/dotnet-tools.json, so the restore has to precede it: it is
+# idempotent and a no-op once the tool is installed.
+run = [
+  "dotnet tool restore",
+  'dotnet jb cleanupcode Greenfield.slnx --profile="AutoCleanup" --settings="Greenfield.slnx.DotSettings" --properties:SkipBuildUI=true --properties:SkipModPostProcess=true --properties:EnforceCodeStyleInBuild=false --exclude="**/obj/**;**/bin/**;**/Mod.props;**/Mod.targets"'
+]
+
+# SETUP TASKS
+# ===========
+
+[tasks."setup:linux"]
+description = "Sets up the CS2 modding toolchain on Linux, where the in-game installer cannot run. Idempotent, rerun it after a game update. Requires the game to be closed."
+raw = true
+run = "bash scripts/setup-linux-toolchain.sh"
+
+# BUILD TASKS
+# ===========
+
+# The tasks writing to the mod's Mods folder take the `Greenfield:deploy` lock, so runs from other
+# terminals, agents or worktrees queue instead of overwriting each other's output.
+# A nested `mise run` inherits it.
+# The `dev:bundle` watcher stays out, as it would hold the lock forever.
+
+[tasks."build"]
+description = "Builds and deploys the whole mod: the C# assembly, the post-processor, and the UI (the csproj calls `build:ui` itself). Requires the game to be closed, which holds the deployed assembly open."
+raw = true
+lock = "Greenfield:deploy"
+run = "dotnet build Greenfield.slnx"
+
+[tasks."build:ui"]
+description = "Builds the UI alone: the bundle and the (gitignored) CSS module type definitions. Deploys straight to the game's Mods folder, so it is the task to run while iterating with the game open."
+depends = ["build:css-types", "build:bundle"]
+
+[tasks."build:bundle"]
+description = "Builds the UI bundle with Bun (`Greenfield/UI/build.ts`). Does not type-check: `mise check` does."
+lock = "Greenfield:deploy"
+run = "bun Greenfield/UI/build.ts"
+
+[tasks."build:css-types"]
+description = "Generates the gitignored *.module.scss.d.ts so `bun check` catches stale styles.* references."
+run = 'bun --bun typed-scss-modules "Greenfield/UI/src/**/*.module.scss" --exportType named --nameFormat camel'
+
+# TEST TASKS
+# ==========
+
+[tasks."test"]
+description = "Runs the full test suite: the off-engine C# tests, the UI tests, and the scripts' tests. The in-game scenarios run apart, through the `cs2-dev` MCP server's `test` tool."
+depends = ["test:cs", "test:ui", "test:scripts", "test:template"]
+
+[tasks."test:cs"]
+description = "Runs the off-engine C# tests on .NET 10 with xUnit, in two passes: float32, then float64."
+# Sequential: both passes build the mod, into the same output.
+run = ["mise test:cs:float32", "mise test:cs:float64"]
+
+[tasks."test:cs:float32"]
+description = "Runs the off-engine C# tests with floats in single precision, as CoreCLR and Burst compute them: the pass `dotnet test` and the IDE run. Skips the UI build, the mod post-processor, and the deploy step (none are needed by the tests)."
+raw = true
+run = "dotnet test --project Greenfield.Tests -p:SkipBuildUI=true -p:SkipModPostProcess=true"
+
+[tasks."test:cs:float64"]
+description = "Runs the off-engine C# tests with floats in double precision, as the game's Mono computes them outside Burst (Greenfield.Tests/Float64/), then checks that no widened assembly left the tests' output."
+# The first run after a clean or a game update widens the game's assemblies, about 10 s; the next
+# ones add under a second to the float32 pass's time.
+# The check runs after, as a task of its own: mise hands the task's arguments (a test filter) to the
+# last command of a `run` list.
+depends_post = ["test:cs:float64:check"]
+raw = true
+run = "dotnet test --project Greenfield.Tests -p:SkipBuildUI=true -p:SkipModPostProcess=true -p:FloatMode=Float64"
+
+[tasks."test:cs:float64:check"]
+description = "Checks that no widened assembly left the float64 tests' output (`test:cs:float64` runs it after the tests): none in the repository outside it, the game's folder or the Mods folder."
+raw = true
+run = "bun scripts/check-float64-output.ts"
+
+[tasks."test:ui"]
+description = "Runs the UI tests with Bun, against the real game UI bundle (see bunfig.toml)."
+raw = true
+run = "bun test Greenfield/UI"
+
+[tasks."test:scripts"]
+description = "Runs the tests of the agent and tooling scripts (scripts/) with Bun."
+# A mod may hold no script test, its init having pruned every part that had one.
+raw = true
+run = "bun test scripts --pass-with-no-tests"
+
+[tasks."test:template"]
+description = "Runs the tests of the template's init script (template/) with Bun, on temporary copies of the template."
+raw = true
+run = "bun test template"
+
+# PUBLISH TASKS
+# =============
+
+[tasks."publish"]
+description = "Builds the mod in Release and publishes it as a new version on Paradox Mods."
+raw = true
+lock = "Greenfield:deploy"
+run = "dotnet publish Greenfield/Greenfield.csproj -p:PublishProfile=PublishNewVersion"
+
+[tasks."publish:page"]
+description = "Updates the Paradox Mods page from PublishConfiguration.xml (description, tags, thumbnail and screenshots) without shipping a version."
+depends = ["images:optimize"]
+raw = true
+lock = "Greenfield:deploy"
+run = "dotnet publish Greenfield/Greenfield.csproj -p:PublishProfile=UpdatePublishedConfiguration"
+
+# LOCALIZATION TASKS
+# ==================
+
+[tasks."l10n:pull"]
+description = "Pulls Crowdin's current translations of the source keys added or changed since `--base` into the locale files, so a volunteer's pending work is seen before the repo gets translations of its own. Previews by default; pass `--write` to apply. Needs CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN."
+raw = true
+run = "bun scripts/crowdin-pull-translations.ts"
+
+[tasks."l10n:push"]
+description = "Pushes the locale-file edits to Crowdin as unapproved translations flagged AI-translated, for proofreaders to review, and approves an edit that replaces an approved translation, so the edit survives the next pull. Previews by default; pass `--push` to apply. Needs CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN."
+raw = true
+run = "bun scripts/crowdin-push-translations.ts"
+
+# ASSET TASKS
+# ===========
+
+# Every image PublishConfiguration.xml uploads to Paradox Mods sits in Greenfield/Properties.
+# Paradox Mods serves the previews byte for byte, so pngquant cuts them to a 256-colour palette,
+# indistinguishable at full size. The thumbnail stays lossless: Paradox re-encodes it to JPEG
+# anyway. oxipng then recompresses every image without touching a pixel. Rerunning changes no pixel.
+# On Windows, cmd passes the globs through unexpanded: both tools expand them themselves (oxipng's
+# source, pngquant-bin's Rust build run under Wine).
+[tasks."images:optimize"]
+description = "Shrinks the Paradox Mods images in Greenfield/Properties: pngquant cuts the previews to 256 colours, oxipng losslessly recompresses them and the thumbnail."
+run = [
+  "bun x pngquant --speed 1 --strip --force --ext .png Greenfield/Properties/Preview_*.png",
+  "oxipng -o max --strip safe Greenfield/Properties/*.png"
+]
+
+# TEMPLATE TASKS
+# ==============
+
+[tasks."init"]
+description = "Turns the template into a named mod: renames it, prunes the parts declined, records where it came from, and deletes the template-only material. `mise init -- --help` lists the flags (mise reads a bare `--help` itself)."
+raw = true
+run = "bun template/init.ts"
+
+[tasks."template:self-test"]
+description = "Runs init on an everything-kept and an everything-pruned copy of the template, then builds, checks and tests each. Run it before a template release and after declaring a part."
+raw = true
+run = "bun template/self-test.ts"
