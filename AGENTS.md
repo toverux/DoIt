@@ -11,7 +11,7 @@ A mod has two halves talking over cohtml bindings: the C# logic in `DoIt`, runni
 
 Three bars every change is held to, in a review as much as in the work:
 
-- **Exemplary UI/UX**: the palette and the toolbar read as part of the game, keyboard driven end to end, with nothing a player has to learn. When a change can be verified by driving the running UI, it is.
+- **Exemplary UI/UX**: the palette and the toolbar read as part of the game; every element is reachable and operable from the keyboard, end to end, and intuitive: nothing a player has to learn. When a change can be verified by driving the running UI, it is.
 - **Exemplary performance**: the palette opens in a frame and filters as the player types; the toolbar costs nothing idle. Measure in the running game before claiming a cost, and resolve a reflection lookup once, at load, never per invoke.
 - **Exemplary robustness**: every source is foreign code. A game internal, a mod's assembly or a mod's registration call that fails is isolated and logged once with the mod and version, and the rest keeps working; the game and the other sources update under the mod.
 
@@ -120,6 +120,7 @@ When the game's debugger port (unity) or its UI debugging port (gameface) is una
 - The decompiled game source, the third-party mod corpus, and the readable copy of the game's UI bundle are machine-local: read their paths from `~/.cs2-modding/setup.md` instead of hardcoding them here. A missing key or a `(none)` value means that source does not exist.
 - Reading that source settles what the engine does, never what it costs. Measure a claim about the running game before asserting one.
 - The mod patches no game code. When a change cannot be made through systems, prefabs or bindings, read the `cs2-modding` skill's patching reference before adding Harmony.
+- When a mod holds an action worth exposing that neither reflection nor a UI trigger reaches reliably, do not force the bridge: ask the user whether to write a handoff for another session to propose a pull request to that mod, and record the gap in the bridge.
 - The toolchain's `CSII_*` variables are Windows user-scope environment variables, a scope Linux lacks: read one from the user scope with a process-environment fallback, the shape `DoIt.csproj` and `DoIt.Tests.csproj` use.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `<type>(<optional scope>): <summary>`, with the types `feat`, `fix`, `perf`, `refactor`, `test`, `docs`, `style`, `build`, `chore`. The release changelog is written from them.
 
