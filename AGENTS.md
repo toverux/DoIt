@@ -73,6 +73,7 @@ TypeScript, one root `tsconfig.json` covering `DoIt/UI` and `scripts`:
 - `mise setup:linux`: Install the modding toolchain on Linux, where the in-game installer cannot run. Idempotent, rerun it after a game update; the game must be closed.
 - `mise l10n:pull`: Preview Crowdin's current translations of the source keys added or changed since `--base`, or of every key with `--all`; `--write` puts them into the files. Needs `CROWDIN_PROJECT_ID` and `CROWDIN_PERSONAL_TOKEN`.
 - `mise l10n:push`: Preview which locale-file edits would be pushed to Crowdin; `--push` writes them, which the Boundaries below gate. Needs `CROWDIN_PROJECT_ID` and `CROWDIN_PERSONAL_TOKEN`.
+- `mise bridges candidates [--top N]` / `mise bridges status`: List the most subscribed Paradox code mods the bridges ledger (`DoIt/Actions/Sources/Bridges/mods.json`) holds no verdict on yet, or every bridged mod beside its current Paradox version with drift marked. Read-only, no token; a verdict is written to the ledger by hand.
 - `mise images:optimize`: Shrink the Paradox Mods images in `DoIt/Properties`, previews quantized by pngquant, everything recompressed by oxipng. Rerunning changes no pixel.
 - `mise publish:page`: Push `PublishConfiguration.xml` to the Paradox Mods page (description, tags, thumbnail, screenshots) without shipping a version; runs `images:optimize` first.
 - `mise publish`: Build in Release and publish a new version on Paradox Mods.
@@ -120,7 +121,7 @@ When the game's debugger port (unity) or its UI debugging port (gameface) is una
 - The decompiled game source, the third-party mod corpus, and the readable copy of the game's UI bundle are machine-local: read their paths from `~/.cs2-modding/setup.md` instead of hardcoding them here. A missing key or a `(none)` value means that source does not exist.
 - Reading that source settles what the engine does, never what it costs. Measure a claim about the running game before asserting one.
 - The mod patches no game code. When a change cannot be made through systems, prefabs or bindings, read the `cs2-modding` skill's patching reference before adding Harmony.
-- When a mod holds an action worth exposing that neither reflection nor a UI trigger reaches reliably, do not force the bridge: ask the user whether to write a handoff for another session to propose a pull request to that mod, and record the gap in the bridge.
+- When a mod holds an action worth exposing that neither reflection nor a UI trigger reaches reliably, do not force the bridge: ask the user whether to write a handoff for another session to propose a pull request to that mod, and record the gap in `DoIt/Actions/Sources/Bridges/mods.json`.
 - The toolchain's `CSII_*` variables are Windows user-scope environment variables, a scope Linux lacks: read one from the user scope with a process-environment fallback, the shape `DoIt.csproj` and `DoIt.Tests.csproj` use.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `<type>(<optional scope>): <summary>`, with the types `feat`, `fix`, `perf`, `refactor`, `test`, `docs`, `style`, `build`, `chore`. The release changelog is written from them.
 

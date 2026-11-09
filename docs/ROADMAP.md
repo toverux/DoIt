@@ -44,7 +44,7 @@ Hook into the game's own actions: the input actions of the tool system and the U
 
 **Priority:** high · **Cost:** large
 
-A bridge adapts a mod that knows nothing of Do It, by reflection into its assembly, guarded so the mod's absence, another version or a thrown exception costs the player nothing but that bridge. Order the mods by install count, which the Paradox Mods API serves without authentication (HallOfFameServer's `mod.service.ts` queries it; borrow its client), and bring them in from the top. Every bridge records which mod version it was written against: the mod manager's list gives the assembly version, the Paradox version string comes from the PDX SDK's playset info.
+A bridge adapts a mod that knows nothing of Do It, by reflection into its assembly, guarded so the mod's absence, another version or a thrown exception costs the player nothing but that bridge. Bring the mods in by subscriber count, from the top: `mise bridges candidates` lists the most subscribed code mods not yet judged, through the search call the Paradox Mods website makes, which answers without a login. The verdict on each mod is kept in `DoIt/Actions/Sources/Bridges/mods.json`, keyed by Paradox mod id: `bridged` with the user-facing version the bridge was written against (Paradox's revision number where the mod publishes none), `set-aside` with the reason, or `gap` with the reason and the upstream proposal; `mise bridges status` marks the bridged mods whose current version moved. In the running game, the mod manager's list gives a mod's assembly version, and its Paradox version string comes from the PDX SDK's playset info, which is what a drift check against the ledger compares.
 
 ## The registration API
 
