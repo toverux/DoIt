@@ -231,6 +231,14 @@ description = "Pushes the locale-file edits to Crowdin as unapproved translation
 raw = true
 run = "bun scripts/crowdin-push-translations.ts"
 
+# BRIDGE TASKS
+# ============
+
+[tasks."bridges"]
+description = "Orders the bridging effort from the Paradox Mods catalogue: `candidates [--top N]` lists the most subscribed code mods the ledger DoIt/Actions/Sources/Bridges/mods.json holds no verdict on yet; `status` lists every bridged mod beside its current version on Paradox, drift marked. Needs no token."
+raw = true
+run = "bun scripts/bridges.ts"
+
 # ASSET TASKS
 # ===========
 
