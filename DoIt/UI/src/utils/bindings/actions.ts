@@ -1,5 +1,11 @@
 import { trigger, useValue } from 'cs2/api';
-import type { Entity } from 'cs2/bindings';
+import { type Entity, selectedInfo } from 'cs2/bindings';
+import type { InputAction } from 'cs2/input';
+import { useCallback, useContext } from 'react';
+import {
+  InputRootContext,
+  type RootInputController
+} from '../../vanilla-modules/game-ui/common/input-events/input-controller';
 import type { ProxyBinding } from './input-action';
 import { lazyBindValue } from './lazy-value-binding';
 
@@ -80,7 +86,7 @@ export interface TriggerChannel {
  */
 export interface InputActionChannel {
   readonly kind: 'inputAction';
-  readonly name: string;
+  readonly name: InputAction;
 }
 
 // What C# reads as Entity.Null, a bare invoke: a trigger takes no optional argument.
@@ -108,4 +114,74 @@ export function queryActions(query: string, sequence: number): void {
  */
 export function invokeAction(id: string, entity: Entity = nullEntity): void {
   trigger(GROUP, 'invoke', id, entity);
+}
+
+/**
+ * Gives the function that runs an action from its row, whichever side fires it.
+ * A C# call goes to C# through {@link invokeAction}. A trigger or an input action fires here, then
+ * tells C# with the `invoked` note, which records its use. A disabled row fires nothing.
+ *
+ * A trigger row taking an entity fires on `entity`, else on the game's selection unless the action
+ * opted out of it, read at fire time from the binding the game's info panel reads; with neither, it
+ * fires nothing.
+ *
+ * An input action is dispatched on the game's root input stack, reached through the game's
+ * `InputRootContext`: it holds the root controller at any depth, where `useInputController` would
+ * attach a controller and only reach the stack on the next rebuild. The game unregisters its
+ * shortcut handlers while a modal is up, so an input action fires nothing from inside one.
+ */
+export function useRunAction(): (row: ActionRow, entity?: Entity) => void {
+  const root = useContext(InputRootContext);
+
+  return useCallback((row, entity) => runAction(row, entity, root), [root]);
+}
+
+function runAction(row: ActionRow, entity: Entity | undefined, root: RootInputController): void {
+  if (!row.isEnabled) {
+    return;
+  }
+
+  const { channel } = row;
+
+  switch (channel.kind) {
+    case 'csharpCall': {
+      invokeAction(row.id, entity);
+
+      return;
+    }
+    case 'trigger': {
+      const args: Array<boolean | number | string | Entity> = [...channel.args];
+
+      if (row.subject == 'entity') {
+        const subject =
+          entity ?? (row.fillsFromSelection ? selectedInfo.selectedEntity$.value : undefined);
+
+        if (subject == null || subject.index == nullEntity.index) {
+          return;
+        }
+
+        args.push(subject);
+      }
+
+      trigger(channel.group, channel.name, ...args);
+
+      break;
+    }
+    case 'inputAction': {
+      // False when no handler took it: the game registers none for a shortcut that cannot run now,
+      // `Pause Simulation` while paused for one.
+      if (!root.stack?.dispatchInputEvent(channel.name, null)) {
+        return;
+      }
+
+      break;
+    }
+    default: {
+      const unknown: never = channel;
+
+      throw new Error(`Unknown action channel ${JSON.stringify(unknown)}.`);
+    }
+  }
+
+  trigger(GROUP, 'invoked', row.id);
 }

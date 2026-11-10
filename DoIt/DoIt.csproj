@@ -137,7 +137,8 @@
     <!-- Not $(SolutionDir): MSBuild only defines it when the build enters through the
          solution, and sets it to the literal "*Undefined*" otherwise, which fails the Exec.
          `dotnet publish` runs on the project, not the solution. -->
-    <Exec Command="mise build:ui" WorkingDirectory="$(MSBuildProjectDirectory)\.." />
+    <Exec Command="mise build:ui" WorkingDirectory="$(MSBuildProjectDirectory)\.."
+          EnvironmentVariables="DOIT_CONFIGURATION=$(Configuration)" />
   </Target>
 
   <!-- For Debug builds, compile Burst for Windows only, which shortens every iteration: the game

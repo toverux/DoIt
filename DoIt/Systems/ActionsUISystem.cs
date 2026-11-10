@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Colossal.Localization;
 using Colossal.UI.Binding;
@@ -13,12 +14,14 @@ using Game.Tools;
 using Game.UI;
 using Game.UI.Localization;
 using Unity.Entities;
+using UnityEngine;
 
 namespace DoIt.Systems;
 
 /// <summary>
 /// UI System owning the actions binding group: it builds the <see cref="ActionRegistry"/> over the
-/// running game, searches it on the query trigger, and runs its C# calls on the invoke trigger.
+/// running game, searches it on the query trigger, runs its C# calls on the invoke trigger, and
+/// records the use of an action the UI fired on its side on the invoked trigger.
 /// </summary>
 internal sealed partial class ActionsUISystem : UISystemBase {
   private const string BindingGroup = "doIt.actions";
@@ -37,6 +40,12 @@ internal sealed partial class ActionsUISystem : UISystemBase {
   /// </summary>
   internal ActionResults Results => this.resultsBinding.value;
 
+  /// <summary>
+  /// The use record, beside the settings file.
+  /// </summary>
+  private static string UsesPath =>
+    Path.Combine(Application.persistentDataPath, Settings.Folder, "ActionUses.txt");
+
   protected override void OnCreate() {
     base.OnCreate();
 
@@ -54,7 +63,7 @@ internal sealed partial class ActionsUISystem : UISystemBase {
           ReadSelection = () => toolSystem.selected,
           ReadGameMode = static () => GameManager.instance.gameMode,
           Now = static () => DateTime.UtcNow,
-          UseStore = new NoUseStore()
+          UseStore = new FileActionUseStore(ActionsUISystem.UsesPath, Mod.Log)
         }
       );
 
@@ -73,6 +82,10 @@ internal sealed partial class ActionsUISystem : UISystemBase {
 
       this.AddBinding(
         new TriggerBinding<string, Entity>(ActionsUISystem.BindingGroup, "invoke", this.OnInvoke)
+      );
+
+      this.AddBinding(
+        new TriggerBinding<string>(ActionsUISystem.BindingGroup, "invoked", this.OnInvoked)
       );
 
       this.localizationManager.onActiveDictionaryChanged += this.OnActiveDictionaryChanged;
@@ -117,6 +130,8 @@ internal sealed partial class ActionsUISystem : UISystemBase {
 
   // The UI sends Entity.Null for a bare invoke: a trigger takes no optional argument.
   private void OnInvoke(string id, Entity entity) => this.Registry.Invoke(id, entity);
+
+  private void OnInvoked(string id) => this.Registry.RecordInvoked(id);
 
   #if DEBUG
   private static ActionsUISystem Instance =>
@@ -164,14 +179,4 @@ internal sealed partial class ActionsUISystem : UISystemBase {
       )
     );
   #endif
-
-  /// <summary>
-  /// Keeps no use: the use record is not persisted yet.
-  /// </summary>
-  private sealed class NoUseStore : IActionUseStore {
-    public IReadOnlyDictionary<string, ActionUse> Load() => new Dictionary<string, ActionUse>();
-
-    public void Save(IReadOnlyDictionary<string, ActionUse> uses) {
-    }
-  }
 }

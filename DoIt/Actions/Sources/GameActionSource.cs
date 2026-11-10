@@ -32,6 +32,11 @@ internal sealed class GameActionSource(World world) : IActionSource {
   private static ActionDescriptor[] Resolve(World world) {
     var toolUISystem = world.GetOrCreateSystemManaged<ToolUISystem>();
     var bulldozeTool = world.GetOrCreateSystemManaged<BulldozeToolSystem>();
+    // Never null for a non-generic type, which the panel is.
+    var economyPanel = typeof(EconomyPanel).FullName!;
+
+    // The UI input action's name, which is also its Shortcuts action's.
+    const string pauseSimulation = "Pause Simulation";
 
     return [
       new ActionDescriptor {
@@ -44,6 +49,23 @@ internal sealed class GameActionSource(World world) : IActionSource {
         // The game's own tool button goes through this member, which also sets the bulldoze prefab
         // the tool needs.
         Channel = ActionChannel.CSharpCall(() => toolUISystem.SelectTool(bulldozeTool))
+      },
+      new ActionDescriptor {
+        LocalId = pauseSimulation,
+        Label = LocalizedString.Id("Main.TOOLTIP_TITLE_PAUSE"),
+        Description = LocalizedString.Id("Main.TOOLTIP_DESCRIPTION_PAUSE"),
+        Icon = "Media/Glyphs/SimulationPause.svg",
+        KeyHint = new ProxyActionKeyHint("Shortcuts", pauseSimulation),
+        Channel = new InputActionChannel(pauseSimulation)
+      },
+      new ActionDescriptor {
+        // The panel's type name, which the game's panel triggers name it by.
+        LocalId = economyPanel,
+        Label = LocalizedString.Id("Main.TOOLTIP_TITLE_CITY_ECONOMY"),
+        Description = LocalizedString.Id("Main.TOOLTIP_DESCRIPTION_CITY_ECONOMY"),
+        Icon = "Media/Game/Icons/Economy.svg",
+        KeyHint = new ProxyActionKeyHint("Shortcuts", "Economy Panel"),
+        Channel = new TriggerChannel("game", "togglePanel", [economyPanel])
       }
     ];
   }

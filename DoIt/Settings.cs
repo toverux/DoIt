@@ -7,10 +7,16 @@ using JetBrains.Annotations;
 
 namespace DoIt;
 
-[FileLocation($"ModsSettings/{nameof(DoIt)}/{nameof(DoIt)}")]
+[FileLocation($"{Settings.Folder}/{nameof(DoIt)}")]
 [SettingsUIGroupOrder(Settings.GroupAdvanced)]
 [SettingsUIShowGroupName(Settings.GroupAdvanced)]
 public sealed class Settings : ModSetting, IJsonWritable {
+  /// <summary>
+  /// The mod's folder under the game's user data, which holds the settings file and the mod's own
+  /// data beside it.
+  /// </summary>
+  internal const string Folder = $"ModsSettings/{nameof(DoIt)}";
+
   private const string GroupAdvanced = "Advanced";
 
   public Settings(IMod mod) : base(mod) {

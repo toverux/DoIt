@@ -142,8 +142,14 @@ internal sealed class ActionRegistry {
 
     var rows = new List<ActionRow>();
 
-    // A stable sort: equal scores keep the catalogue's order.
-    foreach (var (action, match) in matches.OrderByDescending(static match => match.Match.Score)) {
+    // Recorded use breaks a tie in score, the more uses then the latest first; a stable sort, so
+    // the rest keep the catalogue's order.
+    var ranked = matches
+      .OrderByDescending(static match => match.Match.Score)
+      .ThenByDescending(match => this.UseOf(match.Action).Count)
+      .ThenByDescending(match => this.UseOf(match.Action).LastUse);
+
+    foreach (var (action, match) in ranked) {
       if (rows.Count >= rowCap) {
         break;
       }
@@ -209,6 +215,26 @@ internal sealed class ActionRegistry {
       this.Fault(action, ex, "invoked");
 
       return ActionInvokeOutcome.Failed;
+    }
+
+    this.RecordUse(action.Id);
+
+    return ActionInvokeOutcome.Invoked;
+  }
+
+  /// <summary>
+  /// Records the use of an action the UI fired on its side, after calling its reader afresh: a
+  /// disabled or hidden answer records nothing, as the UI does not fire a disabled row.
+  /// The select-first rule is left out, as the UI fires an entity action only on an entity it
+  /// holds, which the note does not carry.
+  /// </summary>
+  internal ActionInvokeOutcome RecordInvoked(string id) {
+    if (!this.TryFind(id, out var action)) {
+      return ActionInvokeOutcome.Unknown;
+    }
+
+    if (this.ReadReader(action).Kind is not ActionAvailabilityKind.Enabled) {
+      return ActionInvokeOutcome.Refused;
     }
 
     this.RecordUse(action.Id);
@@ -285,24 +311,11 @@ internal sealed class ActionRegistry {
   }
 
   /// <summary>
-  /// The reader's answer, an entity action with no entity to take disabled whatever it answers.
+  /// The reader's answer, an enabled one turned disabled for an entity action with no entity to
+  /// take; a hidden or disabled answer passes through.
   /// </summary>
   private ActionAvailability ReadAvailability(IndexedAction action, Entity subject) {
-    if (this.faultedIds.Contains(action.Id)) {
-      return ActionAvailability.Disabled(ActionRegistry.FailedReason);
-    }
-
-    ActionAvailability availability;
-
-    try {
-      availability = action.Descriptor.Availability?.Invoke() ?? ActionAvailability.Enabled;
-    }
-    // Foreign code: whatever it throws is contained to its action.
-    catch (Exception ex) {
-      this.Fault(action, ex, "reading its availability");
-
-      return ActionAvailability.Disabled(ActionRegistry.FailedReason);
-    }
+    var availability = this.ReadReader(action);
 
     return availability.Kind is ActionAvailabilityKind.Enabled &&
       action.Descriptor.Subject is ActionSubject.Entity &&
@@ -310,6 +323,28 @@ internal sealed class ActionRegistry {
         ? ActionAvailability.Disabled(ActionRegistry.SelectFirstReason)
         : availability;
   }
+
+  /// <summary>
+  /// The reader's own answer, enabled for an action with none, and disabled for one that faulted.
+  /// </summary>
+  private ActionAvailability ReadReader(IndexedAction action) {
+    if (this.faultedIds.Contains(action.Id)) {
+      return ActionAvailability.Disabled(ActionRegistry.FailedReason);
+    }
+
+    try {
+      return action.Descriptor.Availability?.Invoke() ?? ActionAvailability.Enabled;
+    }
+    // Foreign code: whatever it throws is contained to its action.
+    catch (Exception ex) {
+      this.Fault(action, ex, "reading its availability");
+
+      return ActionAvailability.Disabled(ActionRegistry.FailedReason);
+    }
+  }
+
+  private ActionUse UseOf(IndexedAction action) =>
+    this.uses.TryGetValue(action.Id, out var use) ? use : default;
 
   private void RecordUse(string id) {
     this.uses.TryGetValue(id, out var use);

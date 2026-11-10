@@ -1,4 +1,5 @@
 import type { ModRegistrar } from 'cs2/modding';
+import { registerActionRunner } from './debug/action-runner';
 import { iconsole } from './iconsole';
 import { logError } from './utils';
 
@@ -6,7 +7,7 @@ import { logError } from './utils';
  * The features registering on the game's UI, each on its own: one that throws is reported and
  * skipped, and the others still register.
  */
-const registrars: readonly ModRegistrar[] = [];
+const registrars: readonly ModRegistrar[] = DEBUG ? [registerActionRunner] : [];
 
 const register: ModRegistrar = moduleRegistry => {
   // The game calls every mod's registrar in one loop with no try/catch, so a throw here would also

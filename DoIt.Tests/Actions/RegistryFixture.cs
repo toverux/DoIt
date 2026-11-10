@@ -19,10 +19,11 @@ namespace DoIt.Tests.Actions;
 internal sealed class RegistryFixture {
   internal static readonly DateTime Now = new(2026, 11, 8, 12, 0, 0, DateTimeKind.Utc);
 
-  internal RegistryFixture(IActionMatcher? matcher = null) {
+  internal RegistryFixture(IActionMatcher? matcher = null, MemoryUseStore? useStore = null) {
     var (log, recorder) = RecordingLog.Create();
 
     this.Log = recorder;
+    this.UseStore = useStore ?? new MemoryUseStore();
 
     var services = new ActionRegistryServices {
       Log = new ModLog(log, static key => key),
@@ -55,7 +56,7 @@ internal sealed class RegistryFixture {
 
   internal GameMode GameMode { get; set; } = GameMode.Game;
 
-  internal MemoryUseStore UseStore { get; } = new();
+  internal MemoryUseStore UseStore { get; }
 
   private string Resolve(LocalizedString text) =>
     text.id is {} id && this.Translations.TryGetValue(id, out var translation)
@@ -124,5 +125,15 @@ internal static class Descriptors {
       LocalId = label,
       Label = LocalizedString.Id(label),
       Channel = ActionChannel.CSharpCall(invoke ?? (static () => {}))
+    };
+
+  /// <summary>
+  /// A trigger action labelled <paramref name="label"/>, keyed by its label, which the UI fires.
+  /// </summary>
+  internal static ActionDescriptor Trigger(string label) =>
+    new() {
+      LocalId = label,
+      Label = LocalizedString.Id(label),
+      Channel = new TriggerChannel("game", "togglePanel", [label])
     };
 }

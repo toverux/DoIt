@@ -32,6 +32,10 @@ if (!localModsPath) {
 // The toolchain deploys the DLL to the same folder, its DeployDir.
 const outputDirectory = path.join(localModsPath, mod.id);
 
+// The mod's build configuration, which DoIt.csproj passes; a build run on its own, while iterating,
+// is a Debug one, as only `dotnet publish` ships.
+const isDebug = process.env.DOIT_CONFIGURATION != 'Release';
+
 const sourceDirectory = path.join(import.meta.dir, 'src');
 
 // The csproj `Version` is the mod's single version source. The game parses the banner's version as
@@ -127,7 +131,8 @@ async function bundle(): Promise<boolean> {
     minify: true,
     banner,
     // Selects the production JSX runtime (jsx, not jsxDEV), as the game ships production React.
-    define: { 'process.env.NODE_ENV': '"production"' },
+    // DEBUG gates Debug-only code, which minification drops from a Release bundle.
+    define: { 'process.env.NODE_ENV': '"production"', 'DEBUG': String(isDebug) },
     publicPath: 'coui://ui-mods/',
     naming: { asset: 'images/[name].[ext]' },
     plugins: [windowExternalsPlugin(), sassModulesPlugin(stylesheets)],

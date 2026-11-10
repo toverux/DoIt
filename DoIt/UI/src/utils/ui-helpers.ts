@@ -1,7 +1,8 @@
 import type { UISound } from 'cs2/ui';
 import type { DOMAttributes } from 'react';
 import { iconsole } from '../iconsole';
-import * as bindings from './bindings';
+import { logJavaScriptError } from './bindings/common';
+import { playSound } from './bindings/vanilla';
 
 /**
  * Based on a hot take from John Carmack, see
@@ -20,7 +21,7 @@ export function snappyOnSelect(
   return {
     onMouseDown(): void {
       handler();
-      bindings.playSound(sound ?? 'select-item');
+      playSound(sound ?? 'select-item');
     }
   } satisfies DOMAttributes<Element>;
 }
@@ -33,5 +34,5 @@ export function logError(error: unknown, fatal = false): void {
 
   const errorString = error instanceof Error ? error.stack : String(error);
 
-  bindings.logJavaScriptError(fatal, errorString);
+  logJavaScriptError(fatal, errorString);
 }
