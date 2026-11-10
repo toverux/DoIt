@@ -13,8 +13,8 @@ namespace DoIt.Tests.Actions;
 /// <summary>
 /// An <see cref="ActionRegistry"/> over settable fakes of every collaborator: a recording log, a
 /// text resolver answering a string's value, then its id, unless <see cref="Translations"/> holds
-/// it, a fixed key binding, a settable selection and game mode, a fixed clock, and an in-memory use
-/// store.
+/// it, a source-locale resolver answering its id, a fixed key binding, a settable selection and
+/// game mode, a fixed clock, and an in-memory use store.
 /// </summary>
 internal sealed class RegistryFixture {
   internal static readonly DateTime Now = new(2026, 11, 8, 12, 0, 0, DateTimeKind.Utc);
@@ -28,6 +28,8 @@ internal sealed class RegistryFixture {
     var services = new ActionRegistryServices {
       Log = new ModLog(log, static key => key),
       ResolveText = this.Resolve,
+      // The ids are the source locale's text, as every test names a label by it.
+      ResolveSourceText = static text => text.id,
       ReadKeyBinding = (map, name) => this.KeyBinding is null
         ? null
         : this.KeyBinding with {

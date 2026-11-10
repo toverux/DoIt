@@ -359,7 +359,7 @@ public sealed class ActionRegistryStateTests {
       },
       row.State
     );
-    Assert.Equal(results.Rows[0].Matches, row.Matches);
+    Assert.Equal(results.Rows[0].Hits, row.Hits);
   }
 
   private void Add(params ActionDescriptor[] descriptors) {

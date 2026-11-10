@@ -32,7 +32,7 @@ public sealed class ActionRegistryTests {
 
     Assert.Equal("game/Bulldoze Tool", row.Id);
     Assert.Equal("Bulldozer", row.Label);
-    Assert.Equal([new MatchRange(0, 5)], row.Matches);
+    Assert.Equal([new MatchRange(0, 5)], Assert.Single(row.Hits).Ranges);
     Assert.Equal("Bulldozer.Description", row.Description);
     Assert.Equal("Source[game]", row.Category);
     Assert.Equal("Media/Game/Icons/Bulldozer.svg", row.Icon);
@@ -238,9 +238,9 @@ public sealed class ActionRegistryTests {
   }
 
   /// <summary>
-  /// Matches every label, a longer one ranking first.
+  /// Matches every text, a longer one scoring higher.
   /// </summary>
   private sealed class LengthMatcher : IActionMatcher {
-    public ActionMatch Match(string query, string label) => new(label.Length, []);
+    public ActionMatch Match(string term, string text) => new(text.Length, []);
   }
 }

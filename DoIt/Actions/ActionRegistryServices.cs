@@ -20,6 +20,13 @@ internal sealed class ActionRegistryServices {
   internal required Func<LocalizedString, string> ResolveText { get; init; }
 
   /// <summary>
+  /// Resolves a label in the source locale, whatever locale the game runs in, or answers
+  /// <c>null</c> when it has no text there: a player on another locale finds an action by its
+  /// English name too.
+  /// </summary>
+  internal required Func<LocalizedString, string?> ResolveSourceText { get; init; }
+
+  /// <summary>
   /// Reads the current keyboard binding of a <c>ProxyAction</c> by map and name, written to the row
   /// as is, or <c>null</c> when the action or its binding does not exist.
   /// </summary>

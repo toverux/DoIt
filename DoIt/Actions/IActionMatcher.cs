@@ -3,18 +3,22 @@ using System.Collections.Generic;
 namespace DoIt.Actions;
 
 /// <summary>
-/// Scores a label against a query, the registry's search seam.
+/// Scores one term of a query against one text, the registry's search seam: both come folded by
+/// <see cref="TextFold"/>, the term never empty and holding no space.
+/// The registry reads the tier of a match from its ranges and scores every field of an action
+/// through it, so a matcher knows nothing of fields, tiers, or use.
 /// </summary>
 internal interface IActionMatcher {
   /// <returns>
-  /// The match, or <c>null</c> when the label does not match.
+  /// The match, or <c>null</c> when the text does not match.
   /// </returns>
-  ActionMatch? Match(string query, string label);
+  ActionMatch? Match(string term, string text);
 }
 
 /// <summary>
-/// A higher <see cref="Score"/> ranks first; <see cref="Ranges"/> are the matched spans of the
-/// label, which the UI highlights.
+/// A higher <see cref="Score"/> ranks first among matches of the same tier and use; the
+/// <see cref="Ranges"/> are the matched spans of the text, in order, adjacent spans merged into
+/// one.
 /// </summary>
 internal sealed record ActionMatch(int Score, IReadOnlyList<MatchRange> Ranges);
 

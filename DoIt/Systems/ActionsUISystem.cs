@@ -7,6 +7,7 @@ using Colossal.Localization;
 using Colossal.UI.Binding;
 using DoIt.Actions;
 using DoIt.Actions.Sources;
+using DoIt.Reflection;
 using DoIt.Utils;
 using DoIt.Utils.Writers;
 using Game.Input;
@@ -84,6 +85,7 @@ internal sealed partial class ActionsUISystem : UISystemBase {
         new ActionRegistryServices {
           Log = Mod.Log,
           ResolveText = ActionsUISystem.ResolveText,
+          ResolveSourceText = ActionsUISystem.SourceTextResolver(this.localizationManager),
           ReadKeyBinding = ActionsUISystem.ReadKeyBinding,
           ReadSelection = () => toolSystem.selected,
           ReadGameMode = static () => GameManager.instance.gameMode,
@@ -182,6 +184,25 @@ internal sealed partial class ActionsUISystem : UISystemBase {
     text.id is {} id ? id.Translate(text.value) : text.value ?? "";
 
   /// <summary>
+  /// Resolves a localized string by its id through the game's fallback dictionary, which holds the
+  /// source locale whatever the active one; a string with no id has no source text.
+  /// When a game update moved that dictionary, it resolves nothing and the actions are no longer
+  /// found by their English name, logged once.
+  /// </summary>
+  private static Func<LocalizedString, string?> SourceTextResolver(LocalizationManager manager) {
+    if (LocalizationManagerAccessor.FallbackDictionary(manager) is not {} fallback) {
+      Mod.Log.Warn(
+        $"{nameof(ActionsUISystem)}: The game's fallback dictionary is out of reach, actions are " +
+        "not found by their source-locale name."
+      );
+
+      return static _ => null;
+    }
+
+    return text => text.id is {} id && fallback.TryGetValue(id, out var value) ? value : null;
+  }
+
+  /// <summary>
   /// The first keyboard binding of a <c>ProxyAction</c>, read on each row written, so a rebind
   /// shows without a restart.
   /// </summary>
@@ -194,7 +215,6 @@ internal sealed partial class ActionsUISystem : UISystemBase {
 
   // The view calls a trigger's handler within the UI's own trigger call, and the results binding's
   // update reaches the UI before that call returns: a keystroke's rows land in its own frame.
-  // Measured in game 1.6.2f1 over 500 actions, that round trip costs about 1.5 ms.
   private void OnQuery(string query, int sequence) =>
     this.resultsBinding.Update(this.Registry.Search(query, sequence));
 
@@ -313,11 +333,25 @@ internal sealed partial class ActionsUISystem : UISystemBase {
       )
     );
 
+  /// <summary>
+  /// Each hit as its field, its option key in brackets when it has one, then its ranges as
+  /// start+length.
+  /// </summary>
+  private static string FormatHits(IEnumerable<ActionHit> hits) =>
+    string.Join(
+      " ",
+      hits.Select(static hit =>
+        $"{hit.Field}{(hit.OptionKey is {} key ? $"[{key}]" : "")} " +
+        string.Join(",", hit.Ranges.Select(static range => $"{range.Start}+{range.Length}"))
+      )
+    );
+
   private static string Format(IEnumerable<ActionRow> rows) =>
     string.Join(
       "\n",
       rows.Select(static row =>
-        $"{row.Id} | {row.Label} | {row.Category} | {row.Icon} | " +
+        $"{row.Id} | {row.Label} | hits {ActionsUISystem.FormatHits(row.Hits)} | " +
+        $"alias {row.Alias} | {row.Category} | {row.Icon} | " +
         $"key {(row.KeyBinding is ProxyBinding binding ? binding.path : row.KeyText)} | " +
         $"{(row.IsEnabled ? "enabled" : $"disabled: {row.DisabledReason}")} | {row.State}"
       )

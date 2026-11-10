@@ -40,9 +40,10 @@ internal static class ActionsMeasurement {
   internal static void Clear() => ActionsMeasurement.source?.Clear();
 
   /// <summary>
-  /// Times a rebuild, a search, a re-read of the result rows, and a read of
-  /// <paramref name="pinCount"/> pins, over <paramref name="actionCount"/> synthetic actions beside
-  /// the real ones, and returns the mean and the worst of each in microseconds.
+  /// Times a rebuild, a search, a search the typo pass runs over in full, a re-read of the result
+  /// rows, and a read of <paramref name="pinCount"/> pins, over <paramref name="actionCount"/>
+  /// synthetic actions beside the real ones, and returns the mean and the worst of each in
+  /// microseconds.
   /// The synthetic actions leave the catalogue when it ends.
   /// </summary>
   internal static string Run(int actionCount = 500, int pinCount = 10, int runs = 200) {
@@ -56,6 +57,10 @@ internal static class ActionsMeasurement {
       var results = registry.Search("", 0);
       var pins = Enumerable.Range(0, pinCount).Select(static i => $"measure/{i}").ToList();
       string[] queries = ["a", "ac", "act", "action 4", "zz"];
+
+      // The typo pass's worst case: a long term that hits nothing, each character differing from
+      // the next, so every one of its variants is tried against every field of every action.
+      const string miss = "zqxjvkwzqxjvkwzqxjvk";
 
       return string.Join(
         "\n",
@@ -71,6 +76,7 @@ internal static class ActionsMeasurement {
           },
           queries.Length
         ),
+        ActionsMeasurement.Time("typo pass", runs, () => registry.Search(miss, 0)),
         ActionsMeasurement.Time("re-read rows", runs, () => registry.Refresh(results)),
         ActionsMeasurement.Time("read pins", runs, () => registry.ReadLive(pins))
       );

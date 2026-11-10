@@ -31,19 +31,16 @@ internal sealed class ActionResultsWriter : IWriter<ActionResults> {
     writer.Write(row.Id);
     writer.PropertyName("label");
     writer.Write(row.Label);
-    writer.PropertyName("matches");
-    writer.ArrayBegin(row.Matches.Count);
+    writer.PropertyName("hits");
+    writer.ArrayBegin(row.Hits.Count);
 
-    foreach (var match in row.Matches) {
-      writer.TypeBegin(typeof(MatchRange).FullName);
-      writer.PropertyName("start");
-      writer.Write(match.Start);
-      writer.PropertyName("length");
-      writer.Write(match.Length);
-      writer.TypeEnd();
+    foreach (var hit in row.Hits) {
+      ActionResultsWriter.WriteHit(writer, hit);
     }
 
     writer.ArrayEnd();
+    writer.PropertyName("alias");
+    writer.WriteNullable(row.Alias);
     writer.PropertyName("description");
     writer.WriteNullable(row.Description);
     writer.PropertyName("category");
@@ -73,6 +70,38 @@ internal sealed class ActionResultsWriter : IWriter<ActionResults> {
     writer.Write(row.Subject is ActionSubject.Entity ? "entity" : "none");
     writer.PropertyName("fillsFromSelection");
     writer.Write(row.FillsFromSelection);
+    writer.TypeEnd();
+  }
+
+  private static void WriteHit(IJsonWriter writer, ActionHit hit) {
+    writer.TypeBegin(typeof(ActionHit).FullName);
+    writer.PropertyName("field");
+
+    writer.Write(
+      hit.Field switch {
+        ActionField.Title => "title",
+        ActionField.Alias => "alias",
+        ActionField.Option => "option",
+        ActionField.Description => "description",
+        _ => throw new InvalidOperationException($"No wire form for the {hit.Field} field.")
+      }
+    );
+
+    writer.PropertyName("optionKey");
+    writer.WriteNullable(hit.OptionKey);
+    writer.PropertyName("ranges");
+    writer.ArrayBegin(hit.Ranges.Count);
+
+    foreach (var range in hit.Ranges) {
+      writer.TypeBegin(typeof(MatchRange).FullName);
+      writer.PropertyName("start");
+      writer.Write(range.Start);
+      writer.PropertyName("length");
+      writer.Write(range.Length);
+      writer.TypeEnd();
+    }
+
+    writer.ArrayEnd();
     writer.TypeEnd();
   }
 

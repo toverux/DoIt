@@ -5,7 +5,7 @@ using Xunit;
 namespace DoIt.Tests.Actions;
 
 public sealed class ActionRegistryUseTests {
-  private readonly RegistryFixture fixture = new(new EqualMatcher());
+  private readonly RegistryFixture fixture = new();
 
   private readonly FakeSource source = new();
 
@@ -59,7 +59,7 @@ public sealed class ActionRegistryUseTests {
   }
 
   [Fact]
-  public void Search_OrdersEqualScoresByRecordedUse() {
+  public void Search_OrdersAnEmptyQueryByRecordedUse() {
     this.Add(Descriptors.Trigger("Alpha"), Descriptors.Trigger("Bravo"), Descriptors.Call("Delta"));
 
     this.fixture.Registry.RecordInvoked("test/Bravo");
@@ -73,27 +73,12 @@ public sealed class ActionRegistryUseTests {
   }
 
   [Fact]
-  public void Search_RanksAHigherScoreOverMoreUse() {
-    var lengthFixture = new RegistryFixture(new LengthMatcher());
-
-    this.source.Descriptors.AddRange([Descriptors.Trigger("Alpha"), Descriptors.Trigger("Bravo!")]);
-    lengthFixture.Registry.AddSource(this.source);
-
-    lengthFixture.Registry.RecordInvoked("test/Alpha");
-
-    Assert.Equal(
-      ["test/Bravo!", "test/Alpha"],
-      lengthFixture.Registry.Search("", 1).Rows.Select(static row => row.Id)
-    );
-  }
-
-  [Fact]
   public void Search_OrdersByTheUsesAnEarlierRegistrySaved() {
     this.Add(Descriptors.Trigger("Alpha"), Descriptors.Trigger("Bravo"));
 
     this.fixture.Registry.RecordInvoked("test/Bravo");
 
-    var restarted = new RegistryFixture(new EqualMatcher(), this.fixture.UseStore);
+    var restarted = new RegistryFixture(useStore: this.fixture.UseStore);
 
     restarted.Registry.AddSource(this.source);
 
@@ -106,19 +91,5 @@ public sealed class ActionRegistryUseTests {
   private void Add(params ActionDescriptor[] descriptors) {
     this.source.Descriptors.AddRange(descriptors);
     this.fixture.Registry.AddSource(this.source);
-  }
-
-  /// <summary>
-  /// Matches every label with the same score.
-  /// </summary>
-  private sealed class EqualMatcher : IActionMatcher {
-    public ActionMatch Match(string query, string label) => new(1, []);
-  }
-
-  /// <summary>
-  /// Matches every label, a longer one ranking first.
-  /// </summary>
-  private sealed class LengthMatcher : IActionMatcher {
-    public ActionMatch Match(string query, string label) => new(label.Length, []);
   }
 }

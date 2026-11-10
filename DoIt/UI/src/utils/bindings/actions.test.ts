@@ -76,7 +76,18 @@ describe('the actions bindings', () => {
   });
 
   it(`reads the results C# wrote`, () => {
-    const results: ActionResults = { sequence: 3, rows: [] };
+    const results: ActionResults = {
+      sequence: 3,
+      rows: [
+        row({
+          id: 'game/Bulldoze Tool',
+          label: 'Bulldozer',
+          hits: [{ field: 'alias', optionKey: null, ranges: [{ start: 0, length: 4 }] }],
+          alias: 'Demolish',
+          channel: { kind: 'csharpCall' }
+        })
+      ]
+    };
 
     setBinding('doIt.actions', 'results', results);
 
@@ -222,7 +233,8 @@ function row(overrides: Partial<ActionRow> & Pick<ActionRow, 'channel'>): Action
   return {
     id: 'test/Action',
     label: 'Action',
-    matches: [],
+    hits: [],
+    alias: null,
     description: null,
     category: 'Test',
     icon: null,

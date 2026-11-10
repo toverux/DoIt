@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game;
 using Game.UI.Localization;
 
@@ -16,6 +17,12 @@ internal sealed record ActionDescriptor {
   internal required string LocalId { get; init; }
 
   internal required LocalizedString Label { get; init; }
+
+  /// <summary>
+  /// Other words players know the action by (<c>demolish</c> for Bulldozer), searched beside the
+  /// label and ranked below it at equal match.
+  /// </summary>
+  internal IReadOnlyList<LocalizedString> Aliases { get; init; } = [];
 
   internal LocalizedString? Description { get; init; }
 

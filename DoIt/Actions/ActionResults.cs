@@ -24,15 +24,23 @@ internal sealed record ActionResults(int Sequence, IReadOnlyList<ActionRow> Rows
 /// <summary>
 /// One action as the UI renders it, complete: the UI holds no catalogue.
 /// A hidden action never makes a row.
-/// Two reads of an unchanged action compare equal, as a re-read keeps the match ranges and the
-/// channel it had.
+/// Two reads of an unchanged action compare equal, as a re-read keeps the hits and the channel it
+/// had.
 /// </summary>
 internal sealed record ActionRow {
   internal required string Id { get; init; }
 
   internal required string Label { get; init; }
 
-  internal required IReadOnlyList<MatchRange> Matches { get; init; }
+  /// <summary>
+  /// Each field the query's terms were placed in, in field order, with the spans they matched.
+  /// </summary>
+  internal required IReadOnlyList<ActionHit> Hits { get; init; }
+
+  /// <summary>
+  /// The alias the query matched, shown beside the label, or none.
+  /// </summary>
+  internal string? Alias { get; init; }
 
   internal string? Description { get; init; }
 
@@ -64,4 +72,32 @@ internal sealed record ActionRow {
   internal required ActionSubject Subject { get; init; }
 
   internal required bool FillsFromSelection { get; init; }
+}
+
+/// <summary>
+/// A field of an action the query matched, and the spans of its text the UI highlights, in the text
+/// the player reads.
+/// An option hit names the option whose label matched, as a choice has several.
+/// </summary>
+internal sealed record ActionHit(
+  ActionField Field,
+  string? OptionKey,
+  IReadOnlyList<MatchRange> Ranges
+);
+
+/// <summary>
+/// The fields of an action a search reaches, in the order a term's hit is placed in at equal group
+/// and tier.
+/// </summary>
+internal enum ActionField {
+  Title,
+
+  Alias,
+
+  /// <summary>
+  /// The label of one of a choice state's options.
+  /// </summary>
+  Option,
+
+  Description
 }

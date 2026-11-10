@@ -30,9 +30,13 @@ export interface ActionRow {
   readonly id: string;
   readonly label: string;
   /**
-   * The spans of `label` the query matched.
+   * Each field the query's terms were placed in, in field order.
    */
-  readonly matches: readonly MatchRange[];
+  readonly hits: readonly ActionHit[];
+  /**
+   * The alias the query matched, shown beside the label: the text an `alias` hit's ranges are in.
+   */
+  readonly alias: string | null;
   readonly description: string | null;
   readonly category: string;
   /**
@@ -59,6 +63,22 @@ export interface ActionRow {
    * Whether an entity action fired bare takes the current selection.
    */
   readonly fillsFromSelection: boolean;
+}
+
+/**
+ * A field of an action the query matched, see C# `DoIt.Actions.ActionHit`.
+ */
+export interface ActionHit {
+  readonly field: 'title' | 'alias' | 'option' | 'description';
+  /**
+   * The key of the option whose label matched, for an `option` hit.
+   */
+  readonly optionKey: string | null;
+  /**
+   * The spans the query matched in the text the player reads: the label, the row's `alias`, the
+   * option's label, or the description.
+   */
+  readonly ranges: readonly MatchRange[];
 }
 
 export interface MatchRange {

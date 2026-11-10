@@ -24,8 +24,9 @@ internal sealed class ActionRegistry {
   /// <summary>
   /// The most rows a search writes when its caller sets no cap, which bounds every re-read of the
   /// rows on the tick.
-  /// Measured in game 1.6.2f1 over 500 actions (<c>ActionsMeasurement</c>), a search costs about
-  /// 1.2 ms and a re-read of 20 rows about 80 µs.
+  /// Measured in game 1.6.4f1 over 500 actions (<c>ActionsMeasurement</c>), the CPU held at 2 GHz,
+  /// a search costs about 1.8 ms, one the typo pass runs over in full about 4 ms, and a re-read of
+  /// 20 rows about 80 µs.
   /// </summary>
   internal const int DefaultRowCap = 20;
 
@@ -98,8 +99,8 @@ internal sealed class ActionRegistry {
   /// <summary>
   /// Lists every source again and resolves every display text, so search matches what the player
   /// reads in the current locale.
-  /// Measured in game 1.6.2f1 over 500 actions (<c>ActionsMeasurement</c>), it costs about 1.3 ms,
-  /// paid on a source's change or a locale change alone.
+  /// Measured in game 1.6.4f1 over 500 actions (<c>ActionsMeasurement</c>), the CPU held at 2 GHz,
+  /// it costs about 3.5 ms, paid on a source's change or a locale change alone.
   /// </summary>
   internal void Rebuild() {
     var catalogue = new List<IndexedAction>();
@@ -128,8 +129,10 @@ internal sealed class ActionRegistry {
   }
 
   /// <summary>
-  /// Ranks the actions whose label matches <paramref name="query"/> and writes at most
-  /// <paramref name="rowCap"/> rows, reading the live parts of those rows alone.
+  /// Ranks the actions every term of <paramref name="query"/> hits, as <see cref="ActionSearch"/>
+  /// places them, and writes at most <paramref name="rowCap"/> rows, reading the live parts of
+  /// those rows alone.
+  /// An empty query lists every action, the most used of late first.
   /// </summary>
   internal ActionResults Search(
     string query,
@@ -138,31 +141,33 @@ internal sealed class ActionRegistry {
   ) {
     var mode = this.services.ReadGameMode();
     var selection = this.services.ReadSelection();
-    var matches = new List<(IndexedAction Action, ActionMatch Match)>();
+    var now = this.services.Now();
 
-    foreach (var action in this.catalogue) {
-      if ((action.Descriptor.Modes & mode) is not 0 &&
-        this.services.Matcher.Match(query, action.Label) is {} match) {
-        matches.Add((action, match));
-      }
-    }
+    var matches = ActionSearch.Find(
+      ActionSearch.Terms(query),
+      this.catalogue.Where(action => (action.Descriptor.Modes & mode) is not 0),
+      rowCap,
+      this.services.Matcher
+    );
 
     var rows = new List<ActionRow>();
 
-    // Recorded use breaks a tie in score, the more uses then the latest first; a stable sort, so
-    // the rest keep the catalogue's order.
+    // A stable sort: rows equal on all three keys keep the order found, the catalogue's, with the
+    // typo pass's rows after the clean ones.
     var ranked = matches
-      .OrderByDescending(static match => match.Match.Score)
-      .ThenByDescending(match => this.UseOf(match.Action).Count)
-      .ThenByDescending(match => this.UseOf(match.Action).LastUse);
+      .OrderBy(static match => match.Rank)
+      .ThenByDescending(match => ActionSearch.Frecency(this.UseOf(match.Action), now))
+      .ThenByDescending(static match => match.Score);
 
-    foreach (var (action, match) in ranked) {
+    foreach (var match in ranked) {
       if (rows.Count >= rowCap) {
         break;
       }
 
-      if (this.ReadLiveParts(action, selection) is {} live) {
-        rows.Add(this.ToRow(action, match.Ranges, live));
+      if (this.ReadLiveParts(match.Action, selection) is {} live) {
+        var (hits, alias) = ActionSearch.Hits(match);
+
+        rows.Add(this.ToRow(match.Action, hits, alias, live));
       }
     }
 
@@ -171,7 +176,7 @@ internal sealed class ActionRegistry {
 
   /// <summary>
   /// Rewrites the rows of <paramref name="results"/> with their live parts read afresh, keeping
-  /// their match ranges and the query's sequence number.
+  /// their hits and the query's sequence number.
   /// A row whose action reads hidden now, or no longer exists in the current game mode, leaves the
   /// list and the rows below it move up: no other match takes its place.
   /// </summary>
@@ -182,7 +187,7 @@ internal sealed class ActionRegistry {
     foreach (var row in results.Rows) {
       if (this.TryFind(row.Id, out var action) &&
         this.ReadLiveParts(action, selection) is {} live) {
-        rows.Add(this.ToRow(action, row.Matches, live));
+        rows.Add(this.ToRow(action, row.Hits, row.Alias, live));
       }
     }
 
@@ -336,18 +341,44 @@ internal sealed class ActionRegistry {
   private IndexedAction Index(ActionSourceInfo source, ActionDescriptor descriptor) {
     var resolve = this.services.ResolveText;
 
+    var label = resolve(descriptor.Label);
+    var description = descriptor.Description is {} text ? resolve(text) : null;
+
+    var title = new SearchField(ActionField.Title, label);
+
+    List<SearchField> fields = [
+      title,
+      .. descriptor.Aliases.Select(alias => new SearchField(ActionField.Alias, resolve(alias)))
+    ];
+
+    // The title in the source locale, so a player on another one finds the action by its English
+    // name too; on the source locale, it is the title.
+    if (this.services.ResolveSourceText(descriptor.Label) is {} sourceLabel) {
+      var sourceTitle = new SearchField(ActionField.Alias, sourceLabel);
+
+      if (sourceTitle.Folded.Text != title.Folded.Text) {
+        fields.Add(sourceTitle);
+      }
+    }
+
+    if (description is not null) {
+      fields.Add(new SearchField(ActionField.Description, description));
+    }
+
     return new IndexedAction(
       new ActionId(source.Segment, descriptor.LocalId).ToString(),
       source,
       descriptor,
-      resolve(descriptor.Label),
-      descriptor.Description is {} description ? resolve(description) : null,
+      label,
+      description,
       resolve(descriptor.Category ?? source.DisplayName),
       descriptor.State is ChoiceState choice
         ? choice.Options.Select(option => new ChoiceOption(option.Key, resolve(option.Label)))
           .ToList()
         : []
-    );
+    ) {
+      Fields = fields
+    };
   }
 
   /// <summary>
@@ -532,7 +563,8 @@ internal sealed class ActionRegistry {
 
   private ActionRow ToRow(
     IndexedAction action,
-    IReadOnlyList<MatchRange> matches,
+    IReadOnlyList<ActionHit> hits,
+    string? alias,
     ActionLive live
   ) {
     var descriptor = action.Descriptor;
@@ -540,7 +572,8 @@ internal sealed class ActionRegistry {
     return new ActionRow {
       Id = action.Id,
       Label = action.Label,
-      Matches = matches,
+      Hits = hits,
+      Alias = alias,
       Description = action.Description,
       Category = action.Category,
       Icon = descriptor.Icon,
@@ -557,20 +590,22 @@ internal sealed class ActionRegistry {
       FillsFromSelection = descriptor.FillsFromSelection
     };
   }
-
-  /// <summary>
-  /// An action of the catalogue, its display texts and its choice options resolved in the current
-  /// locale.
-  /// </summary>
-  private sealed record IndexedAction(
-    string Id,
-    ActionSourceInfo Source,
-    ActionDescriptor Descriptor,
-    string Label,
-    string? Description,
-    string Category,
-    IReadOnlyList<ChoiceOption> Options
-  );
 }
 
 internal sealed record ActionSourceStatus(ActionSourceInfo Info, bool IsDown, int ActionCount);
+
+/// <summary>
+/// An action of the catalogue, its display texts and its choice options resolved in the current
+/// locale, and the fields a search reaches, folded once.
+/// </summary>
+internal sealed record IndexedAction(
+  string Id,
+  ActionSourceInfo Source,
+  ActionDescriptor Descriptor,
+  string Label,
+  string? Description,
+  string Category,
+  IReadOnlyList<ChoiceOption> Options
+) {
+  internal required IReadOnlyList<SearchField> Fields { get; init; }
+}
