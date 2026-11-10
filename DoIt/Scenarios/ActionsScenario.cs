@@ -96,6 +96,58 @@ internal sealed class ActionsScenario : ModTestScenario {
     await this.Finish();
   }
 
+  [Test]
+  [UsedImplicitly]
+  private async Task SetState_PausesAndShowsTheSpeed() {
+    await this.StartCity();
+
+    var actionsSystem = this.World.GetExistingSystemManaged<ActionsUISystem>();
+    var simulationSystem = this.World.GetExistingSystemManaged<SimulationSystem>();
+    var pauseId = new ActionId("game", "Pause Simulation").ToString();
+    var speedId = new ActionId("game", "Simulation Speed").ToString();
+
+    // The load sets the speed a few frames after it returns, which would override the one below.
+    await this.WaitFrames(60);
+
+    // Runs at the second speed, the game's index 1, so the speed row has a value to show.
+    simulationSystem.selectedSpeed = 2;
+
+    await this.Trigger("query", "''", "43");
+
+    // The set rewrites the current rows at once, with no subscriber holding the results.
+    await this.Trigger("setState", $"'{pauseId}'", "'true'");
+
+    var rows = actionsSystem.Results.Rows;
+    var pause = rows.FirstOrDefault(row => row.Id == pauseId);
+    var speed = rows.FirstOrDefault(row => row.Id == speedId);
+
+    this.Check(
+      simulationSystem.selectedSpeed is 0f,
+      $"The simulation is paused: selected speed {simulationSystem.selectedSpeed}."
+    );
+
+    this.Check(
+      pause?.State is ToggleValue { Value: true, IsSettable: true },
+      $"The pause row reads paused: {pause?.State}."
+    );
+
+    this.Check(
+      speed?.State is ChoiceValue { Key: "1", IsSettable: true },
+      $"The speed row shows the speed it resumes at: {speed?.State}."
+    );
+
+    await this.Trigger("setState", $"'{pauseId}'", "'false'");
+
+    this.Check(
+      simulationSystem.selectedSpeed is 2f,
+      $"The simulation resumes at its speed: selected speed {simulationSystem.selectedSpeed}."
+    );
+
+    simulationSystem.selectedSpeed = 1;
+
+    await this.Finish();
+  }
+
   private async Task StartCity() {
     // The new game screen sets the starting year, which a scenario's load does not: left at zero,
     // reading the city's date throws, for the game and every mod reading it.

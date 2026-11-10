@@ -5,11 +5,14 @@ import { createElement, type ReactNode } from 'react';
 import { getTriggers, resetBindings, setBinding } from '../../testing/game-setup';
 import { InputRootContext } from '../../vanilla-modules/game-ui/common/input-events/input-controller';
 import {
+  type ActionLive,
   type ActionResults,
   type ActionRow,
   invokeAction,
   queryActions,
+  setActionState,
   useActionResults,
+  usePinnedLive,
   useRunAction
 } from './actions';
 
@@ -41,6 +44,35 @@ describe('the actions bindings', () => {
     expect(actionTriggers()).toEqual([
       { event: 'doIt.actions.invoke', args: ['test/Follow', { index: 9, version: 2 }] }
     ]);
+  });
+
+  it(`sends a state's value as a string, whatever its shape`, () => {
+    const volume = 0.25;
+
+    setActionState('game/Pause Simulation', true);
+    setActionState('test/Volume', volume);
+    setActionState('game/Simulation Speed', '2');
+
+    expect(actionTriggers()).toEqual([
+      { event: 'doIt.actions.setState', args: ['game/Pause Simulation', 'true'] },
+      { event: 'doIt.actions.setState', args: ['test/Volume', '0.25'] },
+      { event: 'doIt.actions.setState', args: ['game/Simulation Speed', '2'] }
+    ]);
+  });
+
+  it(`reads the pinned actions' live values C# wrote`, () => {
+    const pinned: readonly ActionLive[] = [
+      {
+        id: 'game/Pause Simulation',
+        isEnabled: true,
+        disabledReason: null,
+        state: { kind: 'toggle', value: true, isSettable: true }
+      }
+    ];
+
+    setBinding('doIt.actions', 'pinnedLive', pinned);
+
+    expect(renderHook(() => usePinnedLive()).result.current).toEqual(pinned);
   });
 
   it(`reads the results C# wrote`, () => {
@@ -153,6 +185,18 @@ describe('running an action from its row', () => {
     expect(dispatched).toEqual([]);
     expect(firedTriggers()).toEqual([]);
   });
+
+  it(`fires nothing for a row with a state and no invoke`, () => {
+    runAction(
+      row({
+        id: 'game/Simulation Speed',
+        channel: null,
+        state: { kind: 'choice', options: [], value: '0', isSettable: true }
+      })
+    );
+
+    expect(firedTriggers()).toEqual([]);
+  });
 });
 
 /**
@@ -188,6 +232,7 @@ function row(overrides: Partial<ActionRow> & Pick<ActionRow, 'channel'>): Action
     disabledReason: null,
     subject: 'none',
     fillsFromSelection: true,
+    state: null,
     ...overrides
   };
 }

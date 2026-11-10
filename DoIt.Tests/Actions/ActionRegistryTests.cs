@@ -237,31 +237,6 @@ public sealed class ActionRegistryTests {
     );
   }
 
-  [Fact]
-  public void ReadLive_WritesTheRowsOfTheGivenIdsAlone_LeavingTheHiddenOnesOut() {
-    var fixture = new RegistryFixture();
-    var source = new FakeSource();
-
-    source.Descriptors.AddRange(
-      [
-        Descriptors.Call("Tool A"),
-        Descriptors.Call("Tool B"),
-        Descriptors.Call("Tool C") with {
-          Availability = static () => ActionAvailability.Hidden
-        }
-      ]
-    );
-
-    fixture.Registry.AddSource(source);
-
-    Assert.Equal(
-      ["test/Tool B"],
-      fixture.Registry
-        .ReadLive(["test/Tool B", "test/Tool C", "test/Nothing"])
-        .Select(static row => row.Id)
-    );
-  }
-
   /// <summary>
   /// Matches every label, a longer one ranking first.
   /// </summary>

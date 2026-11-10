@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Colossal.Localization;
@@ -19,12 +20,30 @@ using UnityEngine;
 namespace DoIt.Systems;
 
 /// <summary>
+/// <para>
 /// UI System owning the actions binding group: it builds the <see cref="ActionRegistry"/> over the
-/// running game, searches it on the query trigger, runs its C# calls on the invoke trigger, and
-/// records the use of an action the UI fired on its side on the invoked trigger.
+/// running game, searches it on the query trigger, runs its C# calls on the invoke trigger, sets a
+/// state on the set-state trigger, and records the use of an action the UI fired on its side on the
+/// invoked trigger.
+/// </para>
+/// <para>
+/// It re-reads the live parts of the current rows and of the pinned actions right after each of
+/// those triggers, and on a fixed tick while the UI subscribes to them: the result rows while a
+/// component holds the results binding, which the palette does only while open, the pinned actions
+/// while one holds the pinned-live binding and any action is pinned.
+/// Nothing subscribed means no reads on the tick.
+/// </para>
 /// </summary>
 internal sealed partial class ActionsUISystem : UISystemBase {
   private const string BindingGroup = "doIt.actions";
+
+  /// <summary>
+  /// The seconds between two live re-reads on the tick: a change made outside Do It shows within
+  /// it, under the delay a player reads as instant.
+  /// Measured in game 1.6.2f1 (<c>ActionsMeasurement</c>), a tick re-reading 20 rows and 10 pins
+  /// costs about 0.1 ms.
+  /// </summary>
+  private const double TickInterval = 0.1;
 
   private readonly LocalizationManager localizationManager =
     GameManager.instance.localizationManager;
@@ -32,6 +51,15 @@ internal sealed partial class ActionsUISystem : UISystemBase {
   // Created in OnCreate, which the game runs before any other member: hence mutable, and null!
   // until then.
   private ValueBinding<ActionResults> resultsBinding = null!;
+
+  private ValueBinding<IReadOnlyList<ActionLive>> pinnedLiveBinding = null!;
+
+  // Not UnityEngine.Time: naming it in a system wakes the Entities source generator, which emits
+  // its partial of the system in the global namespace, breaking the build.
+  private readonly Stopwatch clock = Stopwatch.StartNew();
+
+  // Mutable, as each tick sets the next one.
+  private double nextTickTime;
 
   internal ActionRegistry Registry { get; private set; } = null!;
 
@@ -50,9 +78,6 @@ internal sealed partial class ActionsUISystem : UISystemBase {
     base.OnCreate();
 
     try {
-      // No need to OnUpdate: the bindings are written on the triggers.
-      this.Enabled = false;
-
       var toolSystem = this.World.GetOrCreateSystemManaged<ToolSystem>();
 
       this.Registry = new ActionRegistry(
@@ -76,6 +101,16 @@ internal sealed partial class ActionsUISystem : UISystemBase {
 
       this.AddBinding(this.resultsBinding);
 
+      this.pinnedLiveBinding = new ValueBinding<IReadOnlyList<ActionLive>>(
+        ActionsUISystem.BindingGroup,
+        "pinnedLive",
+        [],
+        new ActionLiveWriter(),
+        new SequenceEqualityComparer<ActionLive>()
+      );
+
+      this.AddBinding(this.pinnedLiveBinding);
+
       this.AddBinding(
         new TriggerBinding<string, int>(ActionsUISystem.BindingGroup, "query", this.OnQuery)
       );
@@ -88,12 +123,44 @@ internal sealed partial class ActionsUISystem : UISystemBase {
         new TriggerBinding<string>(ActionsUISystem.BindingGroup, "invoked", this.OnInvoked)
       );
 
+      this.AddBinding(
+        new TriggerBinding<string, string>(
+          ActionsUISystem.BindingGroup,
+          "setState",
+          this.OnSetState
+        )
+      );
+
       this.localizationManager.onActiveDictionaryChanged += this.OnActiveDictionaryChanged;
 
       this.Registry.AddSource(new GameActionSource(this.World));
     }
     catch (Exception ex) {
       Mod.Log.ErrorFatal(ex);
+
+      // The bindings OnUpdate reads may not exist, and the game logs each of its throws as a
+      // critical error, one per tick (seen in the running game).
+      this.Enabled = false;
+    }
+  }
+
+  protected override void OnUpdate() {
+    base.OnUpdate();
+
+    var time = this.clock.Elapsed.TotalSeconds;
+
+    if (time < this.nextTickTime) {
+      return;
+    }
+
+    this.nextTickTime = time + ActionsUISystem.TickInterval;
+
+    if (this.resultsBinding.active) {
+      this.RereadResults();
+    }
+
+    if (this.pinnedLiveBinding.active) {
+      this.RereadPinned();
     }
   }
 
@@ -125,13 +192,44 @@ internal sealed partial class ActionsUISystem : UISystemBase {
       .Select(static binding => (IJsonWritable) binding)
       .FirstOrDefault();
 
+  // The view calls a trigger's handler within the UI's own trigger call, and the results binding's
+  // update reaches the UI before that call returns: a keystroke's rows land in its own frame.
+  // Measured in game 1.6.2f1 over 500 actions, that round trip costs about 1.5 ms.
   private void OnQuery(string query, int sequence) =>
     this.resultsBinding.Update(this.Registry.Search(query, sequence));
 
   // The UI sends Entity.Null for a bare invoke: a trigger takes no optional argument.
-  private void OnInvoke(string id, Entity entity) => this.Registry.Invoke(id, entity);
+  private void OnInvoke(string id, Entity entity) {
+    this.Registry.Invoke(id, entity);
+    this.RereadAll();
+  }
 
-  private void OnInvoked(string id) => this.Registry.RecordInvoked(id);
+  private void OnInvoked(string id) {
+    this.Registry.RecordInvoked(id);
+    this.RereadAll();
+  }
+
+  // The value comes as a string whatever the state's shape, so a wrong type never reaches cohtml.
+  private void OnSetState(string id, string value) {
+    this.Registry.SetState(id, value);
+    this.RereadAll();
+  }
+
+  /// <summary>
+  /// Re-reads the current rows and the pinned actions, subscribed or not, so a binding read next
+  /// shows the change an invoke or a set made.
+  /// </summary>
+  private void RereadAll() {
+    this.RereadResults();
+    this.RereadPinned();
+  }
+
+  private void RereadResults() =>
+    this.resultsBinding.Update(this.Registry.Refresh(this.resultsBinding.value));
+
+  // With nothing pinned, ReadLive reads nothing.
+  private void RereadPinned() =>
+    this.pinnedLiveBinding.Update(this.Registry.ReadLive(Mod.Settings.PinnedActions));
 
   #if DEBUG
   private static ActionsUISystem Instance =>
@@ -147,15 +245,52 @@ internal sealed partial class ActionsUISystem : UISystemBase {
   /// <summary>
   /// Debug entry point: runs a C# call action, as the invoke trigger does.
   /// </summary>
-  internal static ActionInvokeOutcome DebugInvoke(string id) =>
-    ActionsUISystem.Instance.Registry.Invoke(id);
+  internal static ActionInvokeOutcome DebugInvoke(string id) {
+    var outcome = ActionsUISystem.Instance.Registry.Invoke(id);
+
+    ActionsUISystem.Instance.RereadAll();
+
+    return outcome;
+  }
 
   /// <summary>
-  /// Debug entry point: an action's row with its live parts read afresh, or nothing when it is
-  /// unknown or reads hidden.
+  /// Debug entry point: sets an action's state, as the set-state trigger does.
+  /// </summary>
+  internal static ActionSetOutcome DebugSetState(string id, string value) {
+    var outcome = ActionsUISystem.Instance.Registry.SetState(id, value);
+
+    ActionsUISystem.Instance.RereadAll();
+
+    return outcome;
+  }
+
+  /// <summary>
+  /// Debug entry point: pins an action, or unpins it, at the end of the pin list, until the toolbar
+  /// writes the list.
+  /// </summary>
+  internal static void DebugPin(string id, bool isPinned = true) {
+    var settings = Mod.Settings;
+
+    settings.PinnedActions = isPinned
+      ? [.. settings.PinnedActions.Where(pinned => pinned != id), id]
+      : [.. settings.PinnedActions.Where(pinned => pinned != id)];
+
+    settings.ApplyAndSave();
+    ActionsUISystem.Instance.RereadPinned();
+  }
+
+  /// <summary>
+  /// Debug entry point: the pinned actions' live parts last written to the UI, one line each.
+  /// </summary>
+  internal static string DebugPinnedLive() =>
+    ActionsUISystem.FormatLive(ActionsUISystem.Instance.pinnedLiveBinding.value);
+
+  /// <summary>
+  /// Debug entry point: an action's live parts read afresh, or nothing when it is unknown or reads
+  /// hidden.
   /// </summary>
   internal static string DebugReadLive(string id) =>
-    ActionsUISystem.Format(ActionsUISystem.Instance.Registry.ReadLive([id]));
+    ActionsUISystem.FormatLive(ActionsUISystem.Instance.Registry.ReadLive([id]));
 
   /// <summary>
   /// Debug entry point: every source, whether it is down, and how many actions it lists.
@@ -169,13 +304,22 @@ internal sealed partial class ActionsUISystem : UISystemBase {
       )
     );
 
+  private static string FormatLive(IEnumerable<ActionLive> lives) =>
+    string.Join(
+      "\n",
+      lives.Select(static live =>
+        $"{live.Id} | {(live.IsEnabled ? "enabled" : $"disabled: {live.DisabledReason}")} | " +
+        $"{live.State}"
+      )
+    );
+
   private static string Format(IEnumerable<ActionRow> rows) =>
     string.Join(
       "\n",
       rows.Select(static row =>
         $"{row.Id} | {row.Label} | {row.Category} | {row.Icon} | " +
         $"key {(row.KeyBinding is ProxyBinding binding ? binding.path : row.KeyText)} | " +
-        $"{(row.IsEnabled ? "enabled" : $"disabled: {row.DisabledReason}")}"
+        $"{(row.IsEnabled ? "enabled" : $"disabled: {row.DisabledReason}")} | {row.State}"
       )
     );
   #endif

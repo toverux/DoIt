@@ -128,6 +128,17 @@ internal static class Descriptors {
     };
 
   /// <summary>
+  /// An action labelled <paramref name="label"/>, keyed by its label, with
+  /// <paramref name="state"/> and no invoke.
+  /// </summary>
+  internal static ActionDescriptor State(string label, ActionState state) =>
+    new() {
+      LocalId = label,
+      Label = LocalizedString.Id(label),
+      State = state
+    };
+
+  /// <summary>
   /// A trigger action labelled <paramref name="label"/>, keyed by its label, which the UI fires.
   /// </summary>
   internal static ActionDescriptor Trigger(string label) =>

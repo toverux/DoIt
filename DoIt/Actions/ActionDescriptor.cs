@@ -51,7 +51,16 @@ internal sealed record ActionDescriptor {
   /// </summary>
   internal bool FillsFromSelection { get; init; } = true;
 
-  internal required ActionChannel Channel { get; init; }
+  /// <summary>
+  /// How the action is invoked, or none for an action that only shows and sets its
+  /// <see cref="State"/>.
+  /// </summary>
+  internal ActionChannel? Channel { get; init; }
+
+  /// <summary>
+  /// The one live state the action shows, or none.
+  /// </summary>
+  internal ActionState? State { get; init; }
 }
 
 /// <summary>

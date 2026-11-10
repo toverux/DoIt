@@ -8,7 +8,7 @@ namespace DoIt.Tests.Utils.Writers;
 
 public sealed class ActionResultsWriterTests {
   [Fact]
-  public void Write_EmitsOneShapePerTypeName_AcrossEveryAvailabilityAndChannel() {
+  public void Write_EmitsOneShapePerTypeName_AcrossEveryAvailabilityChannelAndState() {
     var enabled = new ActionRow {
       Id = "game/Bulldoze Tool",
       Label = "Bulldozer",
@@ -19,6 +19,7 @@ public sealed class ActionResultsWriterTests {
       KeyBinding = new FakeKeyBinding("Shortcuts/Bulldozer"),
       IsEnabled = true,
       Channel = ActionChannel.CSharpCall(static () => {}),
+      State = null,
       Subject = ActionSubject.None,
       FillsFromSelection = true
     };
@@ -40,25 +41,36 @@ public sealed class ActionResultsWriterTests {
       Channel = new InputActionChannel("Pause Simulation")
     };
 
+    // A row for each state shape, with and without a setter, the last with no invoke.
+    var stateRows = StateValues.All.Select(state => disabled with {
+        State = state,
+        Channel = null
+      }
+    );
+
     var writer = new ShapeRecordingJsonWriter();
 
-    new ActionResultsWriter().Write(writer, new ActionResults(1, [enabled, disabled, inputAction]));
+    new ActionResultsWriter().Write(
+      writer,
+      new ActionResults(1, [enabled, disabled, inputAction, .. stateRows])
+    );
+
     new ActionResultsWriter().Write(writer, ActionResults.Empty);
 
     Assert.Empty(writer.ConflictingTypeNames);
 
-    // Each kind of channel writes under its own type name.
-    Assert.Equal(
-      new[] {
-        "DoIt.Actions.ActionResults",
-        "DoIt.Actions.ActionRow",
-        "DoIt.Actions.MatchRange",
-        nameof(FakeKeyBinding),
-        "DoIt.Actions.CSharpCallChannel",
-        "DoIt.Actions.TriggerChannel",
-        "DoIt.Actions.InputActionChannel"
-      }.Order(),
-      writer.Shapes.Keys.Order()
-    );
+    // Each kind of channel and of state writes under its own type name.
+    string[] typeNames = [
+      "DoIt.Actions.ActionResults",
+      "DoIt.Actions.ActionRow",
+      "DoIt.Actions.MatchRange",
+      nameof(FakeKeyBinding),
+      "DoIt.Actions.CSharpCallChannel",
+      "DoIt.Actions.TriggerChannel",
+      "DoIt.Actions.InputActionChannel",
+      .. StateValues.TypeNames
+    ];
+
+    Assert.Equal(typeNames.Order(), writer.Shapes.Keys.Order());
   }
 }

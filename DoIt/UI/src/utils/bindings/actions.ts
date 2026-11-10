@@ -49,7 +49,11 @@ export interface ActionRow {
   readonly keyText: string | null;
   readonly isEnabled: boolean;
   readonly disabledReason: string | null;
-  readonly channel: ActionChannel;
+  /**
+   * Null for an action with a state and no invoke.
+   */
+  readonly channel: ActionChannel | null;
+  readonly state: ActionState | null;
   readonly subject: 'none' | 'entity';
   /**
    * Whether an entity action fired bare takes the current selection.
@@ -60,6 +64,60 @@ export interface ActionRow {
 export interface MatchRange {
   readonly start: number;
   readonly length: number;
+}
+
+/**
+ * The live parts of a pinned action, see C# `DoIt.Actions.ActionLive`.
+ */
+export interface ActionLive {
+  readonly id: string;
+  readonly isEnabled: boolean;
+  readonly disabledReason: string | null;
+  readonly state: ActionState | null;
+}
+
+/**
+ * An action's one live state, set with {@link setActionState} when `isSettable`.
+ */
+export type ActionState = ToggleState | NumberState | ChoiceState | TextState;
+
+export interface ToggleState {
+  readonly kind: 'toggle';
+  readonly value: boolean;
+  readonly isSettable: boolean;
+}
+
+/**
+ * A set outside `min` and `max` is refused in C#.
+ */
+export interface NumberState {
+  readonly kind: 'number';
+  readonly value: number;
+  readonly min: number | null;
+  readonly max: number | null;
+  readonly step: number | null;
+  readonly isSettable: boolean;
+}
+
+/**
+ * `value` is the key of the current option; keys are opaque to the UI.
+ */
+export interface ChoiceState {
+  readonly kind: 'choice';
+  readonly options: readonly ChoiceOption[];
+  readonly value: string;
+  readonly isSettable: boolean;
+}
+
+export interface ChoiceOption {
+  readonly key: string;
+  readonly label: string;
+}
+
+export interface TextState {
+  readonly kind: 'text';
+  readonly value: string;
+  readonly isSettable: boolean;
 }
 
 export type ActionChannel = CSharpCallChannel | TriggerChannel | InputActionChannel;
@@ -94,11 +152,40 @@ const nullEntity: Entity = { index: 0, version: 0 };
 
 const results$ = lazyBindValue<ActionResults>(GROUP, 'results', { sequence: 0, rows: [] });
 
+const pinnedLive$ = lazyBindValue<readonly ActionLive[]>(GROUP, 'pinnedLive', []);
+
 /**
  * Subscribes to the results of the latest query C# answered.
+ * C# re-reads their live parts on a fixed tick while anything subscribes: hold it while the palette
+ * is open only.
  */
 export function useActionResults(): ActionResults {
   return useValue(results$());
+}
+
+/**
+ * Reads the results of the latest query once, without holding a subscription, so C# does not tick.
+ */
+export function readActionResults(): ActionResults {
+  return results$().value;
+}
+
+/**
+ * Subscribes to the live parts of the pinned actions, in pin order, which C# re-reads on a fixed
+ * tick while anything subscribes.
+ */
+export function usePinnedLive(): readonly ActionLive[] {
+  return useValue(pinnedLive$());
+}
+
+/**
+ * Holds a subscription to the results or the pinned actions until the returned function releases
+ * it, which keeps C#'s tick running: for the Debug entry points, which render nothing.
+ */
+export function holdActionBinding(name: 'results' | 'pinnedLive'): () => void {
+  const subscription = (name == 'results' ? results$() : pinnedLive$()).subscribe();
+
+  return () => subscription.dispose();
 }
 
 /**
@@ -117,9 +204,19 @@ export function invokeAction(id: string, entity: Entity = nullEntity): void {
 }
 
 /**
+ * Sets an action's state, sent as a string whatever its shape, so a wrong type never reaches
+ * cohtml. A disabled action, a read-only state, or a value out of its bounds or options is refused
+ * in C#.
+ */
+export function setActionState(id: string, value: boolean | number | string): void {
+  trigger(GROUP, 'setState', id, String(value));
+}
+
+/**
  * Gives the function that runs an action from its row, whichever side fires it.
  * A C# call goes to C# through {@link invokeAction}. A trigger or an input action fires here, then
- * tells C# with the `invoked` note, which records its use. A disabled row fires nothing.
+ * tells C# with the `invoked` note, which records its use. A disabled row, or one with a state and
+ * no invoke, fires nothing.
  *
  * A trigger row taking an entity fires on `entity`, else on the game's selection unless the action
  * opted out of it, read at fire time from the binding the game's info panel reads; with neither, it
@@ -137,11 +234,11 @@ export function useRunAction(): (row: ActionRow, entity?: Entity) => void {
 }
 
 function runAction(row: ActionRow, entity: Entity | undefined, root: RootInputController): void {
-  if (!row.isEnabled) {
+  const { channel } = row;
+
+  if (!row.isEnabled || !channel) {
     return;
   }
-
-  const { channel } = row;
 
   switch (channel.kind) {
     case 'csharpCall': {

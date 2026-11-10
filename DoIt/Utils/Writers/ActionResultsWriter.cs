@@ -7,7 +7,7 @@ namespace DoIt.Utils.Writers;
 /// <summary>
 /// Writes the rows of a search to the UI.
 /// Every optional part is written, as <c>null</c> when absent, so a row keeps one shape; each kind
-/// of channel writes under its own type name, with its own fixed shape.
+/// of channel and of state writes under its own type name, with its own fixed shape.
 /// </summary>
 internal sealed class ActionResultsWriter : IWriter<ActionResults> {
   public void Write(IJsonWriter writer, ActionResults results) {
@@ -45,11 +45,11 @@ internal sealed class ActionResultsWriter : IWriter<ActionResults> {
 
     writer.ArrayEnd();
     writer.PropertyName("description");
-    ActionResultsWriter.WriteNullable(writer, row.Description);
+    writer.WriteNullable(row.Description);
     writer.PropertyName("category");
     writer.Write(row.Category);
     writer.PropertyName("icon");
-    ActionResultsWriter.WriteNullable(writer, row.Icon);
+    writer.WriteNullable(row.Icon);
     writer.PropertyName("keyBinding");
 
     if (row.KeyBinding is {} keyBinding) {
@@ -60,13 +60,15 @@ internal sealed class ActionResultsWriter : IWriter<ActionResults> {
     }
 
     writer.PropertyName("keyText");
-    ActionResultsWriter.WriteNullable(writer, row.KeyText);
+    writer.WriteNullable(row.KeyText);
     writer.PropertyName("isEnabled");
     writer.Write(row.IsEnabled);
     writer.PropertyName("disabledReason");
-    ActionResultsWriter.WriteNullable(writer, row.DisabledReason);
+    writer.WriteNullable(row.DisabledReason);
     writer.PropertyName("channel");
     ActionResultsWriter.WriteChannel(writer, row.Channel);
+    writer.PropertyName("state");
+    ActionStateValueWriter.Write(writer, row.State);
     writer.PropertyName("subject");
     writer.Write(row.Subject is ActionSubject.Entity ? "entity" : "none");
     writer.PropertyName("fillsFromSelection");
@@ -74,7 +76,13 @@ internal sealed class ActionResultsWriter : IWriter<ActionResults> {
     writer.TypeEnd();
   }
 
-  private static void WriteChannel(IJsonWriter writer, ActionChannel channel) {
+  private static void WriteChannel(IJsonWriter writer, ActionChannel? channel) {
+    if (channel is null) {
+      writer.WriteNull();
+
+      return;
+    }
+
     writer.TypeBegin(channel.GetType().FullName);
     writer.PropertyName("kind");
 
@@ -106,17 +114,6 @@ internal sealed class ActionResultsWriter : IWriter<ActionResults> {
     }
 
     writer.TypeEnd();
-  }
-
-  // Write((string) null) drops the property from the JS object (read in the running game), which
-  // would change the row's shape under its cached type name.
-  private static void WriteNullable(IJsonWriter writer, string? value) {
-    if (value is null) {
-      writer.WriteNull();
-    }
-    else {
-      writer.Write(value);
-    }
   }
 
   /// <summary>

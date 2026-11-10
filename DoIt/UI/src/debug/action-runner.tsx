@@ -1,7 +1,7 @@
 import type { Entity } from 'cs2/bindings';
 import type { ModRegistrar } from 'cs2/modding';
 import { type ReactNode, useEffect } from 'react';
-import { useActionResults, useRunAction } from '../utils/bindings';
+import { holdActionBinding, readActionResults, useRunAction } from '../utils/bindings';
 
 declare global {
   /**
@@ -17,6 +17,11 @@ interface DoItDebug {
    * `engine.trigger('doIt.actions.query', '<text>', <sequence>)`.
    */
   readonly runAction: (id: string, entity?: Entity) => void;
+  /**
+   * Holds a subscription to the results or the pinned actions, or releases it, standing in for the
+   * palette or the toolbar: C# re-reads them on its tick only while one is held.
+   */
+  readonly holdBinding: (name: 'results' | 'pinnedLive', isHeld: boolean) => void;
 }
 
 /**
@@ -30,25 +35,40 @@ export const registerActionRunner: ModRegistrar = moduleRegistry => {
 // oxlint-disable-next-line react/only-export-components - the game's UI has no fast refresh
 function ActionRunner(): ReactNode {
   const runAction = useRunAction();
-  const { rows } = useActionResults();
 
   useEffect(() => {
+    // The subscriptions held, by binding name, released with the runner.
+    const held = new Map<string, () => void>();
+
     globalThis.doItDebug = {
+      // Reads the results at call time rather than subscribing, which would keep C# ticking.
       runAction(id, entity): void {
-        const row = rows.find(candidate => candidate.id == id);
+        const row = readActionResults().rows.find(candidate => candidate.id == id);
 
         if (!row) {
           throw new Error(`Action "${id}" is not in the latest results, query it first.`);
         }
 
         runAction(row, entity);
+      },
+      holdBinding(name, isHeld): void {
+        held.get(name)?.();
+        held.delete(name);
+
+        if (isHeld) {
+          held.set(name, holdActionBinding(name));
+        }
       }
     };
 
     return () => {
+      for (const release of held.values()) {
+        release();
+      }
+
       globalThis.doItDebug = undefined;
     };
-  }, [rows, runAction]);
+  }, [runAction]);
 
   return null;
 }

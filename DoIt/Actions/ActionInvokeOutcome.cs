@@ -18,6 +18,11 @@ internal enum ActionInvokeOutcome {
   NotACSharpCall,
 
   /// <summary>
+  /// The action has a state and no invoke.
+  /// </summary>
+  NoInvoke,
+
+  /// <summary>
   /// The action read disabled or hidden, so its delegate was not called.
   /// </summary>
   Refused,

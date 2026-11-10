@@ -39,12 +39,23 @@ public sealed class Settings : ModSetting, IJsonWritable {
   }
 
   /// <summary>
+  /// The canonical ids of the actions pinned to the toolbar, in order, which the toolbar's live
+  /// values are read for.
+  /// </summary>
+  [SettingsUIHidden]
+  public string[] PinnedActions {
+    get;
+    // The settings file can hold an explicit null, which the game's loader applies verbatim.
+    set => field = value ?? [];
+  } = null!;
+
+  /// <summary>
   /// Applies default values to every setting.
   /// Do NOT initialize the properties inline instead, as this method is also the reset path of
   /// <see cref="ResetSettings"/>.
   /// </summary>
   public override void SetDefaults() {
-    // Each setting's default goes here.
+    this.PinnedActions = [];
   }
 
   /// <summary>

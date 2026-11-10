@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using Game.UI.Localization;
 using Unity.Entities;
@@ -14,13 +15,17 @@ namespace DoIt.Actions;
 /// </para>
 /// <para>
 /// Every call into a source is wrapped: a throw while listing marks the source down until a later
-/// listing succeeds, a throw in an action's reader or invoke disables that action for the session.
+/// listing succeeds, a throw in an action's reader, invoke, or setter disables that action for the
+/// session.
 /// Each is logged once, with the mod name and version behind the source.
 /// </para>
 /// </summary>
 internal sealed class ActionRegistry {
   /// <summary>
-  /// The most rows a search writes when its caller sets no cap.
+  /// The most rows a search writes when its caller sets no cap, which bounds every re-read of the
+  /// rows on the tick.
+  /// Measured in game 1.6.2f1 over 500 actions (<c>ActionsMeasurement</c>), a search costs about
+  /// 1.2 ms and a re-read of 20 rows about 80 µs.
   /// </summary>
   internal const int DefaultRowCap = 20;
 
@@ -32,7 +37,7 @@ internal sealed class ActionRegistry {
     LocalizedString.Id("DoIt.Actions.REASON_SELECT_FIRST");
 
   /// <summary>
-  /// The reason an action whose reader or invoke threw is disabled with.
+  /// The reason an action whose reader, invoke, or setter threw is disabled with.
   /// </summary>
   internal static readonly LocalizedString FailedReason =
     LocalizedString.Id("DoIt.Actions.REASON_FAILED");
@@ -44,8 +49,8 @@ internal sealed class ActionRegistry {
   // The sources whose last listing threw, logged when they enter the set.
   private readonly HashSet<IActionSource> downSources = [];
 
-  // The actions whose reader or invoke threw, disabled for the session and logged when they enter
-  // the set, so a source fixing itself on a rebuild does not bring them back.
+  // The actions whose reader, invoke, or setter threw, disabled for the session and logged when
+  // they enter the set, so a source fixing itself on a rebuild does not bring them back.
   private readonly HashSet<string> faultedIds = [];
 
   // The ids listed twice, logged when they enter the set.
@@ -93,6 +98,8 @@ internal sealed class ActionRegistry {
   /// <summary>
   /// Lists every source again and resolves every display text, so search matches what the player
   /// reads in the current locale.
+  /// Measured in game 1.6.2f1 over 500 actions (<c>ActionsMeasurement</c>), it costs about 1.3 ms,
+  /// paid on a source's change or a locale change alone.
   /// </summary>
   internal void Rebuild() {
     var catalogue = new List<IndexedAction>();
@@ -154,10 +161,8 @@ internal sealed class ActionRegistry {
         break;
       }
 
-      var availability = this.ReadAvailability(action, ActionRegistry.Subject(action, selection));
-
-      if (availability.Kind is not ActionAvailabilityKind.Hidden) {
-        rows.Add(this.ToRow(action, match.Ranges, availability));
+      if (this.ReadLiveParts(action, selection) is {} live) {
+        rows.Add(this.ToRow(action, match.Ranges, live));
       }
     }
 
@@ -165,26 +170,42 @@ internal sealed class ActionRegistry {
   }
 
   /// <summary>
-  /// Writes the rows of <paramref name="ids"/> with their live parts read afresh, in the order
-  /// given, leaving out an id that does not exist in the current game mode or reads hidden.
+  /// Rewrites the rows of <paramref name="results"/> with their live parts read afresh, keeping
+  /// their match ranges and the query's sequence number.
+  /// A row whose action reads hidden now, or no longer exists in the current game mode, leaves the
+  /// list and the rows below it move up: no other match takes its place.
   /// </summary>
-  internal IReadOnlyList<ActionRow> ReadLive(IEnumerable<string> ids) {
+  internal ActionResults Refresh(ActionResults results) {
     var selection = this.services.ReadSelection();
     var rows = new List<ActionRow>();
 
-    foreach (var id in ids) {
-      if (!this.TryFind(id, out var action)) {
-        continue;
-      }
-
-      var availability = this.ReadAvailability(action, ActionRegistry.Subject(action, selection));
-
-      if (availability.Kind is not ActionAvailabilityKind.Hidden) {
-        rows.Add(this.ToRow(action, [], availability));
+    foreach (var row in results.Rows) {
+      if (this.TryFind(row.Id, out var action) &&
+        this.ReadLiveParts(action, selection) is {} live) {
+        rows.Add(this.ToRow(action, row.Matches, live));
       }
     }
 
-    return rows;
+    return results with {
+      Rows = rows
+    };
+  }
+
+  /// <summary>
+  /// Reads the live parts of <paramref name="ids"/> afresh, in the order given, leaving out an id
+  /// that does not exist in the current game mode or reads hidden.
+  /// </summary>
+  internal List<ActionLive> ReadLive(IEnumerable<string> ids) {
+    var selection = this.services.ReadSelection();
+    var lives = new List<ActionLive>();
+
+    foreach (var id in ids) {
+      if (this.TryFind(id, out var action) && this.ReadLiveParts(action, selection) is {} live) {
+        lives.Add(live);
+      }
+    }
+
+    return lives;
   }
 
   /// <summary>
@@ -195,6 +216,10 @@ internal sealed class ActionRegistry {
   internal ActionInvokeOutcome Invoke(string id, Entity entity = default) {
     if (!this.TryFind(id, out var action)) {
       return ActionInvokeOutcome.Unknown;
+    }
+
+    if (action.Descriptor.Channel is null) {
+      return ActionInvokeOutcome.NoInvoke;
     }
 
     if (action.Descriptor.Channel is not CSharpCallChannel call) {
@@ -223,18 +248,53 @@ internal sealed class ActionRegistry {
   }
 
   /// <summary>
-  /// Records the use of an action the UI fired on its side, after calling its reader afresh: a
-  /// disabled or hidden answer records nothing, as the UI does not fire a disabled row.
-  /// The select-first rule is left out, as the UI fires an entity action only on an entity it
-  /// holds, which the note does not carry.
+  /// Sets an action's state from the UI's string form of a value, after reading its availability
+  /// afresh: a disabled or hidden answer refuses it without calling its setter.
+  /// A toggle takes <c>true</c> or <c>false</c>, a number an invariant-culture number within its
+  /// bounds, a choice one of its keys, a text anything.
+  /// </summary>
+  internal ActionSetOutcome SetState(string id, string value) {
+    if (!this.TryFind(id, out var action)) {
+      return ActionSetOutcome.Unknown;
+    }
+
+    if (action.Descriptor.State is not { IsSettable: true } state) {
+      return ActionSetOutcome.ReadOnly;
+    }
+
+    if (ActionRegistry.Setter(state, value) is not {} set) {
+      return ActionSetOutcome.Invalid;
+    }
+
+    var subject = ActionRegistry.Subject(action, this.services.ReadSelection());
+
+    if (this.ReadAvailability(action, subject).Kind is not ActionAvailabilityKind.Enabled) {
+      return ActionSetOutcome.Refused;
+    }
+
+    try {
+      set();
+    }
+    // Foreign code: whatever it throws is contained to its action.
+    catch (Exception ex) {
+      this.Fault(action, ex, "setting its state");
+
+      return ActionSetOutcome.Failed;
+    }
+
+    this.RecordUse(action.Id);
+
+    return ActionSetOutcome.Set;
+  }
+
+  /// <summary>
+  /// Records the use of an action the UI fired on its side, whatever its reader answers now: the
+  /// note lands after the effect, so a fresh answer judges the state the action itself made.
+  /// The UI fires no disabled row, and sends no note for an input action no handler took.
   /// </summary>
   internal ActionInvokeOutcome RecordInvoked(string id) {
     if (!this.TryFind(id, out var action)) {
       return ActionInvokeOutcome.Unknown;
-    }
-
-    if (this.ReadReader(action).Kind is not ActionAvailabilityKind.Enabled) {
-      return ActionInvokeOutcome.Refused;
     }
 
     this.RecordUse(action.Id);
@@ -282,7 +342,11 @@ internal sealed class ActionRegistry {
       descriptor,
       resolve(descriptor.Label),
       descriptor.Description is {} description ? resolve(description) : null,
-      resolve(descriptor.Category ?? source.DisplayName)
+      resolve(descriptor.Category ?? source.DisplayName),
+      descriptor.State is ChoiceState choice
+        ? choice.Options.Select(option => new ChoiceOption(option.Key, resolve(option.Label)))
+          .ToList()
+        : []
     );
   }
 
@@ -299,6 +363,37 @@ internal sealed class ActionRegistry {
     };
 
   /// <summary>
+  /// The call setting a settable state to <paramref name="value"/>, or none when the value does not
+  /// parse for its shape or falls outside its bounds or options.
+  /// </summary>
+  private static Action? Setter(ActionState state, string value) {
+    switch (state) {
+      case ToggleState { Set: {} set }:
+        return bool.TryParse(value, out var toggle) ? () => set(toggle) : null;
+      case NumberState { Set: {} set } number:
+        var isNumber = double.TryParse(
+          value,
+          NumberStyles.Float,
+          CultureInfo.InvariantCulture,
+          out var parsed
+        );
+
+        // NaN fails every bound comparison, hence its own check.
+        return isNumber &&
+          !double.IsNaN(parsed) &&
+          !double.IsInfinity(parsed) &&
+          !(parsed < number.Min) &&
+          !(parsed > number.Max)
+            ? () => set(parsed)
+            : null;
+      case ChoiceState { Set: {} set } choice:
+        return choice.Options.Any(option => option.Key == value) ? () => set(value) : null;
+      case TextState { Set: {} set }: return () => set(value);
+      default: return null;
+    }
+  }
+
+  /// <summary>
   /// Finds an action of the catalogue that exists in the current game mode.
   /// </summary>
   private bool TryFind(string id, [NotNullWhen(true)] out IndexedAction? action) {
@@ -309,6 +404,72 @@ internal sealed class ActionRegistry {
 
     return action is not null;
   }
+
+  /// <summary>
+  /// The availability and the state of an action read afresh, or none when it reads hidden, whose
+  /// state is then left unread.
+  /// A state reader that throws disables the action, as any of its readers does.
+  /// </summary>
+  private ActionLive? ReadLiveParts(IndexedAction action, Entity selection) {
+    var availability = this.ReadAvailability(action, ActionRegistry.Subject(action, selection));
+
+    if (availability.Kind is ActionAvailabilityKind.Hidden) {
+      return null;
+    }
+
+    var state = this.ReadState(action);
+
+    if (this.faultedIds.Contains(action.Id)) {
+      availability = ActionAvailability.Disabled(ActionRegistry.FailedReason);
+    }
+
+    return new ActionLive(
+      action.Id,
+      availability.Kind is ActionAvailabilityKind.Enabled,
+      availability.Reason is {} reason ? this.services.ResolveText(reason) : null,
+      state
+    );
+  }
+
+  /// <summary>
+  /// The action's state as its reader answers now, or none for an action with no state or one that
+  /// faulted.
+  /// </summary>
+  private ActionStateValue? ReadState(IndexedAction action) {
+    if (action.Descriptor.State is not {} state || this.faultedIds.Contains(action.Id)) {
+      return null;
+    }
+
+    try {
+      return state switch {
+        ToggleState toggle => new ToggleValue(toggle.Read()) {
+          IsSettable = state.IsSettable
+        },
+        NumberState number => new NumberValue(number.Read(), number.Min, number.Max, number.Step) {
+          IsSettable = state.IsSettable
+        },
+        ChoiceState choice =>
+          new ChoiceValue(action.Options, ActionRegistry.NotNull(choice.Read())) {
+            IsSettable = state.IsSettable
+          },
+        TextState text => new TextValue(ActionRegistry.NotNull(text.Read())) {
+          IsSettable = state.IsSettable
+        },
+        _ => throw new InvalidOperationException($"No reading for a {state.GetType()}.")
+      };
+    }
+    // Foreign code: whatever it throws is contained to its action.
+    catch (Exception ex) {
+      this.Fault(action, ex, "reading its state");
+
+      return null;
+    }
+  }
+
+  // Foreign code can answer null despite the annotation, and a null string written to the UI drops
+  // the property, which changes the value's shape.
+  private static string NotNull(string? read) =>
+    read ?? throw new InvalidOperationException("The reader answered null.");
 
   /// <summary>
   /// The reader's answer, an enabled one turned disabled for an entity action with no entity to
@@ -372,7 +533,7 @@ internal sealed class ActionRegistry {
   private ActionRow ToRow(
     IndexedAction action,
     IReadOnlyList<MatchRange> matches,
-    ActionAvailability availability
+    ActionLive live
   ) {
     var descriptor = action.Descriptor;
 
@@ -388,16 +549,18 @@ internal sealed class ActionRegistry {
         : null,
       KeyText =
         descriptor.KeyHint is TextKeyHint text ? this.services.ResolveText(text.Text) : null,
-      IsEnabled = availability.Kind is ActionAvailabilityKind.Enabled,
-      DisabledReason = availability.Reason is {} reason ? this.services.ResolveText(reason) : null,
+      IsEnabled = live.IsEnabled,
+      DisabledReason = live.DisabledReason,
       Channel = descriptor.Channel,
+      State = live.State,
       Subject = descriptor.Subject,
       FillsFromSelection = descriptor.FillsFromSelection
     };
   }
 
   /// <summary>
-  /// An action of the catalogue, its display texts resolved in the current locale.
+  /// An action of the catalogue, its display texts and its choice options resolved in the current
+  /// locale.
   /// </summary>
   private sealed record IndexedAction(
     string Id,
@@ -405,7 +568,8 @@ internal sealed class ActionRegistry {
     ActionDescriptor Descriptor,
     string Label,
     string? Description,
-    string Category
+    string Category,
+    IReadOnlyList<ChoiceOption> Options
   );
 }
 

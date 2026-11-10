@@ -22,7 +22,7 @@ public sealed class ActionRegistryUseTests {
   }
 
   [Fact]
-  public void RecordInvoked_RecordsNothingForAnIdTheReaderDisabledSinceItsRowWasWritten() {
+  public void RecordInvoked_RecordsAnActionItsOwnRunDisabled() {
     var isEnabled = true;
 
     this.Add(
@@ -35,8 +35,9 @@ public sealed class ActionRegistryUseTests {
 
     isEnabled = false;
 
-    Assert.Equal(ActionInvokeOutcome.Refused, this.fixture.Registry.RecordInvoked("test/Economy"));
-    Assert.Empty(this.fixture.UseStore.Saved);
+    // The note lands after the effect, so the reader judges the state the action itself made.
+    Assert.Equal(ActionInvokeOutcome.Invoked, this.fixture.Registry.RecordInvoked("test/Economy"));
+    Assert.Equal(1, this.fixture.UseStore.Saved["test/Economy"].Count);
   }
 
   [Fact]

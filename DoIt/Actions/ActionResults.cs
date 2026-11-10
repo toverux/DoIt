@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Colossal.UI.Binding;
 
 namespace DoIt.Actions;
@@ -9,11 +11,21 @@ namespace DoIt.Actions;
 /// </summary>
 internal sealed record ActionResults(int Sequence, IReadOnlyList<ActionRow> Rows) {
   internal static ActionResults Empty { get; } = new(0, []);
+
+  /// <summary>
+  /// Compares the rows by value, so a re-read that changed nothing leaves the binding unwritten.
+  /// </summary>
+  public bool Equals(ActionResults? other) =>
+    other is not null && this.Sequence == other.Sequence && this.Rows.SequenceEqual(other.Rows);
+
+  public override int GetHashCode() => HashCode.Combine(this.Sequence, this.Rows.Count);
 }
 
 /// <summary>
 /// One action as the UI renders it, complete: the UI holds no catalogue.
 /// A hidden action never makes a row.
+/// Two reads of an unchanged action compare equal, as a re-read keeps the match ranges and the
+/// channel it had.
 /// </summary>
 internal sealed record ActionRow {
   internal required string Id { get; init; }
@@ -42,7 +54,12 @@ internal sealed record ActionRow {
 
   internal string? DisabledReason { get; init; }
 
-  internal required ActionChannel Channel { get; init; }
+  /// <summary>
+  /// None for an action with a state and no invoke.
+  /// </summary>
+  internal required ActionChannel? Channel { get; init; }
+
+  internal required ActionStateValue? State { get; init; }
 
   internal required ActionSubject Subject { get; init; }
 
