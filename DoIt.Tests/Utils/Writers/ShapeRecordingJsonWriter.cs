@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Colossal.UI.Binding;
@@ -78,6 +79,11 @@ internal sealed class ShapeRecordingJsonWriter : IJsonWriter {
   public void Write(double value) {
   }
 
+  // The engine drops a property written with a null string (read in the running game), so the
+  // type's shape would vary: a writer writes WriteNull() for it instead.
   public void Write(string value) {
+    if (value is null) {
+      throw new InvalidOperationException("A null string drops its property; write WriteNull().");
+    }
   }
 }

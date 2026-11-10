@@ -82,6 +82,7 @@ public sealed class Mod : IMod {
 
       // Initialize subsystems.
       updateSystem.UpdateAt<CommonUISystem>(SystemUpdatePhase.UIUpdate);
+      updateSystem.UpdateAt<ActionsUISystem>(SystemUpdatePhase.UIUpdate);
 
       #if DEBUG
       // Make the in-game test scenarios available to the game's test framework.
