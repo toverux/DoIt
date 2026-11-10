@@ -88,13 +88,14 @@ Always run the appropriate check/test commands after changes, at the end of the 
 ## Glossary
 
 - **Vanilla**: the unmodded game's own code and UI (`vanilla-modules`, `vanilla-vars.scss`).
-- **Debug entry point**: a Debug-only static member an agent calls from the unity eval to run a C# action or read its state.
+- **Debug entry point**: a Debug-only member an agent calls to run an action or read its state: a static C# member from the unity eval, or a `globalThis.doItDebug` function from the gameface eval.
 
 ## End-to-end contract
 
 One agent builds a feature and verifies it in the running game, so every feature exposes what that takes:
 
 - Every C# action has a Debug entry point, `#if DEBUG` and static, callable from the unity eval, and the state it changes is readable from there too.
+- Every UI-side behaviour with no element to drive yet has a Debug entry point on `globalThis.doItDebug`, mounted from `DoIt/UI/src/debug` in Debug bundles only (`DEBUG`), callable from the gameface eval and from a scenario through `ExecuteScript`.
 - Every interactive UI element carries a stable class from its stylesheet, which an agent or a test selects by its prefixed BEM name with the hash left out: `[class*="doit-<block>-<element>_"]`. No test ids.
 - Every UI↔C# path is a named binding, declared in a `utils/bindings` module on the TS side and in a UI system on the C# side.
 - A feature is done when an agent has driven it in the running game (the unity eval for C#, the gameface `game_*` tools for the UI, the `cs2-dev` tools around both) and pinned what is stable as an in-game scenario or a UI test.
