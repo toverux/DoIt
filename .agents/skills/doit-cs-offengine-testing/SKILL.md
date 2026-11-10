@@ -74,5 +74,5 @@ The classic bug is a **read-back comparison**, a value stored, then compared wit
 
 ## Where .NET differs from the game's runtime
 
-CoreCLR is not the game's Mono: string formatting, culture-aware comparison, hash codes, code pages and a few type layouts differ.
+CoreCLR is not the game's Mono: string formatting, culture-aware comparison, Unicode normalization, invariant casing, hash codes, code pages and a few type layouts differ.
 When a result goes through any of those (text a player sees, a sort, a persisted value, a dictionary's order), read [runtime-differences.md](runtime-differences.md) and check that result in game.

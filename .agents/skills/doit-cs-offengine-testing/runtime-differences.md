@@ -2,6 +2,7 @@
 
 Measured with the same program on CoreCLR (.NET 10) and upstream Mono 6.14.1, the closest runtime to the game's, which runs Unity's own fork of Mono.
 A result that goes through one of these passes off-engine and can still be wrong in game: write the code so it holds on both, then check it in game, through the unity eval or a scenario.
+Code that calls only the class library needs no game: compile it into a scratch `net48` console project and run that under `mono`.
 
 | Behaviour | Mono (the game) | CoreCLR (the tests) | Write instead |
 |---|---|---|---|
@@ -10,6 +11,8 @@ A result that goes through one of these passes off-engine and can still be wrong
 | Culture-aware compare | `string.Compare("a-b", "ab", CurrentCulture)` is `1` | `-1` | `StringComparison.Ordinal` for anything but text sorted for a player. |
 | `string.GetHashCode()` | Stable across runs | Randomized per process | A hash never persisted, sent, or relied on for an order; `HashSet<string>` order comes out the same on both only by chance. |
 | Code page 1252 | `Encoding.GetEncoding(1252)` works | `NotSupportedException` | UTF-8. |
+| `string.Normalize` | One UTF-16 unit at a time, with fewer compatibility mappings: `𝐀`, `ﬁ` and `￥` stay as they are; a lone surrogate or U+FFFE comes back unchanged | By code point: `𝐀` gives `A`, `ﬁ` gives `fi`, `￥` gives `¥`; `ArgumentException` on a lone surrogate or U+FFFE | Count on a mapping only once checked in game. Measured alike: accented Latin and Cyrillic letters, voiced kana, Hangul syllables, full-width Latin, half-width katakana, `㎒`. Catch `ArgumentException` and keep the text, as `TextFold.NormalizeOrKeep` does. |
+| Invariant casing | `char.ToLowerInvariant('ẞ')` returns `ẞ`, `char.ToUpperInvariant('ς')` returns `ς` | `ß` and `Σ` | Map `ẞ` and `ς` explicitly where code must change their case; a test that leaves them to the framework passes here whatever the game does. |
 | Explicit layout | Loads a type overlapping an object field with a non-object field | `TypeLoadException` (`com.rlabrecque.steamworks.net`'s `OptionValue`) | Keep such types out of the tests; the game's own assemblies all load. |
 
 Measured the same on both, so a test can rely on them: `Math.Round(2.5)` is `2`, `Array.Sort` orders equal keys alike, `OrderBy` is stable, `"i".ToUpper(tr-TR)` is `İ`, and `Math.Sin` and `Math.Pow` return the same doubles.
