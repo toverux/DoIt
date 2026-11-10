@@ -40,6 +40,8 @@ When an action needs a subject and is invoked bare, Do It activates a pick tool,
 
 Hook into the game's own actions: the input actions of the tool system and the UI (open a panel, pick a tool, a photo mode toggle), the simulation controls, selection operations. Reach each one by a direct call where the API is public, by reflection where it is not; `DoIt/Reflection` holds the accessors. The input manager enumerates every action with its current keys, and the Shortcuts map's action names are the UI's alias names, so the catalogue starts from it. Catalogue what the game exposes before picking the first batch, and keep the catalogue in a doc an agent can grow.
 
+The seed pause action fires `Pause Simulation`, which the game handles only while the simulation runs: Enter on it does nothing while paused, though its toggle reads on and resumes from the row's control. An input channel falling back to `Resume Simulation` when `Pause Simulation` has no handler would make Enter toggle.
+
 ## Bridges to installed mods
 
 **Priority:** high · **Cost:** large
@@ -62,7 +64,25 @@ Opened by a key binding, `Alt+Space` the first candidate, rebindable in the sett
 
 **Priority:** high · **Cost:** large
 
-Pin any palette action to a toolbar for one-click access, from its palette row with one key, with the same availability rules, ordered and grouped by the player by drag, persisted in the settings. A pinned action without an icon shows its initials. Where it docks in the game's layout, and how it behaves when the game's own toolbars and panels move, is to be decided against the real UI.
+Pin any palette action to a toolbar for one-click access, from its palette row with one key, with the same availability rules, ordered and grouped by the player by drag, persisted in the settings. A pinned action without an icon shows its initials. Where it docks is the next entry's.
+
+## Docking the toolbar
+
+**Priority:** high · **Cost:** moderate
+
+The toolbar docks like Windows's taskbar: pinned vertically or horizontally to an edge, it stays clear of the game's own components and is tested against the other overlays it meets. A quick-settings icon on it changes its appearance and behaviors in place, with one entry opening the mod's settings.
+
+## Arranging and styling the game's top bar
+
+**Priority:** low · **Cost:** moderate
+
+Let the player move the game's own top bar by a drag handle, and set its buttons' color and opacity, kept in the settings.
+
+## Managing other mods' buttons
+
+**Priority:** low · **Cost:** large
+
+Other mods add their own buttons to the game's top-left bar and to the universal mods menu. Wrap each of those entries so the player can manage it: hide it, move it to the other menu, or pin it to Do It's toolbar. How Do It finds and wraps an entry another mod injected into the game's UI is to be read from the game's UI bundle and checked against mods in the corpus.
 
 ## A skill to bring support to a mod
 

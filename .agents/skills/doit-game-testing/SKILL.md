@@ -36,6 +36,7 @@ A scenario takes this shape:
 - Put back in `OnCleanup` whatever the scenario changed that outlives it (a setting, a saved value), then return `base.OnCleanup()`, which returns to the main menu.
 - [`ModTestScenario`](../../../DoIt/Scenarios/ModTestScenario.cs) dismisses in its constructor the errors pending from before the scenario, which would abort it, and logs how many; an error of the mod's among them still fails the `test` run.
 - Reach the UI side with `GameManager.instance.userInterface.view.View.ExecuteScript(<js>)`, then `await this.WaitFrames(5)` for the view to deliver what the script fired, as [`ActionsScenario`](../../../DoIt/Scenarios/ActionsScenario.cs) does: `engine.trigger('<group>.<name>', ...)` fires a binding's trigger, and `doItDebug.<entry>(...)` calls a Debug entry point of the UI, which a Debug bundle mounts in the game's view from [`DoIt/UI/src/debug`](../../../DoIt/UI/src/debug), the UI-side executors among them. Check the effect from C#.
+- Time UI-side work with `Date.now()` over a batch of runs: `performance.now()` holds still within one script run (`~/Documents/Dev/gameface-quirks.md`).
 - Report each check with `this.Check(<passed>, <what was read>)`, which logs a `[PASSED]` or `[FAILED]` line, and end each test on `this.Finish()`, which fails it when one of its checks failed: a run reports every check and not only the first.
 - Keep a check's expected values in the mod's code, beside the logic, when an off-engine test can check them too: one table that the off-engine tests and the scenario both read.
 
