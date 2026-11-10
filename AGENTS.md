@@ -42,6 +42,7 @@ TypeScript, one root `tsconfig.json` covering `DoIt/UI` and `scripts`:
 ## Repository structure
 
 - `DoIt`: the mod's C# project. `Mod.cs` and `Settings.cs` are its entry point and settings.
+  - `Actions`: the action model, the registry that searches and invokes actions, and the registration source other mods register through; `Sources/` holds the game's own source, with the bridges ledger under `Bridges/`.
   - `Systems`: ECS systems, the UI systems among them, which own the C# side of the bindings.
   - `Logging`: the mod-owned logging seam (`IModLog` + `ModLog`, reached through `Mod.Log`), testable off-engine.
   - `Reflection`: accessors reaching into private game internals by reflection.
@@ -109,7 +110,7 @@ When the game's debugger port (unity) or its UI debugging port (gameface) is una
 - Build UI from the game's own components and chrome: the `cs2/ui` exports, and the components and class modules the game does not export, reached through `utils/vanilla-modules.ts` with a typed stub under `vanilla-modules` added on demand (its module path from the `cs2-modding-ui` skill). Write custom SCSS only for what vanilla cannot express, so the mod looks native and follows the game's restyles.
 - Every C#↔TS binding goes through a `DoIt/UI/src/utils/bindings` module, which owns its `const GROUP`, keeps its `bindValue`/`trigger` calls private, and exports typed hooks and command functions. Components call those, never raw `bindValue`/`trigger`.
 - Create value bindings with `lazyBindValue` (not eager `bindValue`) so that importing a module or component does not instantiate engine bindings; call the returned accessor inside the hook, e.g. `useValue(foo$())`.
-- A type's outbound UI wire format lives in a `DoIt/Utils/Writers` writer. A writer whose properties vary between writes encodes which are present in its `TypeBegin` name: cohtml caches one shape per type name and crashes the game on another (`gameface` skill, data binding).
+- A type's outbound UI wire format lives in a `DoIt/Utils/Writers` writer. A writer whose properties vary between writes encodes which are present in its `TypeBegin` name: cohtml caches one shape per type name and crashes the game on another (`gameface` skill, data binding). A null string goes through `WriteNull()`: `Write((string) null)` drops the property, which changes the shape.
 - One `*.module.scss` per component file, colocated with its `*.tsx`, class names following the BEM-derived convention in `.agents/rules/css-modules-bem.md`.
 - Every layout length is in `rem` or `em`, which scale with the viewport: `px` is only correct at 1920 wide, where `1rem` happens to equal `1px`, and drifts both ways at every other resolution.
 - SCSS reaches a vanilla color only through its `vanilla.$…` variable in `DoIt/UI/src/vanilla-vars.scss`, never a raw `var(--…)` nor its value copied as a literal: add a missing one there with its latest known value in a trailing comment, so a game update that moves a color shows in one file. A tint is `color.change(vanilla.$…, $alpha: …)`, which Sass computes at build time: the variable it tints holds the literal value, its `var(--…)` in the comment.
@@ -121,6 +122,7 @@ When the game's debugger port (unity) or its UI debugging port (gameface) is una
 - The decompiled game source, the third-party mod corpus, and the readable copy of the game's UI bundle are machine-local: read their paths from `~/.cs2-modding/setup.md` instead of hardcoding them here. A missing key or a `(none)` value means that source does not exist.
 - Reading that source settles what the engine does, never what it costs. Measure a claim about the running game before asserting one.
 - The mod patches no game code. When a change cannot be made through systems, prefabs or bindings, read the `cs2-modding` skill's patching reference before adding Harmony.
+- A source reads the game or mod internals it needs in `List()`, kept once resolved, never in its constructor: `ActionRegistry.TryList` then marks it down when an update breaks them, where a constructor throw reaches the UI system's fatal error.
 - When a mod holds an action worth exposing that neither reflection nor a UI trigger reaches reliably, do not force the bridge: ask the user whether to write a handoff for another session to propose a pull request to that mod, and record the gap in `DoIt/Actions/Sources/Bridges/mods.json`.
 - The toolchain's `CSII_*` variables are Windows user-scope environment variables, a scope Linux lacks: read one from the user scope with a process-environment fallback, the shape `DoIt.csproj` and `DoIt.Tests.csproj` use.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `<type>(<optional scope>): <summary>`, with the types `feat`, `fix`, `perf`, `refactor`, `test`, `docs`, `style`, `build`, `chore`. The release changelog is written from them.
