@@ -4,17 +4,19 @@ Planned work on the mod that no ticket holds yet.
 
 Every entry opens with a triage line: **Priority** (high, medium, low) and **Cost** as the code reads at triage (trivial, cheap, moderate, large), either one `unsure` when nobody has judged it yet.
 
-## The shape of an action
-
-**Priority:** high · **Cost:** moderate
-
-Everything else hangs on this. An action is what the palette lists and the toolbar pins: a stable ID, a localized label and description, an icon (the game's or the mod's own for that action where one exists), a category, an availability predicate (main menu, in game, a tool active, an entity selected), an invoke, and, where the action is a toggle or holds a value or a mode, its state, read live so the palette and the toolbar show it. It takes no argument or one, the selected entity the first case; what else an argument can be (a prefab, a position, a free-text query) and how the palette collects it before invoking are open. Three invoke channels, measured in the running game: a public C# member; a cohtml trigger, fired from C# for `bool`, `int` and `string` arguments only (an entity argument crashes the game, so those go through the UI side or the C# member behind the trigger); and a UI input action, dispatched through the game's input stack from the UI side only. Settle the C# model, its wire format to the UI, and how a source reports an action gone or changed, before the first bridge.
+An entry is removed once its work is done.
 
 ## State and sub-actions in the results
 
 **Priority:** high · **Cost:** moderate
 
-An action is not a bare item. A result row shows, on its right, the state the action holds (a toggle on or off, the current value, the active mode) and its sub-actions where it has several, so the player reads the state and changes it without leaving the row: a toggle flips in place, a value edits inline, a sub-action is picked with the arrow keys. A pinned action shows the same state on its toolbar button.
+The registry already hands a row and a pin their state: its shape (a toggle, a number, a choice, a text), its live value, and whether the player can set it. What is left is the UI. A result row shows, on its right, the state the action holds (a toggle on or off, the current value, the active mode) and its sub-actions where it has several, so the player reads the state and changes it without leaving the row: a toggle flips in place, a value edits inline, a sub-action is picked with the arrow keys. A pinned action shows the same state on its toolbar button. Which key reaches the row's control is settled against the running UI: one that types into the query box cannot be it, and moving focus into the row is the first candidate.
+
+## Actions that take over the palette
+
+**Priority:** high · **Cost:** large
+
+An action can do more than call up the vanilla panel it stands for: invoked, it replaces the results with a view of its own, inside the palette. Load Game is the first case: instead of opening the game's load panel, it lists the saves where the results were, the query filters them, and Enter loads the one picked; Escape steps back to the actions. The search bar is a dynamic environment: what the box searches, what the rows are and what Enter does belong to the action in charge. The action model was built for a bare invoke and changes wherever this needs it: no choice already made closes a door here. A free-text subject, a prefix scope and a named thing picked as a subject are the same mechanism seen from other entries.
 
 ## Settings as actions
 
@@ -89,18 +91,6 @@ Other mods add their own buttons to the game's top-left bar and to the universal
 **Priority:** medium · **Cost:** moderate
 
 A repo-local skill an agent runs on a mod not yet supported: locate its source or decompile, find what it exposes that could be an action, write the bridge in the shape the first bridges settled, verify it in the running game with the mod installed, and record the mod version. Written once a few bridges exist by hand, so the skill captures what they have in common rather than guesses at it.
-
-## Robustness over foreign code
-
-**Priority:** high · **Cost:** moderate
-
-Every source is foreign code: the game's internals, other mods' assemblies, a mod's registration call. One misbehaving source is isolated, logged once with what failed and why, and the rest keeps working; a bridge that fails on load reports which mod and which version. A game update or a mod update breaking a bridge shows in the log before a player reports it. A trigger fired from C# with a mistyped argument crashes the game instead of throwing, so the trigger channel is typed at the bridge, never at invoke. Decide what the palette shows for a source that is down.
-
-## Performance budget
-
-**Priority:** medium · **Cost:** moderate
-
-The palette opens in a frame and filters as the player types; the toolbar costs nothing when idle. Measure in the running game rather than reason from the source, and keep the measurements with the code that meets them. Reflection lookups are resolved once, at bridge load, never per invoke.
 
 ## Contextual palette
 

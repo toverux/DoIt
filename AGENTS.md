@@ -4,7 +4,7 @@
 
 ## Project overview
 
-DoIt is a C# mod for Cities: Skylines II: a command palette over the game's and other mods' actions, and a toolbar to pin them. Actions come from three sources: the game's own, reached by direct call or reflection; bridges into installed mods, by reflection; and mods registering through the API the mod provides. `docs/ROADMAP.md` holds what is planned and what is still to define, the shape of an action first.
+DoIt is a C# mod for Cities: Skylines II: a command palette over the game's and other mods' actions, and a toolbar to pin them. Actions come from three sources: the game's own, reached by direct call or reflection; bridges into installed mods, by reflection; and mods registering through the API the mod provides. `docs/ROADMAP.md` holds what is planned and what is still to define.
 A mod has two halves talking over cohtml bindings: the C# logic in `DoIt`, running as ECS systems in the game's world, and the React UI in `DoIt/UI/src`, hooking onto the game's own React UI.
 
 ## Standing goals
