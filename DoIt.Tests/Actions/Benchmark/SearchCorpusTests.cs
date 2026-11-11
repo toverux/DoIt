@@ -83,14 +83,6 @@ public sealed class SearchCorpusTests {
     Assert.Null(labels["Common.ACTION[Bulldoze]"].Description);
   }
 
-  [Fact]
-  public void Stress_HoldsThePrefabNames() {
-    var stress = SearchCorpus.Require().Stress("en-US");
-
-    Assert.Contains(new CorpusLabel("Assets.NAME[Small Road]", "Two-Lane Road", null), stress);
-    Assert.All(stress, static label => Assert.StartsWith("Assets.NAME[", label.Key));
-  }
-
   [Theory]
   [InlineData(null, "CSII_INSTALLATIONPATH is not set")]
   [InlineData("", "CSII_INSTALLATIONPATH is not set")]

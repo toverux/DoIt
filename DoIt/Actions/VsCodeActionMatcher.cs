@@ -54,9 +54,9 @@ internal sealed class VsCodeActionMatcher : IActionMatcher {
   private int[] table = [], arrows = [], diag = [];
 
   public ActionMatch? Match(string term, string text) {
-    // Hot path, every field of every action: a scan of the UTF-16 units, in place of decoding the
-    // text for IsPatternInWord to reject.
-    if (CodePointText.Scope(term, text) is null) {
+    // [PERF] A scan of the UTF-16 units, in place of decoding the text for IsPatternInWord to
+    // reject.
+    if (!CodePointText.HoldsInOrder(term, text)) {
       return null;
     }
 
@@ -182,7 +182,7 @@ internal sealed class VsCodeActionMatcher : IActionMatcher {
       // Keep the backwards diagonal when it makes a run of three or more longer than the forwards
       // one.
       if (backwardsDiagLength > 1 &&
-        this.pattern[row - 1] == this.word[column - 1] &&
+        HangulInitials.IsMatch(this.pattern[row - 1], this.word[column - 1]) &&
         backwardsDiagLength + 1 > this.diag[(row * stride) + diagColumn]) {
         diagColumn = column;
       }
@@ -215,7 +215,7 @@ internal sealed class VsCodeActionMatcher : IActionMatcher {
     var patternPos = 0;
 
     for (var wordPos = 0; patternPos < patternLen && wordPos < wordLen; wordPos++) {
-      if (this.pattern[patternPos] == this.word[wordPos]) {
+      if (HangulInitials.IsMatch(this.pattern[patternPos], this.word[wordPos])) {
         this.minWordMatchPos[patternPos] = wordPos;
         patternPos++;
       }
@@ -228,7 +228,7 @@ internal sealed class VsCodeActionMatcher : IActionMatcher {
     var patternPos = patternLen - 1;
 
     for (var wordPos = wordLen - 1; patternPos >= 0 && wordPos >= 0; wordPos--) {
-      if (this.pattern[patternPos] == this.word[wordPos]) {
+      if (HangulInitials.IsMatch(this.pattern[patternPos], this.word[wordPos])) {
         this.maxWordMatchPos[patternPos] = wordPos;
         patternPos--;
       }
@@ -240,7 +240,7 @@ internal sealed class VsCodeActionMatcher : IActionMatcher {
   /// <paramref name="wordPos"/>, or <see cref="NoScore"/> when they differ.
   /// </summary>
   private int DoScore(int patternPos, int wordPos, bool isNewMatchStart) {
-    if (this.pattern[patternPos] != this.word[wordPos]) {
+    if (!HangulInitials.IsMatch(this.pattern[patternPos], this.word[wordPos])) {
       return VsCodeActionMatcher.NoScore;
     }
 

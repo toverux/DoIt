@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -74,27 +73,9 @@ internal sealed record SearchCase(
 
   /// <summary>
   /// The locale keys of the rows a search over the locale's quality corpus writes, in rank order,
-  /// with <paramref name="matcher"/> behind the registry's real pipeline; <paramref name="clock"/>,
-  /// when given, runs during the search alone.
+  /// through the registry's real pipeline and shipped matcher.
   /// </summary>
-  internal List<string> Rank(
-    SearchCorpus corpus,
-    IActionMatcher matcher,
-    Stopwatch? clock = null
-  ) =>
-    this.Search(corpus, matcher, clock)
-      .Rows
-      .Select(static row => ActionId.Parse(row.Id).Local)
-      .ToList();
-
-  /// <summary>
-  /// The rows a search over the locale's quality corpus writes, as <see cref="Rank"/> reads them.
-  /// </summary>
-  internal ActionResults Search(
-    SearchCorpus corpus,
-    IActionMatcher matcher,
-    Stopwatch? clock = null
-  ) {
+  internal List<string> Rank(SearchCorpus corpus) {
     var english = corpus.Locales[SearchCase.SourceLocale].Entries;
     var useStore = new MemoryUseStore();
 
@@ -109,9 +90,9 @@ internal sealed record SearchCase(
     );
 
     var fixture = new RegistryFixture(
-      matcher,
-      useStore,
-      text => text.id is {} id && english.TryGetValue(id, out var label) ? label : null
+      useStore: useStore,
+      resolveSourceText: text =>
+        text.id is {} id && english.TryGetValue(id, out var label) ? label : null
     );
 
     var source = new FakeSource(SearchCase.Segment);
@@ -133,13 +114,11 @@ internal sealed record SearchCase(
     }
 
     fixture.Registry.AddSource(source);
-    clock?.Start();
 
-    var results = fixture.Registry.Search(this.Query, sequence: 0);
-
-    clock?.Stop();
-
-    return results;
+    return fixture.Registry.Search(this.Query, sequence: 0)
+      .Rows
+      .Select(static row => ActionId.Parse(row.Id).Local)
+      .ToList();
   }
 
   /// <summary>

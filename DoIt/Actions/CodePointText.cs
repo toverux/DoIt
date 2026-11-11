@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -29,61 +28,50 @@ internal sealed class CodePointText {
   /// Whether a code point belongs to a word: a letter, a mark, or a number.
   /// A word starts after any other character, the registry's own reading of a boundary, so a
   /// matcher's word-start bonus lands where the registry reads a word-starts tier.
+  /// The letters, the marks, and the numbers are the first eleven categories.
   /// </summary>
   internal static bool IsWordCharacter(int point) =>
     CharUnicodeInfo.GetUnicodeCategory(point) <= UnicodeCategory.OtherNumber;
 
   /// <summary>
-  /// The span of <paramref name="text"/> a match of <paramref name="term"/> can lie in, from the
-  /// character before the first place of the term's first character to the last place of its last
-  /// one, or none when the text does not hold the term's characters in order.
+  /// Whether the code point at <paramref name="index"/> belongs to a word.
+  /// The low half of a surrogate pair and a lone surrogate belong to none.
+  /// </summary>
+  internal static bool IsWordCharacter(string text, int index) =>
+    CharUnicodeInfo.GetUnicodeCategory(text, index) <= UnicodeCategory.OtherNumber;
+
+  /// <summary>
+  /// Whether <paramref name="text"/> holds the characters of <paramref name="term"/> in order, a
+  /// consonant typed alone held by a syllable opening on it.
   /// It reads UTF-16 units, which hold in order whenever the code points do, so it rejects a text
   /// before decoding it.
   /// </summary>
-  internal static (int Start, int End)? Scope(string term, string text) {
+  internal static bool HoldsInOrder(string term, string text) {
     var at = -1;
-    var first = -1;
 
     foreach (var unit in term) {
-      at = text.IndexOf(unit, at + 1);
+      at = HangulInitials.IndexOf(text, unit, at + 1);
 
       if (at < 0) {
-        return null;
-      }
-
-      if (first < 0) {
-        first = at;
+        return false;
       }
     }
 
-    var start = Math.Max(first - 1, 0);
-
-    // Never half a surrogate pair.
-    if (start > 0 && char.IsLowSurrogate(text[start])) {
-      start--;
-    }
-
-    return (start, text.LastIndexOf(term[^1]) + 1);
+    return true;
   }
 
-  internal void Decode(string text) => this.Decode(text, 0, text.Length);
-
-  /// <summary>
-  /// Decodes the span of <paramref name="text"/> from <paramref name="start"/> to
-  /// <paramref name="end"/>, the ranges it reports still placed in the whole text.
-  /// </summary>
-  internal void Decode(string text, int start, int end) {
-    if (this.points.Length < end - start) {
-      this.points = new int[end - start];
-      this.starts = new int[end - start + 1];
+  internal void Decode(string text) {
+    if (this.points.Length < text.Length) {
+      this.points = new int[text.Length];
+      this.starts = new int[text.Length + 1];
     }
 
     var count = 0;
 
-    for (var i = start; i < end; i++) {
+    for (var i = 0; i < text.Length; i++) {
       this.starts[count] = i;
 
-      if (i + 1 < end && char.IsSurrogatePair(text[i], text[i + 1])) {
+      if (i + 1 < text.Length && char.IsSurrogatePair(text[i], text[i + 1])) {
         this.points[count] = char.ConvertToUtf32(text[i], text[i + 1]);
         i++;
       }
@@ -94,7 +82,7 @@ internal sealed class CodePointText {
       count++;
     }
 
-    this.starts[count] = end;
+    this.starts[count] = text.Length;
     this.Length = count;
   }
 

@@ -16,12 +16,6 @@ Everything else hangs on this. An action is what the palette lists and the toolb
 
 An action is not a bare item. A result row shows, on its right, the state the action holds (a toggle on or off, the current value, the active mode) and its sub-actions where it has several, so the player reads the state and changes it without leaving the row: a toggle flips in place, a value edits inline, a sub-action is picked with the arrow keys. A pinned action shows the same state on its toolbar button.
 
-## Search quality
-
-**Priority:** high · **Cost:** moderate
-
-State of the art fuzzy matching over the action labels: word-start and abbreviation bonuses (`ps` finds Pause Simulation), tolerance to a typo, diacritics folded, and a ranking that mixes match quality with recent and frequent use. Candidates to measure against the game's own action names in the 12 locales, CJK among them: fzf's algorithm, VS Code's `fuzzyScore`, command-score. The choice is made on a benchmark of real labels, not on a demo.
-
 ## Settings as actions
 
 **Priority:** medium · **Cost:** large
@@ -42,6 +36,12 @@ Hook into the game's own actions: the input actions of the tool system and the U
 
 The seed pause action fires `Pause Simulation`, which the game handles only while the simulation runs: Enter on it does nothing while paused, though its toggle reads on and resumes from the row's control. An input channel falling back to `Resume Simulation` when `Pause Simulation` has no handler would make Enter toggle.
 
+## Isolating the game's systems from each other
+
+**Priority:** high · **Cost:** moderate
+
+`GameActionSource` will grow into one source over many unrelated game systems, and the registry isolates failures per source: a game update that retires or changes one system throws from the source's `List()` and takes every game action down with it. Contain a failure to the system it comes from, by splitting the game source into one source per system or by isolating each system's actions inside it, so the rest of the game's actions keep working and the log names the system that broke. Settle it before the game source grows past its seed actions.
+
 ## Bridges to installed mods
 
 **Priority:** high · **Cost:** large
@@ -58,7 +58,7 @@ Mods that want to register actions themselves. The first shape is a reflection s
 
 **Priority:** high · **Cost:** large
 
-Opened by a key binding, `Alt+Space` the first candidate, rebindable in the settings. Search per the Search quality entry, keyboard driven end to end, built from the game's own chrome so it reads as part of the game. A row shows the action's icon where it has one and nothing in its place otherwise, and the action's current key where the game or the mod binds one. Argument collection for actions that take one. The game's shortcut consumers unregister while a modal is open, so the palette either stays out of the game's modal scope or closes before it dispatches a game action. Controller support is the open question: what the palette becomes without a keyboard.
+Opened by a key binding, `Alt+Space` the first candidate, rebindable in the settings. Keyboard driven end to end, showing what the registry's search matched (the spans of the label, a matched alias or description), built from the game's own chrome so it reads as part of the game. A row shows the action's icon where it has one and nothing in its place otherwise, and the action's current key where the game or the mod binds one. Argument collection for actions that take one. The game's shortcut consumers unregister while a modal is open, so the palette either stays out of the game's modal scope or closes before it dispatches a game action. Controller support is the open question: what the palette becomes without a keyboard.
 
 ## The toolbar
 

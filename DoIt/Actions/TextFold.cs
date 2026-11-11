@@ -8,8 +8,9 @@ namespace DoIt.Actions;
 /// <summary>
 /// Turns a string into the form the search compares, so a query and a label typed or written
 /// differently still meet: compatibility-decomposed, lower-cased, accents dropped from Latin
-/// letters only, the Latin letters that do not decompose replaced, katakana turned into hiragana,
-/// and what is left recomposed.
+/// letters only, the Latin letters that do not decompose replaced, the consonant clusters a Korean
+/// IME composes split into their two consonants, katakana turned into hiragana, and what is left
+/// recomposed.
 /// </summary>
 internal static class TextFold {
   /// <summary>
@@ -40,7 +41,7 @@ internal static class TextFold {
     buffer.Clear();
 
     for (var index = 0; index < text.Length; index++) {
-      // ASCII has no decomposition, so it skips the cache.
+      // [PERF] ASCII has no decomposition: lower-cased directly, in place of a lookup in the cache.
       if (text[index] < 0x80) {
         var lower = char.ToLowerInvariant(text[index]);
 
@@ -91,7 +92,7 @@ internal static class TextFold {
           isAfterLatinLetter = TextFold.IsLatinLetter(character);
         }
 
-        if (TextFold.ReplaceLatinLetter(character) is {} replacement) {
+        if (TextFold.ReplaceLetter(character) is {} replacement) {
           foreach (var replacing in replacement) {
             buffer.Append(replacing, start);
           }
@@ -135,10 +136,17 @@ internal static class TextFold {
   }
 
   /// <summary>
+  /// <para>
   /// The Latin letters that hold their accent or ligature in the letter itself, which a
   /// decomposition cannot drop.
+  /// </para>
+  /// <para>
+  /// The Hangul clusters a Korean IME composes from two consonants typed with no vowel, <c>ㄳ</c>
+  /// from <c>ㄱ</c> then <c>ㅅ</c>, read as those two initials: decomposed, a cluster is a final
+  /// consonant or an archaic initial, which no initial matches.
+  /// </para>
   /// </summary>
-  private static string? ReplaceLatinLetter(char character) =>
+  private static string? ReplaceLetter(char character) =>
     character switch {
       'ł' => "l",
       'ø' => "o",
@@ -148,6 +156,17 @@ internal static class TextFold {
       'ẞ' => "ss",
       'æ' => "ae",
       'œ' => "oe",
+      'ᆪ' => "ᄀᄉ",
+      'ᆬ' => "ᄂᄌ",
+      'ᆭ' => "ᄂᄒ",
+      'ᆰ' => "ᄅᄀ",
+      'ᆱ' => "ᄅᄆ",
+      'ᆲ' => "ᄅᄇ",
+      'ᆳ' => "ᄅᄉ",
+      'ᆴ' => "ᄅᄐ",
+      'ᆵ' => "ᄅᄑ",
+      'ᄚ' => "ᄅᄒ",
+      'ᄡ' => "ᄇᄉ",
       _ => null
     };
 

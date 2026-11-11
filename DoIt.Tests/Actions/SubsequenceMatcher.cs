@@ -15,7 +15,7 @@ internal sealed class SubsequenceMatcher : IActionMatcher {
     var from = 0;
 
     foreach (var character in term) {
-      var at = text.IndexOf(character, from);
+      var at = HangulInitials.IndexOf(text, character, from);
 
       if (at < 0) {
         return null;

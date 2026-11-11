@@ -28,8 +28,6 @@ internal sealed class SearchCorpus {
     @"^\w+\.\w*PANEL_TITLE$|^Main\.TOOLTIP_TITLE_"
   );
 
-  private static readonly Regex StressFamily = new(@"^Assets\.NAME\[");
-
   /// <summary>
   /// The key prefix of a label family, and the one of its descriptions, keyed alike past it.
   /// </summary>
@@ -42,10 +40,8 @@ internal sealed class SearchCorpus {
   private static readonly Lazy<(SearchCorpus? Corpus, string Why)> Installed =
     new(static () => SearchCorpus.Load(SearchCorpus.ReadInstallPath()));
 
-  // Hot path: every case searches its locale's labels, so each family is read once per locale
-  // rather than filtered and sorted from the whole locale on each call.
-  private readonly ConcurrentDictionary<(string Locale, Regex Family), List<CorpusLabel>> labels =
-    new();
+  // [PERF] Each locale's labels, filtered and sorted once, in place of on every call.
+  private readonly ConcurrentDictionary<string, List<CorpusLabel>> labels = new();
 
   private SearchCorpus(IReadOnlyDictionary<string, GameLocale> locales) {
     this.Locales = locales;
@@ -91,26 +87,17 @@ internal sealed class SearchCorpus {
   /// on, in key order.
   /// </summary>
   internal IReadOnlyList<CorpusLabel> Quality(string locale) =>
-    this.Labels(locale, SearchCorpus.QualityFamilies);
+    this.labels.GetOrAdd(locale, this.ReadLabels);
 
   /// <summary>
-  /// The prefab names of <paramref name="locale"/>, which the benchmark times the search on alone,
-  /// in key order.
+  /// The action-like labels of a locale, a label holding a placeholder left out, as no action shows
+  /// one.
   /// </summary>
-  internal IReadOnlyList<CorpusLabel> Stress(string locale) =>
-    this.Labels(locale, SearchCorpus.StressFamily);
-
-  /// <summary>
-  /// The labels of a family, a label holding a placeholder left out, as no action shows one.
-  /// </summary>
-  private List<CorpusLabel> Labels(string locale, Regex family) =>
-    this.labels.GetOrAdd((locale, family), this.ReadLabels);
-
-  private List<CorpusLabel> ReadLabels((string Locale, Regex Family) family) {
-    var entries = this.Locales[family.Locale].Entries;
+  private List<CorpusLabel> ReadLabels(string locale) {
+    var entries = this.Locales[locale].Entries;
 
     return entries
-      .Where(entry => family.Family.IsMatch(entry.Key) &&
+      .Where(entry => SearchCorpus.QualityFamilies.IsMatch(entry.Key) &&
         entry.Value.Length > 0 &&
         !entry.Value.Contains('{')
       )

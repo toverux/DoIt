@@ -76,6 +76,137 @@ public sealed class ActionRegistrySearchTests {
   }
 
   [Fact]
+  public void Search_RanksTheInitialsOfEveryWordAboveOtherWordStarts() {
+    // Pick Shape Cover scores higher, its s closer to its p.
+    this.Add(Descriptors.Call("Pick Shape Cover"), Descriptors.Call("Panel Slider"));
+
+    Assert.Equal(["Panel Slider", "Pick Shape Cover"], this.Labels("ps"));
+  }
+
+  [Fact]
+  public void Search_ReadsInitialsAsOneLetterPerWord_NotAWordStartAndAPrefix() {
+    // Exit Conveyor is hit on both its words, but as e and con, which a word prefix outranks.
+    this.Add(Descriptors.Call("Exit Conveyor"), Descriptors.Call("City Economy"));
+
+    Assert.Equal(["City Economy", "Exit Conveyor"], this.Labels("econ"));
+  }
+
+  [Fact]
+  public void Search_ReadsInitials_CountingOnlyTheWordsOfLettersAndNumbers() {
+    // Bike Trail Map scores higher; the & of Bus & Tram is no word to hit.
+    this.Add(Descriptors.Call("Bike Trail Map"), Descriptors.Call("Bus & Tram"));
+
+    Assert.Equal(["Bus & Tram", "Bike Trail Map"], this.Labels("bt"));
+  }
+
+  [Fact]
+  public void Search_ReadsInitials_OnlyWhenEveryRangeHitsAWord() {
+    // Bus & Bike Lanes scores higher; b& on Buses & Trams hits the & in place of Trams.
+    this.Add(Descriptors.Call("Buses & Trams"), Descriptors.Call("Bus & Bike Lanes"));
+
+    Assert.Equal(["Bus & Bike Lanes", "Buses & Trams"], this.Labels("b&"));
+  }
+
+  [Theory]
+  [InlineData("Panneau d'informations")]
+  [InlineData("Panneau d\u2019informations")]
+  [InlineData("Panneau \U00020000'informations")]
+  public void Search_ReadsInitials_OfWordsAnApostropheJoins(string label) {
+    // Pause Image Tool scores higher; an elided article and its word make one word to hit.
+    this.Add(Descriptors.Call("Pause Image Tool"), Descriptors.Call(label));
+
+    Assert.Equal([label, "Pause Image Tool"], this.Labels("pi"));
+  }
+
+  [Theory]
+  [InlineData("Driver's License")]
+  [InlineData("Driver’s License")]
+  public void Search_ReadsInitials_SkippingTheLoneLetterOfAPossessive(string label) {
+    // The possessive scores higher; the s after the apostrophe is no word, so sl hits no initials.
+    this.Add(Descriptors.Call(label), Descriptors.Call("Save Layout"));
+
+    Assert.Equal(["Save Layout", label], this.Labels("sl"));
+    Assert.Equal([label], this.Labels("dl"));
+  }
+
+  [Theory]
+  [InlineData("Toggle 'Info' View")]
+  [InlineData("'Info' Toggle View")]
+  public void Search_ReadsInitials_OfAQuotedWordAsAWordOfItsOwn(string label) {
+    // Toggle Van Info is shorter; an apostrophe after no word opens a quote, not an elision.
+    this.Add(Descriptors.Call(label), Descriptors.Call("Toggle Van Info"));
+
+    Assert.Equal(["Toggle Van Info", label], this.Labels("tv"));
+  }
+
+  [Fact]
+  public void Search_ReadsInitials_OfCharactersBeyondTheBasicPlane() {
+    // Each word opens on a surrogate pair, one character; the used label holds a third word.
+    this.Seed("\U00020000 \U00020001 Hall", count: 5, daysAgo: 0);
+    this.Add(
+      Descriptors.Call("\U00020000 \U00020001 Hall"),
+      Descriptors.Call("\U00020000 \U00020001")
+    );
+
+    Assert.Equal(
+      ["\U00020000 \U00020001", "\U00020000 \U00020001 Hall"],
+      this.Labels("\U00020000\U00020001")
+    );
+  }
+
+  [Fact]
+  public void Search_MatchesHangulSyllablesByTheirInitialConsonants_WordStartsFirst() {
+    // ㅂㄷㅈ opens 불도저 and runs inside 대형불도저.
+    this.Add(Descriptors.Call("대형불도저"), Descriptors.Call("불도저"), Descriptors.Call("도로"));
+
+    Assert.Equal(["불도저", "대형불도저"], this.Labels("ㅂㄷㅈ"));
+  }
+
+  [Fact]
+  public void Search_MatchesATypedSyllable_OnlyByItself_BesideAnInitialConsonant() {
+    // 쓸레질 opens on 쓸, whose initial is the one of 쓰.
+    this.Add(Descriptors.Call("쓸레질"), Descriptors.Call("쓰레기"));
+
+    Assert.Equal(["쓰레기"], this.Labels("쓰ㄹ"));
+  }
+
+  [Theory]
+  // 도로 opens on the initials of 다리, where the term's 다 lands.
+  [InlineData("도로 다리", "다ㄹ")]
+  // The consonant lands on a syllable the term also types whole.
+  [InlineData("도로 도구", "도로ㄷ")]
+  public void Search_MatchesATermMixingSyllablesAndInitialConsonants(string label, string query) {
+    this.Add(Descriptors.Call(label));
+
+    Assert.Equal([label], this.Labels(query));
+  }
+
+  [Theory]
+  // A Korean IME composes two consonants typed with no vowel into one cluster, ㄱ then ㅅ into ㄳ.
+  [InlineData("공사", "ㄳ")]
+  [InlineData("비상", "ㅄ")]
+  [InlineData("리허설", "ㅀ")]
+  // A label holding the cluster itself folds alike.
+  [InlineData("ㄳ", "ㄳ")]
+  public void Search_MatchesAConsonantClusterTheImeComposes_AsItsTwoInitials(
+    string label,
+    string query
+  ) {
+    this.Add(Descriptors.Call(label));
+
+    Assert.Equal([label], this.Labels(query));
+  }
+
+  [Fact]
+  public void Search_ReadsAWordStart_AfterALoneSurrogate() {
+    // A lone low surrogate, broken text in a mod's label, ends a word: B starts one, which Cab's
+    // run inside a word ranks below.
+    this.Add(Descriptors.Call("Cab"), Descriptors.Call("A\uDC00Bx"));
+
+    Assert.Equal(["A\uDC00Bx", "Cab"], this.Labels("b"));
+  }
+
+  [Fact]
   public void Search_OrdersATierByFrecency_UseHalvingEveryTwoWeeks() {
     // 2 × ½^(13/14) ≈ 1.05, then 1, then 2 × ½^(15/14) ≈ 0.95.
     this.Seed("Dozer C", count: 2, daysAgo: 15);

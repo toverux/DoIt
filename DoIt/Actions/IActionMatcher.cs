@@ -7,6 +7,9 @@ namespace DoIt.Actions;
 /// <see cref="TextFold"/>, the term never empty and holding no space.
 /// The registry reads the tier of a match from its ranges and scores every field of an action
 /// through it, so a matcher knows nothing of fields, tiers, or use.
+/// A matcher compares a term's character with a text's through
+/// <see cref="HangulInitials.IsMatch"/>, so a Korean consonant typed alone matches a syllable
+/// opening on it.
 /// </summary>
 internal interface IActionMatcher {
   /// <returns>

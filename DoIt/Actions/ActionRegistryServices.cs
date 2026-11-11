@@ -43,5 +43,11 @@ internal sealed class ActionRegistryServices {
 
   internal required IActionUseStore UseStore { get; init; }
 
-  internal IActionMatcher Matcher { get; init; } = new VsCodeActionMatcher();
+  internal IActionMatcher Matcher { get; init; } = ActionRegistryServices.NewShippedMatcher();
+
+  /// <summary>
+  /// A new instance of the matcher the mod ships, which a test fixture handed none defaults to, so
+  /// the case file asserts what players search with.
+  /// </summary>
+  internal static IActionMatcher NewShippedMatcher() => new VsCodeActionMatcher();
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace DoIt.Actions;
@@ -59,8 +58,7 @@ internal static class ActionSearch {
     // The actions the typo pass may still find, with the hits of their other terms.
     var misses = new List<(IndexedAction Action, TermHit?[] Hits)>();
 
-    // Hot path, once per action: one buffer for every action, copied for those kept, in place of an
-    // array per action.
+    // [PERF] One buffer for every action, copied for those kept, in place of an array per action.
     var hits = new TermHit?[terms.Count];
 
     foreach (var action in actions) {
@@ -73,8 +71,8 @@ internal static class ActionSearch {
         if (hits[i] is null) {
           isWhole = false;
 
-          // Hot path, once per missed action: a miss past the cap is dropped, in place of kept for
-          // a typo pass that no longer runs.
+          // [PERF] A miss past the cap is dropped, in place of kept for a typo pass that no longer
+          // runs.
           isRetryable = matches.Count < rowCap && terms[i].Length >= ActionSearch.TypoTermMinLength;
         }
       }
@@ -190,23 +188,25 @@ internal static class ActionSearch {
         break;
       }
 
+      var text = field.Folded.Text;
+
       // A description is prose, where a term's letters scatter by chance: such hits would fill the
       // cap and keep the typo pass from running, so a description is hit by a run of the term
       // alone, wherever the matcher's alignment would go, and the matcher only scores it.
-      // Hot path, every field of every action: an ordinal search, in place of the matcher's
-      // alignment, on a description the term cannot hit.
       var run = field.Kind is ActionField.Description
-        ? ActionSearch.RunOf(term, field.Folded.Text)
+        ? ActionSearch.RunOf(term, text)
         : null;
 
+      // [PERF] A search for the run, in place of the matcher's alignment, on a description the term
+      // cannot hit.
       if ((field.Kind is ActionField.Description && run is null) ||
-        matcher.Match(term, field.Folded.Text) is not {} match) {
+        matcher.Match(term, text) is not {} match) {
         continue;
       }
 
       var ranges = run is {} span ? [span] : match.Ranges;
 
-      var tier = isTypo ? MatchTier.Typo : ActionSearch.ReadTier(field.Folded.Text, ranges);
+      var tier = isTypo ? MatchTier.Typo : ActionSearch.ReadTier(text, ranges);
 
       var hit = new TermHit(i, new HitRank(field.Kind, tier), match.Score, ranges);
 
@@ -250,13 +250,14 @@ internal static class ActionSearch {
   /// <summary>
   /// The term's first place in <paramref name="text"/> at a word start, else its first place, or
   /// none when the text does not hold it.
+  /// A consonant typed alone in the term finds a syllable opening on it.
   /// </summary>
   private static MatchRange? RunOf(string term, string text) {
     MatchRange? first = null;
 
-    for (var at = text.IndexOf(term, StringComparison.Ordinal);
+    for (var at = HangulInitials.IndexOf(text, term, 0);
       at >= 0;
-      at = text.IndexOf(term, at + 1, StringComparison.Ordinal)) {
+      at = HangulInitials.IndexOf(text, term, at + 1)) {
       if (ActionSearch.IsWordStart(text, at)) {
         return new MatchRange(at, term.Length);
       }
@@ -291,12 +292,12 @@ internal static class ActionSearch {
   /// The hits of an action every term hit.
   /// </summary>
   private static TermHit[] Whole(TermHit?[] hits) {
-    // Hot path, the empty query: one shared empty array, in place of one per action.
+    // [PERF] The empty query: one shared empty array, in place of one per action.
     if (hits.Length is 0) {
       return [];
     }
 
-    // Hot path, once per matching action: a loop, in place of LINQ.
+    // [PERF] A loop, in place of LINQ.
     var whole = new TermHit[hits.Length];
 
     for (var i = 0; i < hits.Length; i++) {
@@ -309,7 +310,7 @@ internal static class ActionSearch {
   /// <summary>
   /// The kind of hit a term's ranges make on a folded text, the same reading for every matcher.
   /// A prefix is one range at the text's start; an abbreviation like <c>ps</c> for Pause Simulation
-  /// is a hit on word starts.
+  /// is a hit on word starts, and the initials when it hits every word.
   /// </summary>
   private static MatchTier ReadTier(string text, IReadOnlyList<MatchRange> ranges) {
     if (ranges is [{ Start: 0 }]) {
@@ -322,11 +323,78 @@ internal static class ActionSearch {
       isOnWordStarts &= ActionSearch.IsWordStart(text, range.Start);
     }
 
-    return isOnWordStarts
-      ? MatchTier.WordStarts
-      : ranges.Count is 1
-        ? MatchTier.OneRun
-        : MatchTier.Scattered;
+    if (isOnWordStarts) {
+      return ActionSearch.IsInitials(text, ranges) ? MatchTier.Initials : MatchTier.WordStarts;
+    }
+
+    return ranges.Count is 1 ? MatchTier.OneRun : MatchTier.Scattered;
+  }
+
+  /// <summary>
+  /// Whether ranges on word starts are the initials of <paramref name="text"/>: one character on
+  /// the start of each of its words, a word opening on a letter, a mark, or a number, so a symbol
+  /// standing alone, such as an ampersand, is no word to hit.
+  /// An apostrophe joins an elided article to its word, which then opens twice: Panneau
+  /// d'informations has the initials <c>pd</c>, <c>pi</c>, and <c>pdi</c>.
+  /// A lone letter after an apostrophe, a possessive's s, is no word to hit: Driver's License has
+  /// the initials <c>dl</c>.
+  /// A word start followed by more of the word is not an initial: <c>econ</c> hitting Electricity
+  /// Consumption as <c>e</c> and <c>con</c> stays below a word prefix.
+  /// </summary>
+  private static bool IsInitials(string text, IReadOnlyList<MatchRange> ranges) {
+    foreach (var range in ranges) {
+      var width = char.IsSurrogatePair(text, range.Start) ? 2 : 1;
+
+      if (range.Length != width || !CodePointText.IsWordCharacter(text, range.Start)) {
+        return false;
+      }
+    }
+
+    // The next range to meet, and whether the word being read is hit yet.
+    var next = 0;
+    var isWordHit = true;
+
+    // [PERF] A one-character hit on a word start of a long description: an exit at the first word
+    // no range hits, in place of reading every word of the text.
+    for (var i = 0; i < text.Length; i++) {
+      if (!CodePointText.IsWordCharacter(text, i) || !ActionSearch.IsWordStart(text, i)) {
+        continue;
+      }
+
+      // An apostrophe after a word joins an elided article to its word; after no word, it quotes.
+      var isJoined = i >= 1 &&
+        text[i - 1] is '\'' or '\u2019' &&
+        !ActionSearch.IsWordStart(text, i - 1);
+
+      if (isJoined && ActionSearch.IsLoneLetter(text, i)) {
+        continue;
+      }
+
+      if (!isJoined) {
+        if (!isWordHit) {
+          return false;
+        }
+
+        isWordHit = false;
+      }
+
+      if (next < ranges.Count && ranges[next].Start == i) {
+        isWordHit = true;
+        next++;
+      }
+    }
+
+    return isWordHit && next == ranges.Count;
+  }
+
+  /// <summary>
+  /// Whether the word character at <paramref name="index"/> stands alone, with no word character
+  /// after it.
+  /// </summary>
+  private static bool IsLoneLetter(string text, int index) {
+    var after = index + (char.IsSurrogatePair(text, index) ? 2 : 1);
+
+    return after >= text.Length || !CodePointText.IsWordCharacter(text, after);
   }
 
   /// <summary>
@@ -339,10 +407,11 @@ internal static class ActionSearch {
       return true;
     }
 
-    var before = index >= 2 && char.IsLowSurrogate(text[index - 1]) ? index - 2 : index - 1;
+    var before = index >= 2 && char.IsSurrogatePair(text[index - 2], text[index - 1])
+      ? index - 2
+      : index - 1;
 
-    // The letters, the marks, and the numbers are the first eleven categories.
-    return CharUnicodeInfo.GetUnicodeCategory(text, before) > UnicodeCategory.OtherNumber;
+    return !CodePointText.IsWordCharacter(text, before);
   }
 
   /// <summary>
@@ -412,7 +481,7 @@ internal sealed class SearchMatch {
     this.Terms = terms;
     this.Rank = new HitRank(ActionField.Title, MatchTier.Prefix);
 
-    // Hot path, once per matching action: a loop, in place of LINQ's Max and Sum.
+    // [PERF] A loop, in place of LINQ's Max and Sum.
     foreach (var term in terms) {
       if (term.Rank.CompareTo(this.Rank) > 0) {
         this.Rank = term.Rank;
@@ -454,9 +523,8 @@ internal readonly record struct TermHit(
 internal readonly record struct HitRank(ActionField Field, MatchTier Tier) : IComparable<HitRank> {
   /// <summary>
   /// The group, the tier, and the field, one byte each.
-  /// Hot path, compared thousands of times by a search's sort: one integer, in place of a tuple of
-  /// enums.
   /// </summary>
+  // [PERF] One integer, in place of a tuple of enums.
   private int Order =>
     ((int) ActionSearch.GroupOf(this.Field) << 16) | ((int) this.Tier << 8) | (int) this.Field;
 
@@ -483,6 +551,11 @@ internal enum FieldGroup {
 /// </summary>
 internal enum MatchTier {
   Prefix,
+
+  /// <summary>
+  /// One character on the start of every word, an abbreviation of the whole label.
+  /// </summary>
+  Initials,
 
   WordStarts,
 

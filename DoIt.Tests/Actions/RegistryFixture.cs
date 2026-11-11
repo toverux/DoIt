@@ -44,7 +44,7 @@ internal sealed class RegistryFixture {
       ReadGameMode = () => this.GameMode,
       Now = static () => RegistryFixture.Now,
       UseStore = this.UseStore,
-      Matcher = matcher ?? new VsCodeActionMatcher()
+      Matcher = matcher ?? ActionRegistryServices.NewShippedMatcher()
     };
 
     this.Registry = new ActionRegistry(services);

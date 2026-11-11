@@ -268,7 +268,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
         "Options.OPTION[Shortcuts/Pause Simulation/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, stand-in reviewed: the initials of the two words, the abbreviation a command palette teaches; Previous Section shares the initials, but no player in a running city means a menu-navigation binding"
     },
     {
@@ -366,7 +365,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Parks And Recreation Panel/binding]",
         "Options.OPTION[Shortcuts/Parks And Recreation Panel/binding]"
       ],
-      "expectedMiss": "baseline",
+      "expectedMiss": "synonym",
       "note": "habit, stand-in reviewed: the & typed as 'and', and the last word clipped, the way Americans say the name"
     },
     {
@@ -684,7 +683,7 @@
         "Infoviews.INFOVIEW[NoisePollution]",
         "Infoviews.INFOMODE[NoisePollutionInfomode]"
       ],
-      "expectedMiss": "baseline",
+      "expectedMiss": "variant",
       "note": "habit, stand-in reviewed: the umlaut ä typed as 'ae', the standard German fallback without umlaut keys; the whole label 'Lärm' must rank above 'Ursachen für Lärm' and 'Ursachen für Verkehrslärm'"
     },
     {
@@ -2035,8 +2034,13 @@
       "locale": "ko-KR",
       "query": "쓰ㄹ",
       "expect": ["Infoviews.INFOMODE[Garbage Accumulation]"],
-      "expectedMiss": "jamo",
       "note": "a bare initial consonant before the syllable composes"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "ㄳ",
+      "expect": ["Common.ACTION[Slope Terrain]"],
+      "note": "the cluster an IME composes from ㄱ then ㅅ typed with no vowel"
     },
     {
       "locale": "ko-KR",
@@ -2101,8 +2105,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "expectedMiss": "jamo",
-      "note": "habit, stand-in reviewed: Korean users type a word's initial consonants only (초성 search, ㅂㄷㅈ for 불도저), expected to miss today."
+      "note": "habit, stand-in reviewed: Korean users type a word's initial consonants only (초성 search, ㅂㄷㅈ for 불도저)."
     },
     {
       "locale": "ko-KR",
@@ -2457,7 +2460,7 @@
       "locale": "pl-PL",
       "query": "metro",
       "expect": ["Infoviews.INFOMODE[Subway Stops]", "Infoviews.INFOMODE[Subway Tracks]"],
-      "expectedMiss": "baseline",
+      "expectedMiss": "inflection",
       "note": "habit, stand-in reviewed: the nominative 'metro' where the labels hold the genitive 'metra'"
     },
     {
@@ -2951,7 +2954,7 @@
       "locale": "ru-RU",
       "query": "жд пути",
       "expect": ["Infoviews.INFOMODE[Train Tracks]"],
-      "expectedMiss": "baseline",
+      "expectedMiss": "synonym",
       "note": "habit, stand-in reviewed: players write железнодорожные as the initials жд, lowercase and without the slash of ж/д"
     },
     {
@@ -3633,7 +3636,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Radio Panel/binding]",
         "Options.OPTION[Shortcuts/Radio Panel/binding]"
       ],
-      "expectedMiss": "baseline",
+      "expectedMiss": "variant",
       "note": "habit, stand-in reviewed: 臺 is the Taiwan standard form and many players and IMEs commit it, where the label writes the common variant 台"
     },
     {

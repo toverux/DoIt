@@ -41,6 +41,27 @@ public sealed class VsCodeActionMatcherTests {
   public void Match_FindsNothing_WhenTheTermIsNotASubsequence(string term, string text) =>
     Assert.Null(this.matcher.Match(term, text));
 
+  [Theory]
+  [InlineData("ㅂㄷㅈ", "불도저", "0+3")]
+  [InlineData("다ㄹ", "도로 다리", "3+2")]
+  // The traceback keeps the backwards diagonal, a run of three, over a first syllable alone.
+  [InlineData("ㄱㄱㄴ", "가나가가나", "2+3")]
+  public void Match_MatchesAConsonantTypedAlone_ToASyllableOpeningOnIt(
+    string term,
+    string text,
+    string ranges
+  ) =>
+    Assert.Equal(
+      ranges,
+      VsCodeActionMatcherTests.Format(this.matcher.Match(TextFold.Fold(term).Text, text))
+    );
+
+  [Theory]
+  [InlineData("다", "도로")]
+  [InlineData("ㄷ", "가로")]
+  public void Match_FindsNothing_WhenNoSyllableOpensOnTheTermsCharacter(string term, string text) =>
+    Assert.Null(this.matcher.Match(TextFold.Fold(term).Text, text));
+
   [Fact]
   public void Match_ScoresAMatchAfterASeparatorHighest() {
     string[] texts = [

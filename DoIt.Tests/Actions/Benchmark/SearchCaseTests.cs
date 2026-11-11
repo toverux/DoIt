@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DoIt.Actions;
 using Xunit;
 
 namespace DoIt.Tests.Actions.Benchmark;
@@ -27,14 +26,15 @@ public sealed class SearchCaseTests {
   ];
 
   /// <summary>
-  /// Why a case misses today: the shipped matcher cannot make the hit (<c>baseline</c>), the typo
-  /// pass forgives one edit per term (<c>two typos</c>), a bare Hangul consonant composes nothing
-  /// (<c>jamo</c>), nothing stems a word (<c>inflection</c>), a word no label or declared alias
-  /// holds (<c>synonym</c>), nothing maps keys typed on the wrong keyboard layout (<c>layout</c>),
-  /// or nothing matches a label by its reading, pinyin, romaji or kana (<c>reading</c>).
+  /// Why a case misses today: the typo pass forgives one edit per term (<c>two typos</c>), nothing
+  /// stems a word (<c>inflection</c>), a word no label or declared alias holds (<c>synonym</c>),
+  /// nothing maps keys typed on the wrong keyboard layout (<c>layout</c>), nothing matches a label
+  /// by its reading, pinyin, romaji, or kana (<c>reading</c>), or the fold does not equate a
+  /// letter's variant form with the one the label writes, ä typed as ae or 臺 for 台
+  /// (<c>variant</c>).
   /// </summary>
   private static readonly string[] MissReasons = [
-    "baseline", "two typos", "jamo", "inflection", "synonym", "layout", "reading"
+    "two typos", "inflection", "synonym", "layout", "reading", "variant"
   ];
 
   /// <summary>
@@ -63,7 +63,7 @@ public sealed class SearchCaseTests {
   public void Search_RanksTheExpectedLabelFirst(int index) {
     var corpus = SearchCorpus.Require();
     var @case = SearchCases.All[index];
-    var ranked = @case.Rank(corpus, new VsCodeActionMatcher());
+    var ranked = @case.Rank(corpus);
     var top = string.Join(", ", ranked.Take(3));
 
     if (@case.ExpectedMiss is {} reason) {
