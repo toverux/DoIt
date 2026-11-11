@@ -10,7 +10,7 @@ namespace DoIt.Actions;
 /// split into terms, each term scored on its own through the matcher against every field of an
 /// action and placed in its best one, every term required.
 /// A row is placed by its weakest term's field group, then tier, then field, then by frecency, the
-/// matcher's score breaking a frecency tie alone.
+/// matcher's score breaking a frecency tie, and the shorter title a score tie.
 /// </summary>
 internal static class ActionSearch {
   /// <summary>
@@ -190,13 +190,25 @@ internal static class ActionSearch {
         break;
       }
 
-      if (matcher.Match(term, field.Folded.Text) is not {} match) {
+      // A description is prose, where a term's letters scatter by chance: such hits would fill the
+      // cap and keep the typo pass from running, so a description is hit by a run of the term
+      // alone, wherever the matcher's alignment would go, and the matcher only scores it.
+      // Hot path, every field of every action: an ordinal search, in place of the matcher's
+      // alignment, on a description the term cannot hit.
+      var run = field.Kind is ActionField.Description
+        ? ActionSearch.RunOf(term, field.Folded.Text)
+        : null;
+
+      if ((field.Kind is ActionField.Description && run is null) ||
+        matcher.Match(term, field.Folded.Text) is not {} match) {
         continue;
       }
 
-      var tier = isTypo ? MatchTier.Typo : ActionSearch.ReadTier(field.Folded.Text, match.Ranges);
+      var ranges = run is {} span ? [span] : match.Ranges;
 
-      var hit = new TermHit(i, new HitRank(field.Kind, tier), match.Score, match.Ranges);
+      var tier = isTypo ? MatchTier.Typo : ActionSearch.ReadTier(field.Folded.Text, ranges);
+
+      var hit = new TermHit(i, new HitRank(field.Kind, tier), match.Score, ranges);
 
       if (ActionSearch.IsBetter(hit, best)) {
         best = hit;
@@ -234,6 +246,26 @@ internal static class ActionSearch {
     best is not {} current ||
     hit.Rank.CompareTo(current.Rank) < 0 ||
     (hit.Rank == current.Rank && hit.Score > current.Score);
+
+  /// <summary>
+  /// The term's first place in <paramref name="text"/> at a word start, else its first place, or
+  /// none when the text does not hold it.
+  /// </summary>
+  private static MatchRange? RunOf(string term, string text) {
+    MatchRange? first = null;
+
+    for (var at = text.IndexOf(term, StringComparison.Ordinal);
+      at >= 0;
+      at = text.IndexOf(term, at + 1, StringComparison.Ordinal)) {
+      if (ActionSearch.IsWordStart(text, at)) {
+        return new MatchRange(at, term.Length);
+      }
+
+      first ??= new MatchRange(at, term.Length);
+    }
+
+    return first;
+  }
 
   /// <summary>
   /// The term with one character dropped, a surrogate pair whole.

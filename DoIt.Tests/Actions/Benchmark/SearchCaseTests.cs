@@ -27,10 +27,10 @@ public sealed class SearchCaseTests {
   ];
 
   /// <summary>
-  /// Why a case misses today: the shipped substring matcher cannot make the hit (<c>baseline</c>),
-  /// the typo pass forgives one edit per term (<c>two typos</c>), a bare Hangul consonant composes
-  /// nothing (<c>jamo</c>), nothing stems a word (<c>inflection</c>), or a word no label or
-  /// declared alias holds (<c>synonym</c>).
+  /// Why a case misses today: the shipped matcher cannot make the hit (<c>baseline</c>), the typo
+  /// pass forgives one edit per term (<c>two typos</c>), a bare Hangul consonant composes nothing
+  /// (<c>jamo</c>), nothing stems a word (<c>inflection</c>), or a word no label or declared alias
+  /// holds (<c>synonym</c>).
   /// </summary>
   private static readonly string[] MissReasons = [
     "baseline", "two typos", "jamo", "inflection", "synonym"
@@ -62,7 +62,7 @@ public sealed class SearchCaseTests {
   public void Search_RanksTheExpectedLabelFirst(int index) {
     var corpus = SearchCorpus.Require();
     var @case = SearchCases.All[index];
-    var ranked = @case.Rank(corpus, new SubstringActionMatcher());
+    var ranked = @case.Rank(corpus, new VsCodeActionMatcher());
     var top = string.Join(", ", ranked.Take(3));
 
     if (@case.ExpectedMiss is {} reason) {

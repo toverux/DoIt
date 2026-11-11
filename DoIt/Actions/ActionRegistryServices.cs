@@ -43,5 +43,5 @@ internal sealed class ActionRegistryServices {
 
   internal required IActionUseStore UseStore { get; init; }
 
-  internal IActionMatcher Matcher { get; init; } = new SubstringActionMatcher();
+  internal IActionMatcher Matcher { get; init; } = new VsCodeActionMatcher();
 }

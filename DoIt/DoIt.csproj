@@ -95,6 +95,13 @@
     <EmbeddedResource Include="Locales\*.json" />
   </ItemGroup>
 
+  <!-- The MIT notices of the code the mod ports ship beside the DLL: the licenses ask for them in
+       every copy. -->
+  <ItemGroup>
+    <None Include="..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
     <None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />

@@ -95,6 +95,21 @@ public sealed class ActionRegistrySearchTests {
   }
 
   [Fact]
+  public void Search_BreaksAScoreTieByTheShorterTitle() {
+    // Both prefixes, scored alike: the whole label above the longer one opening with it.
+    this.Add(Descriptors.Call("Pause Menu"), Descriptors.Call("Pause"));
+
+    Assert.Equal(["Pause", "Pause Menu"], this.Labels("pa"));
+  }
+
+  [Fact]
+  public void Search_ListsUnusedActionsInCatalogueOrderOnAnEmptyQuery_WhateverTheirLength() {
+    this.Add(Descriptors.Call("Pause Menu"), Descriptors.Call("Pause"));
+
+    Assert.Equal(["Pause Menu", "Pause"], this.Labels(""));
+  }
+
+  [Fact]
   public void Search_RanksAUsedActionAboveAHigherScoreInItsTier() {
     this.Seed("Dazzler", count: 1, daysAgo: 30);
     this.Add(Descriptors.Call("Dazzler"), Descriptors.Call("Dozer"));
@@ -131,6 +146,50 @@ public sealed class ActionRegistrySearchTests {
 
     // A scattered title hit above a description's prefix.
     Assert.Equal(["Electric Coverage", "Panel"], this.Labels("eco"));
+  }
+
+  [Fact]
+  public void Search_FindsAWordOfADescription_WhereTheMatchersAlignmentScatters() {
+    this.Add(
+      Descriptors.Call("Menu") with {
+        Description = LocalizedString.Id("Opens a panel to use the pause menu")
+      }
+    );
+
+    // The fake matcher takes the p of "Opens" first.
+    Assert.Equal(["Description 25+5"], ActionRegistrySearchTests.Hits(this.Single("pause")));
+  }
+
+  [Fact]
+  public void Search_IgnoresATermScatteredAcrossADescription() {
+    this.Add(
+      Descriptors.Call("Menu") with {
+        Description = LocalizedString.Id("Opens a panel to use the pause menu")
+      }
+    );
+
+    Assert.Empty(this.Labels("pnpm"));
+  }
+
+  [Fact]
+  public void Search_FindsAChoiceByAnOptionLabel_InTheDetailGroup_WithTheOptionsKey() {
+    this.Add(
+      Descriptors.State(
+        "Game Speed",
+        new ChoiceState {
+          Options = [new ActionChoice("1", "Slow"), new ActionChoice("3", "Fast Forward")],
+          Read = static () => "1"
+        }
+      ),
+      Descriptors.Call("Menu") with {
+        Description = LocalizedString.Id("Fast travel")
+      },
+      Descriptors.Call("Breakfast")
+    );
+
+    // A title's run inside a word, then an option's prefix above a description's.
+    Assert.Equal(["Breakfast", "Game Speed", "Menu"], this.Labels("fast"));
+    Assert.Equal(["Option 3 8+4"], ActionRegistrySearchTests.Hits(this.Single("ward")));
   }
 
   [Fact]

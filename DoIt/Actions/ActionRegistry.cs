@@ -152,12 +152,15 @@ internal sealed class ActionRegistry {
 
     var rows = new List<ActionRow>();
 
-    // A stable sort: rows equal on all three keys keep the order found, the catalogue's, with the
-    // typo pass's rows after the clean ones.
+    // A stable sort: rows equal on every key keep the order found, the catalogue's, with the typo
+    // pass's rows after the clean ones.
+    // The shorter title breaks a score tie alone, so a whole label ranks above a longer one opening
+    // with it; the empty query, where every row ties, keeps catalogue order.
     var ranked = matches
       .OrderBy(static match => match.Rank)
       .ThenByDescending(match => ActionSearch.Frecency(this.UseOf(match.Action), now))
-      .ThenByDescending(static match => match.Score);
+      .ThenByDescending(static match => match.Score)
+      .ThenBy(static match => match.Terms.Count is 0 ? 0 : match.Action.Label.Length);
 
     foreach (var match in ranked) {
       if (rows.Count >= rowCap) {
@@ -344,6 +347,11 @@ internal sealed class ActionRegistry {
     var label = resolve(descriptor.Label);
     var description = descriptor.Description is {} text ? resolve(text) : null;
 
+    var options = descriptor.State is ChoiceState choice
+      ? choice.Options.Select(option => new ChoiceOption(option.Key, resolve(option.Label)))
+        .ToList()
+      : [];
+
     var title = new SearchField(ActionField.Title, label);
 
     List<SearchField> fields = [
@@ -361,6 +369,12 @@ internal sealed class ActionRegistry {
       }
     }
 
+    fields.AddRange(
+      options.Select(static option =>
+        new SearchField(ActionField.Option, option.Label, option.Key)
+      )
+    );
+
     if (description is not null) {
       fields.Add(new SearchField(ActionField.Description, description));
     }
@@ -372,10 +386,7 @@ internal sealed class ActionRegistry {
       label,
       description,
       resolve(descriptor.Category ?? source.DisplayName),
-      descriptor.State is ChoiceState choice
-        ? choice.Options.Select(option => new ChoiceOption(option.Key, resolve(option.Label)))
-          .ToList()
-        : []
+      options
     ) {
       Fields = fields
     };

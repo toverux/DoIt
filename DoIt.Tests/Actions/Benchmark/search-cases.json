@@ -10,7 +10,6 @@
       "locale": "en-US",
       "query": "wpc",
       "expect": ["Infoviews.INFOMODE[Water Pipe Outside Connections]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -23,7 +22,6 @@
       "locale": "en-US",
       "query": "egwy",
       "expect": ["Common.ACTION[Merge Waypoint]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -35,7 +33,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
         "Options.OPTION[Shortcuts/Economy Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -58,7 +55,6 @@
         "Options.OPTION[InputSettings.Gamepad.Photo mode/Capture Keyframe/binding]",
         "Options.OPTION[Photo mode/Capture Keyframe/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -157,7 +153,6 @@
       "locale": "en-US",
       "query": "isb",
       "expect": ["Infoviews.INFOMODE[Signature Industrial]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -170,14 +165,12 @@
       "locale": "en-US",
       "query": "antx",
       "expect": ["Common.ACTION[Paint Material]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
       "locale": "en-US",
       "query": "collxpse",
       "expect": ["Common.ACTION[Collapse Group]"],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -194,7 +187,6 @@
       "locale": "en-US",
       "query": "wrokplace aavilability",
       "expect": ["Infoviews.INFOVIEW[Workplaces]"],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -286,7 +278,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: the z typed as s, the British spelling habit and a near key"
     },
     {
@@ -379,7 +370,6 @@
       "locale": "de-DE",
       "query": "gwb",
       "expect": ["Infoviews.INFOMODE[Education Coverage]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -392,14 +382,12 @@
       "locale": "de-DE",
       "query": "vly",
       "expect": ["Common.ACTION[Steam Overlay]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
       "locale": "de-DE",
       "query": "zersyorte",
       "expect": ["Infoviews.INFOMODE[Destroyed]"],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -417,7 +405,6 @@
       "locale": "de-DE",
       "query": "flimsequenz koordinate",
       "expect": ["Options.OPTION[InputSettings.Gamepad.Tool/Capture/binding]"],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -587,8 +574,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
         "Options.OPTION[Shortcuts/Roads Panel/binding]"
       ],
-      "expectedMiss": "baseline",
-      "note": "habit, unreviewed: 'Straßen' typed with ss, the Swiss and no-German-keyboard spelling; the whole label must rank above the longer labels opening with it, which the substring matcher scores alike"
+      "note": "habit, unreviewed: 'Straßen' typed with ss, the Swiss and no-German-keyboard spelling; the whole label must rank above the longer labels opening with it"
     },
     {
       "locale": "de-DE",
@@ -598,7 +584,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: one r of the double rr dropped at the compound seam of 'Planier|raupe', a common misspelling"
     },
     {
@@ -658,7 +643,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Toggle Follow Selected Citizen/binding]",
         "Options.OPTION[Shortcuts/Toggle Follow Selected Citizen/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -671,7 +655,6 @@
       "locale": "es-ES",
       "query": "qdz",
       "expect": ["Infoviews.INFOMODE[Wealth]", "Infoviews.INFOVIEW[Wealth]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -681,7 +664,6 @@
         "Options.OPTION[Debug/Debug Prefab Tool/binding]",
         "Options.OPTION[InputSettings.Keyboard.Debug/Debug Prefab Tool/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -693,8 +675,10 @@
     {
       "locale": "es-ES",
       "query": "vheiculos mnatenimiento",
-      "expect": ["Infoviews.INFOMODE[Road Maintenance Vehicles]"],
-      "expectedMiss": "baseline",
+      "expect": [
+        "Infoviews.INFOMODE[Park Maintenance Vehicles]",
+        "Infoviews.INFOMODE[Road Maintenance Vehicles]"
+      ],
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -845,7 +829,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 3/binding]",
         "Options.OPTION[Shortcuts/Speed 3/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: the double rr of a prefixed word typed as a single r, a common Spanish misspelling, with the accent dropped"
     },
     {
@@ -899,7 +882,6 @@
       "locale": "fr-FR",
       "query": "dln",
       "expect": ["Common.ACTION[Purchase Dev Tree Node]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -912,14 +894,12 @@
       "locale": "fr-FR",
       "query": "ofmr",
       "expect": ["Common.ACTION[Purchase Map Tile]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
       "locale": "fr-FR",
       "query": "navigzteur",
       "expect": ["Editor.TOOL[PrefabTool]"],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -932,7 +912,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Event Journal Panel/binding]",
         "Options.OPTION[Shortcuts/Event Journal Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -1048,7 +1027,6 @@
       "locale": "fr-FR",
       "query": "stats",
       "expect": ["Main.TOOLTIP_TITLE_CITY_STATISTICS", "Statistics.PANEL_TITLE"],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: French players clip \"statistiques\" to the everyday short form \"stats\"."
     },
     {
@@ -1067,7 +1045,6 @@
       "locale": "fr-FR",
       "query": "souterain",
       "expect": ["Main.TOOLTIP_TITLE_UNDERGROUND"],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: the doubled \"rr\" of \"souterrain\" is typed single, a common French misspelling."
     },
     {
@@ -1120,7 +1097,6 @@
       "locale": "it-IT",
       "query": "axe",
       "expect": ["Options.OPTION[Editor/Align X/binding]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -1133,14 +1109,12 @@
       "locale": "it-IT",
       "query": "ihz",
       "expect": ["Infoviews.INFOMODE[Wealth]", "Infoviews.INFOVIEW[Wealth]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
       "locale": "it-IT",
       "query": "navyli",
       "expect": ["Infoviews.INFOMODE[Ship Outside Connections]"],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -1158,7 +1132,6 @@
       "locale": "it-IT",
       "query": "cnacella txeture",
       "expect": ["Common.ACTION[Erase Material]"],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -1373,7 +1346,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quickload/binding]",
         "Options.OPTION[Shortcuts/Quickload/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -1383,7 +1355,6 @@
         "Options.OPTION[InputSettings.Gamepad.Navigation/Move Vertical/positive]",
         "Options.OPTION[Navigation/Move Vertical/positive]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -1399,7 +1370,6 @@
         "Options.OPTION[InputSettings.Gamepad.Navigation/Tertiary Action/binding]",
         "Options.OPTION[Navigation/Tertiary Action/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -1597,7 +1567,6 @@
       "locale": "ko-KR",
       "query": "값변",
       "expect": ["Common.ACTION[Change Value]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -1610,7 +1579,6 @@
       "locale": "ko-KR",
       "query": "너기",
       "expect": ["Common.ACTION[Close Tutorial]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -1620,7 +1588,6 @@
         "Options.OPTION[InputSettings.Gamepad.Navigation/Scroll Vertical/positive]",
         "Options.OPTION[Navigation/Scroll Vertical/positive]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -1641,7 +1608,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Continue Tutorial/binding]",
         "Options.OPTION[Shortcuts/Continue Tutorial/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -1668,7 +1634,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Water And Sewage Panel/binding]",
         "Options.OPTION[Shortcuts/Water And Sewage Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "a detail hit below a name hit"
     },
     {
@@ -1776,14 +1741,12 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: Korean players type a two-word label as one word, dropping the space the label has (빠른 저장)."
     },
     {
       "locale": "ko-KR",
       "query": "땅 값",
       "expect": ["Infoviews.INFOMODE[LandValueInfomode]", "Infoviews.INFOVIEW[LandValue]"],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: players split a closed compound the label writes as one word (땅값), a common Korean spacing slip."
     },
     {
@@ -1853,7 +1816,6 @@
         "Options.OPTION[InputSettings.Keyboard.Tool/Switch Toolmode/binding]",
         "Options.OPTION[Tool/Switch Toolmode/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -1872,7 +1834,6 @@
         "Options.OPTION[InputSettings.Mouse.Tool/Default Tool/binding]",
         "Options.OPTION[Tool/Default Tool/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -1884,7 +1845,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Universal Mod Panel/binding]",
         "Options.OPTION[Shortcuts/Universal Mod Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -1901,7 +1861,6 @@
         "Options.OPTION[InputSettings.Mouse.Tool/Secondary Apply/binding]",
         "Options.OPTION[Tool/Secondary Apply/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -2068,7 +2027,6 @@
       "locale": "pl-PL",
       "query": "zanieczyszenie gleby",
       "expect": ["Infoviews.INFOVIEW[GroundPollution]"],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: a letter dropped from the long 'szcz' cluster of 'zanieczyszczenie'"
     },
     {
@@ -2104,7 +2062,6 @@
       "locale": "pt-BR",
       "query": "vds",
       "expect": ["Common.ACTION[Exit Underground Mode]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -2125,7 +2082,6 @@
         "Options.OPTION[InputSettings.Keyboard.Tool/Switch Toolmode/binding]",
         "Options.OPTION[Tool/Switch Toolmode/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -2137,7 +2093,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Garbage Managment Panel/binding]",
         "Options.OPTION[Shortcuts/Garbage Managment Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -2150,7 +2105,6 @@
       "locale": "pt-BR",
       "query": "vsiualizacao qaudrado",
       "expect": ["Common.ACTION[Leave Map Tile View]"],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -2312,7 +2266,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Landscaping Panel/binding]",
         "Options.OPTION[Shortcuts/Landscaping Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: a player typing fast drops the second 's' of 'Paisagismo', a frequent slip in the 'sm' cluster."
     },
     {
@@ -2367,7 +2320,6 @@
       "locale": "ru-RU",
       "query": "бд",
       "expect": ["Infoviews.INFOMODE[Wealth]", "Infoviews.INFOVIEW[Wealth]"],
-      "expectedMiss": "baseline",
       "note": "word starts, an abbreviation"
     },
     {
@@ -2386,7 +2338,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Chirper Panel/binding]",
         "Options.OPTION[Shortcuts/Chirper Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -2402,7 +2353,6 @@
         "Options.OPTION[Shortcuts/Info View/binding]",
         "Options.OPTION[Tool/Default Tool/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -2414,7 +2364,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
         "Options.OPTION[Shortcuts/Pause Simulation/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -2538,6 +2487,7 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
+      "expectedMiss": "synonym",
       "note": "habit, unreviewed: gamers clip статистика to the colloquial стата and drop the adjective Городская"
     },
     {
@@ -2547,7 +2497,6 @@
         "Options.OPTION[InputSettings.Mouse.Camera/Zoom Mouse/binding]",
         "Options.OPTION[InputSettings.Mouse.Camera/Zoom/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: the silent с of масштаб is commonly dropped, giving the misspelling маштаб"
     },
     {
@@ -2558,7 +2507,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Landscaping Panel/binding]",
         "Options.OPTION[Shortcuts/Landscaping Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: the т of ландшафтный is unpronounced in the фтн cluster and often left out when typing"
     },
     {
@@ -2626,14 +2574,12 @@
         "Options.OPTION[InputSettings.Gamepad.Navigation/Switch Main Category/positive]",
         "Options.OPTION[Navigation/Switch Main Category/positive]"
       ],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
       "locale": "zh-HANS",
       "query": "公园会盖",
       "expect": ["Infoviews.INFOMODE[Park Coverage]"],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -2655,7 +2601,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Healthcare and Deathcare Panel/binding]",
         "Options.OPTION[Shortcuts/Healthcare and Deathcare Panel/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -2776,7 +2721,6 @@
       "locale": "zh-HANS",
       "query": "社保局",
       "expect": ["Infoviews.INFOMODE[WelfareOffice Buildings]"],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: players shorten 社会保障局 to the everyday 缩写 社保局, first character of 社会 and 保障"
     },
     {
@@ -2787,7 +2731,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: gamers shorten 快速保存 to the two-character 快存, a short form whose second character is not at the start of its word"
     },
     {
@@ -2873,7 +2816,6 @@
       "locale": "zh-HANT",
       "query": "右曳",
       "expect": ["Common.ACTION[Change Water Source Radius]"],
-      "expectedMiss": "baseline",
       "note": "scattered"
     },
     {
@@ -2884,7 +2826,6 @@
         "Options.OPTION[InputSettings.Gamepad.Camera/Move Fast/down]",
         "Options.OPTION[InputSettings.Keyboard.Camera/Move Fast/down]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo, a wrong letter"
     },
     {
@@ -2905,7 +2846,6 @@
         "Options.OPTION[InputSettings.Mouse.Navigation/Secondary Action/binding]",
         "Options.OPTION[Navigation/Secondary Action/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "one typo in each of two terms, swapped letters"
     },
     {
@@ -3041,7 +2981,6 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: players shorten 快速存檔 to 快存, the first character of each word of the compound"
     },
     {
@@ -3052,7 +2991,6 @@
         "Infoviews.INFOMODE[GroundPollutionInfomode]",
         "Infoviews.INFOVIEW[AirPollution]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: Taiwanese players say 空汙 for 空氣汙染, the everyday two-character short form of the compound"
     },
     {
@@ -3082,7 +3020,6 @@
         "Infoviews.INFOMODE[NoisePollutionInfomode]",
         "Infoviews.INFOVIEW[NoisePollution]"
       ],
-      "expectedMiss": "baseline",
       "note": "habit, unreviewed: Hong Kong players and many IMEs commit the variant 污 where the label writes the Taiwan standard 汙"
     },
     {
