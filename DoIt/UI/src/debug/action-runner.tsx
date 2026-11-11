@@ -41,7 +41,8 @@ function ActionRunner(): ReactNode {
     const held = new Map<string, () => void>();
 
     globalThis.doItDebug = {
-      // Reads the results at call time rather than subscribing, which would keep C# ticking.
+      // [PERF] Reads the results at call time, in place of a subscription, which would keep C#
+      // ticking.
       runAction(id, entity): void {
         const row = readActionResults().rows.find(candidate => candidate.id == id);
 
