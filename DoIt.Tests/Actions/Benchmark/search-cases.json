@@ -1,0 +1,3105 @@
+{
+  "cases": [
+    {
+      "locale": "en-US",
+      "query": "play",
+      "expect": ["Main.TOOLTIP_TITLE_PLAY"],
+      "note": "prefix"
+    },
+    {
+      "locale": "en-US",
+      "query": "wpc",
+      "expect": ["Infoviews.INFOMODE[Water Pipe Outside Connections]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "en-US",
+      "query": "rses",
+      "expect": ["Infoviews.INFOMODE[Hearse Vehicles]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "en-US",
+      "query": "egwy",
+      "expect": ["Common.ACTION[Merge Waypoint]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "en-US",
+      "query": "ecojomy",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "en-US",
+      "query": "joulrnal",
+      "expect": [
+        "EventJournal.PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_EVENT_JOURNAL",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Event Journal Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Event Journal Panel/binding]",
+        "Options.OPTION[Shortcuts/Event Journal Panel/binding]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "en-US",
+      "query": "cpature kyeframe",
+      "expect": [
+        "Common.ACTION[Capture Keyframe]",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Capture Keyframe/binding]",
+        "Options.OPTION[Photo mode/Capture Keyframe/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "en-US",
+      "query": "panel line",
+      "expect": ["Common.ACTION[Focus Line Panel]"],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "en-US",
+      "query": "citizens",
+      "expect": [
+        "LifePath.LIST_PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_FOLLOWED_CITIZENS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Lifepath Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Lifepath Panel/binding]",
+        "Options.OPTION[Shortcuts/Lifepath Panel/binding]"
+      ],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "en-US",
+      "query": "air",
+      "expect": ["Infoviews.INFOMODE[AirPollutionInfomode]", "Infoviews.INFOVIEW[AirPollution]"],
+      "uses": {
+        "Infoviews.INFOVIEW[AirPollution]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "en-US",
+      "query": "back",
+      "expect": [
+        "Common.ACTION[Back]",
+        "Common.ACTION[Bulldoze Cancel]",
+        "Common.ACTION[Leave Info View]",
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Back/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Navigation/Back/binding]",
+        "Options.OPTION[InputSettings.Mouse.Navigation/Back/binding]",
+        "Options.OPTION[Navigation/Back/binding]"
+      ],
+      "uses": {
+        "Infoviews.INFOMODE[AirPollutionInfomode]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "en-US",
+      "query": "xpj",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'xp' alone reaches Common.ACTION[Expand Group]"
+    },
+    {
+      "locale": "en-US",
+      "query": "xjpqz",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "en-US",
+      "query": "erase qoxjj",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "en-US",
+      "query": "fnllowad",
+      "expect": [
+        "LifePath.LIST_PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_FOLLOWED_CITIZENS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Lifepath Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Lifepath Panel/binding]",
+        "Options.OPTION[Shortcuts/Lifepath Panel/binding]"
+      ],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "en-US",
+      "query": "rel",
+      "expect": [
+        "Common.ACTION[Move Object]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Relocate Selected Object/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Relocate Selected Object/binding]",
+        "Options.OPTION[Shortcuts/Relocate Selected Object/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "en-US",
+      "query": "isb",
+      "expect": ["Infoviews.INFOMODE[Signature Industrial]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "en-US",
+      "query": "geme",
+      "expect": ["Infoviews.INFOVIEW[Garbage]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "en-US",
+      "query": "antx",
+      "expect": ["Common.ACTION[Paint Material]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "en-US",
+      "query": "collxpse",
+      "expect": ["Common.ACTION[Collapse Group]"],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "en-US",
+      "query": "countercwlockwise",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Tool/Precise Rotation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Tool/Precise Rotation/negative]",
+        "Options.OPTION[Tool/Precise Rotation/negative]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "en-US",
+      "query": "wrokplace aavilability",
+      "expect": ["Infoviews.INFOVIEW[Workplaces]"],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "en-US",
+      "query": "game start",
+      "expect": [
+        "Common.ACTION[Start Game]",
+        "Options.OPTION[InputSettings.Gamepad.Menu/Start Game/binding]",
+        "Options.OPTION[Menu/Start Game/binding]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "en-US",
+      "query": "bui",
+      "expect": ["Infoviews.INFOMODE[Level]", "Infoviews.INFOVIEW[Level]"],
+      "uses": {
+        "Infoviews.INFOVIEW[Level]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "en-US",
+      "query": "carg",
+      "expect": ["Infoviews.INFOMODE[Cargo Transport Vehicles]"],
+      "uses": {
+        "Common.ACTION[Change Time Scale]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "en-US",
+      "query": "xqtjx",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "en-US",
+      "query": "parks jjqvx",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "en-US",
+      "query": "csnematsc",
+      "expect": ["Common.ACTION[Cinematic Mode]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "en-US",
+      "query": "",
+      "expect": ["Main.TOOLTIP_TITLE_ELEVATION_LOWER"],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "en-US",
+      "query": "ps",
+      "expect": [
+        "Common.ACTION[Pause Simulation]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the initials of the two words, the abbreviation a command palette teaches"
+    },
+    {
+      "locale": "en-US",
+      "query": "bulldoser",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the z typed as s, the British spelling habit and a near key"
+    },
+    {
+      "locale": "en-US",
+      "query": "econ",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "note": "habit, unreviewed: the clipped word players write for the economy panel"
+    },
+    {
+      "locale": "en-US",
+      "query": "infoview",
+      "expect": ["Common.ACTION[Info View]", "Main.TOOLTIP_TITLE_INFO_VIEWS"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the two words typed as one, as the community writes it"
+    },
+    {
+      "locale": "en-US",
+      "query": "quick save",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "habit, unreviewed: the closed compound typed as two words"
+    },
+    {
+      "locale": "en-US",
+      "query": "unpause",
+      "expect": ["Common.ACTION[Resume Simulation]"],
+      "note": "habit, unreviewed: the word players use for resuming, which the label holds"
+    },
+    {
+      "locale": "en-US",
+      "query": "demolish",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]": ["Demolish"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]": ["Demolish"],
+        "Options.OPTION[Shortcuts/Bulldozer/binding]": ["Demolish"]
+      },
+      "note": "habit, unreviewed: the word players use for bulldozing, found through an alias a source declares"
+    },
+    {
+      "locale": "en-US",
+      "query": "dem",
+      "expect": ["Main.TOOLTIP_TITLE_DEMAND"],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]": ["Demolish"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]": ["Demolish"],
+        "Options.OPTION[Shortcuts/Bulldozer/binding]": ["Demolish"]
+      },
+      "note": "a title prefix ranks above an alias prefix"
+    },
+    {
+      "locale": "en-US",
+      "query": "wreck",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]": ["Demolish", "Wreck"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]": ["Demolish", "Wreck"],
+        "Options.OPTION[Shortcuts/Bulldozer/binding]": ["Demolish", "Wreck"]
+      },
+      "note": "an alias hit, the second one a source declares"
+    },
+    {
+      "locale": "de-DE",
+      "query": "stadti",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_INFO",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/City Information Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/City Information Panel/binding]",
+        "Options.OPTION[Shortcuts/City Information Panel/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "de-DE",
+      "query": "gwb",
+      "expect": ["Infoviews.INFOMODE[Education Coverage]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "de-DE",
+      "query": "shot",
+      "expect": ["Editor.TOOL[PhotoTool]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "de-DE",
+      "query": "vly",
+      "expect": ["Common.ACTION[Steam Overlay]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "de-DE",
+      "query": "zersyorte",
+      "expect": ["Infoviews.INFOMODE[Destroyed]"],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "de-DE",
+      "query": "werkzeugzoptionen",
+      "expect": [
+        "Common.ACTION[Tool Options]",
+        "Options.OPTION[InputSettings.Gamepad.Tool/Tool Options/binding]",
+        "Options.OPTION[Tool/Tool Options/binding]",
+        "Toolbar.TOOL_OPTIONS_PANEL_TITLE"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "de-DE",
+      "query": "flimsequenz koordinate",
+      "expect": ["Options.OPTION[InputSettings.Gamepad.Tool/Capture/binding]"],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "de-DE",
+      "query": "schiessen foto",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Take Photo/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]",
+        "Options.OPTION[Photo mode/Take Photo/binding]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "de-DE",
+      "query": "drehen",
+      "expect": ["Common.ACTION[Rotate Object]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "de-DE",
+      "query": "ben",
+      "expect": [
+        "Main.TOOLTIP_TITLE_NOTIFICATIONS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Notification Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Notification Panel/binding]",
+        "Options.OPTION[Shortcuts/Notification Panel/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Shortcuts/Notification Panel/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "de-DE",
+      "query": "zuwe",
+      "expect": ["Common.ACTION[Unset Binding]"],
+      "uses": {
+        "Common.ACTION[Change Water Source Height]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "de-DE",
+      "query": "tyq",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'ty' alone reaches Infoviews.INFOMODE[Commercial Suitability]"
+    },
+    {
+      "locale": "de-DE",
+      "query": "ykqyy",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "de-DE",
+      "query": "zonen qtfqx",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "de-DE",
+      "query": "pmatziersn",
+      "expect": ["Common.ACTION[Add Or Modify Area Node]", "Common.ACTION[Add/Modify Area Node]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "de-DE",
+      "query": "",
+      "expect": [
+        "Common.ACTION[Lower Terrain]",
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "de-DE",
+      "query": "loschen",
+      "expect": [
+        "Common.ACTION[Erase Object]",
+        "Common.ACTION[Erase Resource]",
+        "Common.ACTION[Remove Zone]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Delete Selected Object/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Delete Selected Object/binding]",
+        "Options.OPTION[Shortcuts/Delete Selected Object/binding]"
+      ],
+      "note": "diacritics dropped"
+    },
+    {
+      "locale": "de-DE",
+      "query": "strassenzustand",
+      "expect": ["Infoviews.INFOMODE[Road Condition]"],
+      "note": "ß typed as ss"
+    },
+    {
+      "locale": "de-DE",
+      "query": "raise",
+      "expect": [
+        "Common.ACTION[Raise Terrain]",
+        "Main.TOOLTIP_TITLE_ELEVATION_RAISE",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/positive]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/positive]",
+        "Options.OPTION[Shortcuts/Change Elevation/positive]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "de-DE",
+      "query": "relocate",
+      "expect": [
+        "Common.ACTION[Move Object]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Relocate Selected Object/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Relocate Selected Object/binding]",
+        "Options.OPTION[Shortcuts/Relocate Selected Object/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "de-DE",
+      "query": "statistik",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: a player shortens the compound 'Stadtstatistiken' to its head noun 'Statistik', dropping 'Stadt' and the plural ending"
+    },
+    {
+      "locale": "de-DE",
+      "query": "pausenmenu",
+      "expect": [
+        "Main.TOOLTIP_TITLE_PAUSE_MENU",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Menu/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Menu/binding]",
+        "Options.OPTION[Shortcuts/Pause Menu/binding]"
+      ],
+      "note": "habit, unreviewed: the umlaut ü typed as plain u, as on a keyboard without German layout or by the English 'menu' habit"
+    },
+    {
+      "locale": "de-DE",
+      "query": "strassen",
+      "expect": [
+        "Infoviews.INFOMODE[Roads]",
+        "Infoviews.INFOVIEW[Roads]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[Shortcuts/Roads Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: 'Straßen' typed with ss, the Swiss and no-German-keyboard spelling; the whole label must rank above the longer labels opening with it, which the substring matcher scores alike"
+    },
+    {
+      "locale": "de-DE",
+      "query": "planieraupe",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: one r of the double rr dropped at the compound seam of 'Planier|raupe', a common misspelling"
+    },
+    {
+      "locale": "de-DE",
+      "query": "benachrichtigung",
+      "expect": [
+        "Main.TOOLTIP_TITLE_NOTIFICATIONS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Notification Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Notification Panel/binding]",
+        "Options.OPTION[Shortcuts/Notification Panel/binding]"
+      ],
+      "note": "habit, unreviewed: the singular 'Benachrichtigung' typed for the plural label 'Benachrichtigungen'"
+    },
+    {
+      "locale": "de-DE",
+      "query": "geschwindigkeit ändern",
+      "expect": [
+        "Common.ACTION[Switch Speed]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Switch Speed/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Switch Speed/binding]",
+        "Options.OPTION[Shortcuts/Switch Speed/binding]"
+      ],
+      "note": "habit, unreviewed: the everyday verb 'ändern' typed where the label uses its prefixed form 'verändern'"
+    },
+    {
+      "locale": "de-DE",
+      "query": "budget",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "aliases": {
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY": ["Budget"],
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]": ["Budget"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]": ["Budget"],
+        "Options.OPTION[Shortcuts/Economy Panel/binding]": ["Budget"]
+      },
+      "note": "habit, unreviewed: German players call the economy panel by the loanword 'Budget', which the label 'Stadtwirtschaft' lacks"
+    },
+    {
+      "locale": "es-ES",
+      "query": "ent",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "es-ES",
+      "query": "asc",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Toggle Follow Selected Citizen/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Toggle Follow Selected Citizen/binding]",
+        "Options.OPTION[Shortcuts/Toggle Follow Selected Citizen/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "es-ES",
+      "query": "vimi",
+      "expect": ["Common.ACTION[Discard Move Area Node]", "Common.ACTION[Discard Move Waypoint]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "es-ES",
+      "query": "qdz",
+      "expect": ["Infoviews.INFOMODE[Wealth]", "Infoviews.INFOVIEW[Wealth]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "es-ES",
+      "query": "prefabjicados",
+      "expect": [
+        "Options.OPTION[Debug/Debug Prefab Tool/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Debug/Debug Prefab Tool/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "es-ES",
+      "query": "criminzalidad",
+      "expect": ["Infoviews.INFOMODE[Crime Probability]"],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "es-ES",
+      "query": "vheiculos mnatenimiento",
+      "expect": ["Infoviews.INFOMODE[Road Maintenance Vehicles]"],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "es-ES",
+      "query": "fuente anadir",
+      "expect": ["Common.ACTION[Add Water Source]"],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "es-ES",
+      "query": "desplaza",
+      "expect": ["Common.ACTION[Scroll Vertical]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "es-ES",
+      "query": "atr",
+      "expect": [
+        "Common.ACTION[Back]",
+        "Common.ACTION[Bulldoze Cancel]",
+        "Common.ACTION[Leave Info View]",
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Back/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Navigation/Back/binding]",
+        "Options.OPTION[Navigation/Back/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Navigation/Back/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "es-ES",
+      "query": "juga",
+      "expect": ["Main.TOOLTIP_TITLE_PLAY"],
+      "uses": {
+        "Common.ACTION[Change Water Source Height]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "es-ES",
+      "query": "kdo",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'do' alone reaches Common.ACTION[Add Area Node]"
+    },
+    {
+      "locale": "es-ES",
+      "query": "kycqk",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "es-ES",
+      "query": "mover lkqko",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "es-ES",
+      "query": "pklicca",
+      "expect": ["Infoviews.INFOVIEW[Police]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "es-ES",
+      "query": "",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "es-ES",
+      "query": "activacion",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Toggle Selected Object Active/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Toggle Selected Object Active/binding]",
+        "Options.OPTION[Shortcuts/Toggle Selected Object Active/binding]"
+      ],
+      "note": "diacritics dropped"
+    },
+    {
+      "locale": "es-ES",
+      "query": "tertiary",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Tertiary Action/binding]",
+        "Options.OPTION[Navigation/Tertiary Action/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "es-ES",
+      "query": "enable",
+      "expect": ["Common.ACTION[Enable Info Mode]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "es-ES",
+      "query": "eco",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "note": "habit, unreviewed: a player clips \"economía\" to its first syllable to open the city economy panel"
+    },
+    {
+      "locale": "es-ES",
+      "query": "camara cinematica",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CINEMATIC_CAMERA",
+        "Options.OPTION[Shortcuts/Cinematic Camera Panel/binding]"
+      ],
+      "note": "habit, unreviewed: both accents of \"Cámara cinemática\" typed without their mark"
+    },
+    {
+      "locale": "es-ES",
+      "query": "anadir fuente de agua",
+      "expect": ["Common.ACTION[Add Water Source]"],
+      "note": "habit, unreviewed: ñ typed as a plain n, as on a keyboard layout without it"
+    },
+    {
+      "locale": "es-ES",
+      "query": "velocidad ultrarapida",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Speed 3/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 3/binding]",
+        "Options.OPTION[Shortcuts/Speed 3/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the double rr of a prefixed word typed as a single r, a common Spanish misspelling, with the accent dropped"
+    },
+    {
+      "locale": "es-ES",
+      "query": "guardar rápido",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "habit, unreviewed: the verb \"guardar\" typed where the label has the noun \"guardado\""
+    },
+    {
+      "locale": "es-ES",
+      "query": "edificio emblematico",
+      "expect": [
+        "Infoviews.INFOMODE[Signature Buildings]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Signature Buildings Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Signature Buildings Panel/binding]",
+        "Options.OPTION[Shortcuts/Signature Buildings Panel/binding]"
+      ],
+      "note": "habit, unreviewed: the singular typed where the label is plural, accent dropped"
+    },
+    {
+      "locale": "es-ES",
+      "query": "basura",
+      "expect": [
+        "Infoviews.INFOVIEW[Garbage]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Garbage Managment Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Garbage Managment Panel/binding]",
+        "Options.OPTION[Shortcuts/Garbage Managment Panel/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Garbage Managment Panel/binding]": [
+          "basura"
+        ],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Garbage Managment Panel/binding]": [
+          "basura"
+        ],
+        "Options.OPTION[Shortcuts/Garbage Managment Panel/binding]": ["basura"]
+      },
+      "note": "habit, unreviewed: players say \"basura\" for the garbage services the game labels \"Gestión de residuos\""
+    },
+    {
+      "locale": "fr-FR",
+      "query": "sim",
+      "expect": ["Options.OPTION[Shortcuts/Pause Simulation/binding]"],
+      "note": "prefix"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "dln",
+      "expect": ["Common.ACTION[Purchase Dev Tree Node]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "aiss",
+      "expect": ["Common.ACTION[Leave Map Tile View]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "ofmr",
+      "expect": ["Common.ACTION[Purchase Map Tile]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "navigzteur",
+      "expect": ["Editor.TOOL[PrefabTool]"],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "juornal eevnements",
+      "expect": [
+        "EventJournal.PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_EVENT_JOURNAL",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Event Journal Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Event Journal Panel/binding]",
+        "Options.OPTION[Shortcuts/Event Journal Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "tutoriel commencer",
+      "expect": ["Common.ACTION[Start Next Tutorial]"],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "ecoles",
+      "expect": ["Infoviews.INFOMODE[Education Buildings]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "edu",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Education And Research Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Education And Research Panel/binding]",
+        "Options.OPTION[Shortcuts/Education And Research Panel/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Shortcuts/Education And Research Panel/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "evac",
+      "expect": ["Infoviews.INFOMODE[Evacuating Transport Vehicles]"],
+      "uses": {
+        "Common.ACTION[Change Water Source Height]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "fuw",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'fu' alone reaches Common.ACTION[Discard Merge Area Node]"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "kzrjj",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "carreaux wfbwc",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "cppturds",
+      "expect": ["Editor.TOOL[PhotoTool]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "prevention",
+      "expect": ["Infoviews.INFOMODE[DisasterFacility Buildings]"],
+      "note": "diacritics dropped"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "tiles",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "target",
+      "expect": ["Common.ACTION[Set Level Target]", "Common.ACTION[Set Slope Target]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "fr-FR",
+      "query": "stats",
+      "expect": ["Main.TOOLTIP_TITLE_CITY_STATISTICS", "Statistics.PANEL_TITLE"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: French players clip \"statistiques\" to the everyday short form \"stats\"."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "ajouter noeud",
+      "expect": ["Common.ACTION[Add Area Node]"],
+      "note": "habit, unreviewed: the \"œ\" ligature is typed as \"oe\", since French keyboards have no key for it."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "sans abri",
+      "expect": ["Infoviews.INFOVIEW[HomelessCount]"],
+      "note": "habit, unreviewed: the hyphen of a compound noun (\"sans-abri\") is replaced by a space."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "souterain",
+      "expect": ["Main.TOOLTIP_TITLE_UNDERGROUND"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the doubled \"rr\" of \"souterrain\" is typed single, a common French misspelling."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "citoyen suivi",
+      "expect": [
+        "LifePath.LIST_PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_FOLLOWED_CITIZENS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Lifepath Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Lifepath Panel/binding]",
+        "Options.OPTION[Shortcuts/Lifepath Panel/binding]"
+      ],
+      "note": "habit, unreviewed: the player types the singular where the label is plural (\"Citoyens suivis\")."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "tuiles",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "aliases": {
+        "Main.TOOLTIP_TITLE_MAP_TILES": ["tuiles"]
+      },
+      "note": "habit, unreviewed: French players call map tiles \"tuiles\", a calque of the English \"tiles\", where the game says \"carreaux\"."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "bulldozzer",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "it-IT",
+      "query": "rice",
+      "expect": [
+        "Common.ACTION[Search Options]",
+        "Options.OPTION[InputSettings.Gamepad.Menu/Search Options/binding]",
+        "Options.OPTION[Menu/Search Options/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "it-IT",
+      "query": "axe",
+      "expect": ["Options.OPTION[Editor/Align X/binding]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "it-IT",
+      "query": "urgo",
+      "expect": ["Infoviews.INFOMODE[Prisoner Transport Vehicles]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "it-IT",
+      "query": "ihz",
+      "expect": ["Infoviews.INFOMODE[Wealth]", "Infoviews.INFOVIEW[Wealth]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "it-IT",
+      "query": "navyli",
+      "expect": ["Infoviews.INFOMODE[Ship Outside Connections]"],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "it-IT",
+      "query": "univexrsali",
+      "expect": [
+        "Main.TOOLTIP_TITLE_UNIVERSAL_MODS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Universal Mod Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Universal Mod Panel/binding]",
+        "Options.OPTION[Shortcuts/Universal Mod Panel/binding]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "it-IT",
+      "query": "cnacella txeture",
+      "expect": ["Common.ACTION[Erase Material]"],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "it-IT",
+      "query": "intervallo cambia",
+      "expect": ["Common.ACTION[Change Time Scale]"],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "it-IT",
+      "query": "taxi",
+      "expect": ["Infoviews.INFOMODE[Taxi Vehicles]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "it-IT",
+      "query": "str",
+      "expect": [
+        "Infoviews.INFOMODE[Roads]",
+        "Infoviews.INFOVIEW[Roads]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[Shortcuts/Roads Panel/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Shortcuts/Roads Panel/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "it-IT",
+      "query": "tema",
+      "expect": ["Toolbar.THEME_PANEL_TITLE"],
+      "uses": {
+        "Common.ACTION[Add Or Modify Waypoint]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "it-IT",
+      "query": "fkf",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'ff' alone reaches Infoviews.INFOMODE[Bike Traffic Volume]"
+    },
+    {
+      "locale": "it-IT",
+      "query": "gyryy",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "it-IT",
+      "query": "opzioni pyymx",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "it-IT",
+      "query": "rdtazioze",
+      "expect": [
+        "Common.ACTION[Precise Rotation]",
+        "Options.OPTION[InputSettings.Mouse.Tool/Precise Rotation/binding]"
+      ],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "it-IT",
+      "query": "",
+      "expect": ["Main.TOOLTIP_TITLE_ELEVATION_LOWER"],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "it-IT",
+      "query": "densita",
+      "expect": ["Infoviews.INFOMODE[PopulationInfomode]"],
+      "note": "diacritics dropped"
+    },
+    {
+      "locale": "it-IT",
+      "query": "economy",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "it-IT",
+      "query": "signature",
+      "expect": [
+        "Infoviews.INFOMODE[Signature Buildings]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Signature Buildings Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Signature Buildings Panel/binding]",
+        "Options.OPTION[Shortcuts/Signature Buildings Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "it-IT",
+      "query": "stat",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: an Italian player clips 'Statistiche' to its first syllable, the way 'stat' is said in chat"
+    },
+    {
+      "locale": "it-IT",
+      "query": "info città",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_INFO",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/City Information Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/City Information Panel/binding]",
+        "Options.OPTION[Shortcuts/City Information Panel/binding]"
+      ],
+      "note": "habit, unreviewed: an Italian player shortens 'Informazioni' to the everyday clipped form 'info'"
+    },
+    {
+      "locale": "it-IT",
+      "query": "velocita' normale",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Speed 1/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 1/binding]",
+        "Options.OPTION[Shortcuts/Speed 1/binding]"
+      ],
+      "note": "habit, unreviewed: an accented final vowel typed as the bare letter plus an apostrophe, the habit of a non-Italian keyboard"
+    },
+    {
+      "locale": "it-IT",
+      "query": "modalita foto",
+      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
+      "note": "habit, unreviewed: an accented final vowel typed without its mark"
+    },
+    {
+      "locale": "it-IT",
+      "query": "quadranti mapa",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "note": "habit, unreviewed: a double consonant typed single, the most common Italian slip, with the article dropped"
+    },
+    {
+      "locale": "it-IT",
+      "query": "fermata autobus",
+      "expect": ["Infoviews.INFOMODE[Bus Stops]"],
+      "note": "habit, unreviewed: the singular of a plural label, with the articulated preposition dropped"
+    },
+    {
+      "locale": "it-IT",
+      "query": "salvataggio rapido",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]": ["salvataggio rapido"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]": [
+          "salvataggio rapido"
+        ],
+        "Options.OPTION[Shortcuts/Quicksave/binding]": ["salvataggio rapido"]
+      },
+      "note": "habit, unreviewed: 'rapido', the usual Italian gaming word for quick save, stands in for the label's 'veloce'"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "めい",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Primary Action/binding]",
+        "Options.OPTION[InputSettings.Mouse.Navigation/Primary Action/binding]",
+        "Options.OPTION[Navigation/Primary Action/binding]",
+        "Options.OPTION[Navigation/Primary Mouse Action/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "害対",
+      "expect": ["Infoviews.INFOVIEW[DisasterControl]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "いろ",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quickload/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quickload/binding]",
+        "Options.OPTION[Shortcuts/Quickload/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "上に郭動",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Move Vertical/positive]",
+        "Options.OPTION[Navigation/Move Vertical/positive]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "かめらちもーど",
+      "expect": ["Main.TOOLTIP_TITLE_CAMERA_MODES"],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "さどーui あしくょん",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Tertiary Action/binding]",
+        "Options.OPTION[Navigation/Tertiary Action/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "下げる 高度を",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "現在",
+      "expect": ["Main.TOOLTIP_TITLE_CURRENT_MILESTONE"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "選択",
+      "expect": ["Common.ACTION[Select Area]", "Common.ACTION[Select]", "Tools.TOOL_MODE[Marquee]"],
+      "uses": {
+        "Tools.TOOL_MODE[Marquee]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "移動",
+      "expect": ["Common.ACTION[Discard Move Area Node]", "Common.ACTION[Discard Move Waypoint]"],
+      "uses": {
+        "Common.ACTION[Add Or Modify Area Node]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "えり転",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'えり' alone reaches Common.ACTION[Add Area Node]"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "右変細路ほ",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "ふぉともーど 空きのおふぃす施設",
+      "expect": [],
+      "note": "negative: every term required, no action holds both"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "く郭っくせ新ぶ",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "ほてる",
+      "expect": ["Infoviews.INFOMODE[Hotels]"],
+      "note": "kana fold: hiragana finds katakana"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "ふるど",
+      "expect": [],
+      "note": "dakuten kept distinct: the bare kana finds nothing"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "views",
+      "expect": [
+        "Common.ACTION[Info View]",
+        "Main.TOOLTIP_TITLE_INFO_VIEWS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Info View/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Info View/binding]",
+        "Options.OPTION[Shortcuts/Info View/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "roads",
+      "expect": [
+        "Infoviews.INFOMODE[Roads]",
+        "Infoviews.INFOVIEW[Roads]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[Shortcuts/Roads Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "ブル",
+      "expect": [
+        "Common.ACTION[Bulldoze]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "note": "habit, unreviewed: Japanese players clip ブルドーザー to its first two morae, ブル, the everyday short form of the loan word"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "くいっくせ",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "habit, unreviewed: the palette sees the IME's unconverted hiragana prefix of クイックセーブ while the player is still typing kuikkuse"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "ふぉともー",
+      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
+      "note": "habit, unreviewed: a mid-composition hiragana prefix with a small kana and a long-vowel mark (fotomo-) reaches the katakana フォトモード"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "統計",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: players remember the statistics panel by its head noun 統計, not the full 都市の統計"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "等速",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Speed 1/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 1/binding]",
+        "Options.OPTION[Shortcuts/Speed 1/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Speed 1/binding]": ["等速"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 1/binding]": ["等速"],
+        "Options.OPTION[Shortcuts/Speed 1/binding]": ["等速"]
+      },
+      "note": "habit, unreviewed: Japanese gamers name 1x game speed 等速 (as in 等速/倍速), a word the label 通常スピード never uses"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "키프",
+      "expect": [
+        "Common.ACTION[Capture Keyframe]",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Capture Keyframe/binding]",
+        "Options.OPTION[Photo mode/Capture Keyframe/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "값변",
+      "expect": ["Common.ACTION[Change Value]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "차용",
+      "expect": ["Infoviews.INFOMODE[Bicycle Parking Racks]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "너기",
+      "expect": ["Common.ACTION[Close Tutorial]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "위쪽담로",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Scroll Vertical/positive]",
+        "Options.OPTION[Navigation/Scroll Vertical/positive]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "감피추기",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[Shortcuts/Hide UI/binding]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "튜리토얼 계하속기",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Continue Tutorial/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Continue Tutorial/binding]",
+        "Options.OPTION[Shortcuts/Continue Tutorial/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "취소 선택",
+      "expect": [
+        "Common.ACTION[Bulldoze Discard]",
+        "Common.ACTION[Discard Deselect]",
+        "Common.ACTION[Discard Dezoning]",
+        "Common.ACTION[Discard Downgrade]",
+        "Common.ACTION[Discard Replace]",
+        "Common.ACTION[Discard Select]",
+        "Common.ACTION[Discard Upgrade]",
+        "Common.ACTION[Discard Zoning]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "상수",
+      "expect": [
+        "Infoviews.INFOVIEW[WaterPipes]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Water And Sewage Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Water And Sewage Panel/binding]",
+        "Options.OPTION[Shortcuts/Water And Sewage Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "에디",
+      "expect": ["Options.OPTION[Editor/Toggle Inspector Groups/binding]"],
+      "uses": {
+        "Options.OPTION[Editor/Toggle Inspector Groups/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "왼쪽",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Move Horizontal/negative]",
+        "Options.OPTION[Navigation/Move Horizontal/negative]"
+      ],
+      "uses": {
+        "Options.OPTION[Camera/Move Fast/left]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "구역카",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though '구역' alone reaches Common.ACTION[Add Area Node]"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "압맞국를룹",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "치안 삭제",
+      "expect": [],
+      "note": "negative: every term required, no action holds both"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "시금레닫션",
+      "expect": [
+        "Common.ACTION[Pause Simulation]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]"
+      ],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "",
+      "expect": ["Main.TOOLTIP_TITLE_ELEVATION_LOWER"],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "쓰ㄹ",
+      "expect": ["Infoviews.INFOMODE[Garbage Accumulation]"],
+      "expectedMiss": "jamo",
+      "note": "a bare initial consonant before the syllable composes"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "signature",
+      "expect": [
+        "Infoviews.INFOMODE[Signature Buildings]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Signature Buildings Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Signature Buildings Panel/binding]",
+        "Options.OPTION[Shortcuts/Signature Buildings Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "target",
+      "expect": ["Common.ACTION[Set Level Target]", "Common.ACTION[Set Slope Target]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "ko-KR",
+      "query": "빠른저장",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: Korean players type a two-word label as one word, dropping the space the label has (빠른 저장)."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "땅 값",
+      "expect": ["Infoviews.INFOMODE[LandValueInfomode]", "Infoviews.INFOVIEW[LandValue]"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: players split a closed compound the label writes as one word (땅값), a common Korean spacing slip."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "튜토 닫기",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Close Tutorial/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Close Tutorial/binding]",
+        "Options.OPTION[Shortcuts/Close Tutorial/binding]"
+      ],
+      "note": "habit, unreviewed: gamers clip a loanword to its first syllables (튜토 for 튜토리얼) and keep the rest of the label."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "상하수",
+      "expect": [
+        "Infoviews.INFOVIEW[WaterPipes]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Water And Sewage Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Water And Sewage Panel/binding]",
+        "Options.OPTION[Shortcuts/Water And Sewage Panel/binding]"
+      ],
+      "note": "habit, unreviewed: players clip a Sino-Korean compound by dropping its last syllable (상하수 for 상하수도)."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "ㅂㄷㅈ",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "expectedMiss": "jamo",
+      "note": "habit, unreviewed: Korean users type a word's initial consonants only (초성 search, ㅂㄷㅈ for 불도저), expected to miss today."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "일시정지",
+      "expect": [
+        "Common.ACTION[Pause Simulation]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]"
+      ],
+      "aliases": {
+        "Common.ACTION[Pause Simulation]": ["일시정지"],
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]": ["일시정지"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]": ["일시정지"],
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]": ["일시정지"]
+      },
+      "note": "habit, unreviewed: players type the everyday word for pause (일시정지, as on any media player) where the game writes 일시 중지."
+    },
+    {
+      "locale": "pl-PL",
+      "query": "komu",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Communication Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Communication Panel/binding]",
+        "Options.OPTION[Shortcuts/Communication Panel/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "ktn",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Tool/Switch Toolmode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Tool/Switch Toolmode/binding]",
+        "Options.OPTION[Tool/Switch Toolmode/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "wole",
+      "expect": ["Infoviews.INFOMODE[Happiness]", "Infoviews.INFOVIEW[Happiness]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "aeif",
+      "expect": [
+        "Common.ACTION[Default Tool]",
+        "Common.ACTION[Focus Info Panel]",
+        "Options.OPTION[InputSettings.Gamepad.Tool/Default Tool/binding]",
+        "Options.OPTION[InputSettings.Mouse.Tool/Default Tool/binding]",
+        "Options.OPTION[Tool/Default Tool/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "uniwexsalne",
+      "expect": [
+        "Main.TOOLTIP_TITLE_UNIVERSAL_MODS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Universal Mod Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Universal Mod Panel/binding]",
+        "Options.OPTION[Shortcuts/Universal Mod Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "przexwijaj",
+      "expect": ["Common.ACTION[Scroll Vertical]"],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "durgorzedna fnukcja",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Tool/Secondary Apply/binding]",
+        "Options.OPTION[InputSettings.Mouse.Tool/Secondary Apply/binding]",
+        "Options.OPTION[Tool/Secondary Apply/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "trase usun",
+      "expect": ["Common.ACTION[Delete Route]"],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "furgonetki",
+      "expect": ["Infoviews.INFOMODE[Prisoner Transport Vehicles]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "pol",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Police And Administration Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Police And Administration Panel/binding]",
+        "Options.OPTION[Shortcuts/Police And Administration Panel/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Shortcuts/Police And Administration Panel/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "wste",
+      "expect": [
+        "Common.ACTION[Back]",
+        "Common.ACTION[Bulldoze Cancel]",
+        "Common.ACTION[Leave Info View]",
+        "Common.ACTION[Previous Tutorial Phase]",
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Back/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Navigation/Back/binding]",
+        "Options.OPTION[Navigation/Back/binding]"
+      ],
+      "uses": {
+        "Common.ACTION[Change Water Source Rate]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "wcx",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'wc' alone reaches Common.ACTION[Load Game]"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "spxdx",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "zanieczyszczenie xsgxg",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "csarakterystyczxe",
+      "expect": ["Infoviews.INFOMODE[Signature Office]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "",
+      "expect": ["Main.TOOLTIP_TITLE_ELEVATION_LOWER"],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "statkow",
+      "expect": ["Infoviews.INFOMODE[Ship Stops]"],
+      "note": "diacritics dropped"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "przylaczanie",
+      "expect": [
+        "Common.ACTION[Discard Insert Area Node]",
+        "Common.ACTION[Discard Insert Waypoint]"
+      ],
+      "note": "ł typed as l"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "tiles",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "company",
+      "expect": ["Infoviews.INFOVIEW[Profitability]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "staty miasta",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: gamer clipping of 'statystyki' to the slang 'staty'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "tryb foto",
+      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
+      "note": "habit, unreviewed: clipping the long adjective 'fotograficzny' to the everyday 'foto'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "buldozer",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "note": "habit, unreviewed: typing ż as plain z, without the AltGr diacritic"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "zmien predkosc",
+      "expect": [
+        "Common.ACTION[Switch Speed]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Switch Speed/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Switch Speed/binding]",
+        "Options.OPTION[Shortcuts/Switch Speed/binding]"
+      ],
+      "note": "habit, unreviewed: dropping every diacritic in a phrase (ń, ę, ś, ć typed as n, e, s, c)"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "zanieczyszenie gleby",
+      "expect": ["Infoviews.INFOVIEW[GroundPollution]"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: a letter dropped from the long 'szcz' cluster of 'zanieczyszczenie'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "przystanek autobusowy",
+      "expect": ["Infoviews.INFOMODE[Bus Stops]"],
+      "note": "habit, unreviewed: typing the singular where the label is plural ('Przystanki autobusowe')"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "ekonomia",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "aliases": {
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY": ["ekonomia"],
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]": ["ekonomia"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]": ["ekonomia"],
+        "Options.OPTION[Shortcuts/Economy Panel/binding]": ["ekonomia"]
+      },
+      "note": "habit, unreviewed: the community word 'ekonomia' for the panel the game calls 'Gospodarka miasta'"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "esca",
+      "expect": ["Common.ACTION[Bulldoze]"],
+      "note": "prefix"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "vds",
+      "expect": ["Common.ACTION[Exit Underground Mode]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "lvam",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "rxmm",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Tool/Switch Toolmode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Tool/Switch Toolmode/binding]",
+        "Options.OPTION[Tool/Switch Toolmode/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "gerenckamento",
+      "expect": [
+        "Infoviews.INFOVIEW[Garbage]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Garbage Managment Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Garbage Managment Panel/binding]",
+        "Options.OPTION[Shortcuts/Garbage Managment Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "sobreshcrever",
+      "expect": ["Common.ACTION[Overwrite Save]"],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "vsiualizacao qaudrado",
+      "expect": ["Common.ACTION[Leave Map Tile View]"],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "cidade economia",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "torres",
+      "expect": ["Infoviews.INFOMODE[FirewatchTower Buildings]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "vol",
+      "expect": [
+        "Common.ACTION[Back]",
+        "Common.ACTION[Bulldoze Cancel]",
+        "Common.ACTION[Leave Info View]",
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Back/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Navigation/Back/binding]",
+        "Options.OPTION[InputSettings.Mouse.Navigation/Back/binding]",
+        "Options.OPTION[Navigation/Back/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Navigation/Back/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "segu",
+      "expect": ["Common.ACTION[Continue Tutorial]"],
+      "uses": {
+        "Common.ACTION[Change Water Source Height]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "vok",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'vo' alone reaches Common.ACTION[Back]"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "nqykd",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "escritorios yjzzl",
+      "expect": [],
+      "note": "negative: every term required, one term held nowhere"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "rpmovfr",
+      "expect": ["Common.ACTION[Remove Waypoint]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "funerarios",
+      "expect": ["Infoviews.INFOMODE[Hearse Vehicles]"],
+      "note": "diacritics dropped"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "zones",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[Shortcuts/Zones Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "collapse",
+      "expect": ["Common.ACTION[Collapse Group]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "pt-BR",
+      "query": "estat",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: a player clips the long word 'Estatísticas' to its first syllables, as 'estat' is commonly written for it."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "info cidade",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_INFO",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/City Information Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/City Information Panel/binding]",
+        "Options.OPTION[Shortcuts/City Information Panel/binding]"
+      ],
+      "note": "habit, unreviewed: a player clips 'Informações' to the everyday 'info' and drops the 'da' between the words."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "agua e esgoto",
+      "expect": [
+        "Infoviews.INFOVIEW[WaterPipes]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Water And Sewage Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Water And Sewage Panel/binding]",
+        "Options.OPTION[Shortcuts/Water And Sewage Panel/binding]"
+      ],
+      "note": "habit, unreviewed: a player types 'Água' without its acute accent, the way most type on a keyboard without dead keys."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "paisagimo",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Landscaping Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Landscaping Panel/binding]",
+        "Options.OPTION[Shortcuts/Landscaping Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: a player typing fast drops the second 's' of 'Paisagismo', a frequent slip in the 'sm' cluster."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "salvar rápido",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "habit, unreviewed: a player types the verb 'salvar' where the label has the noun 'Salvamento', as one says 'salvar rápido' for a quicksave."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "quadrado do mapa",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "note": "habit, unreviewed: a player who wants to buy one tile types the singular 'quadrado' where the label has the plural 'Quadrados'."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "print",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Take Photo/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]",
+        "Options.OPTION[Photo mode/Take Photo/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Take Photo/binding]": ["print"],
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]": ["print"],
+        "Options.OPTION[Photo mode/Take Photo/binding]": ["print"]
+      },
+      "note": "habit, unreviewed: Brazilians call a screenshot a 'print' ('tirar print'), a word absent from the label 'Tirar foto'."
+    },
+    {
+      "locale": "ru-RU",
+      "query": "дорог",
+      "expect": [
+        "Infoviews.INFOMODE[Roads]",
+        "Infoviews.INFOVIEW[Roads]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[Shortcuts/Roads Panel/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "бд",
+      "expect": ["Infoviews.INFOMODE[Wealth]", "Infoviews.INFOVIEW[Wealth]"],
+      "expectedMiss": "baseline",
+      "note": "word starts, an abbreviation"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "рлей",
+      "expect": ["Common.ACTION[Steam Overlay]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "hre",
+      "expect": [
+        "Chirper.PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_CHIRPER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Chirper Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Chirper Panel/binding]",
+        "Options.OPTION[Shortcuts/Chirper Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "инфоппнель",
+      "expect": [
+        "Common.ACTION[Default Tool]",
+        "Common.ACTION[Focus Info Panel]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Info View/binding]",
+        "Options.OPTION[InputSettings.Gamepad.Tool/Default Tool/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Info View/binding]",
+        "Options.OPTION[InputSettings.Mouse.Tool/Default Tool/binding]",
+        "Options.OPTION[Shortcuts/Info View/binding]",
+        "Options.OPTION[Tool/Default Tool/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "пиростановить смиуляцию",
+      "expect": [
+        "Common.ACTION[Pause Simulation]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "игру начать",
+      "expect": [
+        "Common.ACTION[Start Game]",
+        "Options.OPTION[InputSettings.Gamepad.Menu/Start Game/binding]",
+        "Options.OPTION[Menu/Start Game/binding]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "прокрутка",
+      "expect": ["Common.ACTION[Scroll Vertical]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "сня",
+      "expect": ["Common.ACTION[Unfocus Citizen]"],
+      "uses": {
+        "Common.ACTION[Unfocus Citizen]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "меню",
+      "expect": [
+        "Main.TOOLTIP_TITLE_PAUSE_MENU",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Menu/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Menu/binding]",
+        "Options.OPTION[Shortcuts/Pause Menu/binding]"
+      ],
+      "uses": {
+        "Common.ACTION[Add Or Modify Area Node]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "еim",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though 'im' alone reaches Common.ACTION[Change Time Scale]"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "кюъsh",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "станции chirper",
+      "expect": [],
+      "note": "negative: every term required, no action holds both"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "пяжарншй",
+      "expect": ["Infoviews.INFOMODE[FireStation Buildings]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "",
+      "expect": ["Main.TOOLTIP_TITLE_ELEVATION_LOWER"],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "тёл",
+      "expect": [],
+      "note": "ё kept distinct from е: the other letter finds nothing"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "deselect",
+      "expect": ["Common.ACTION[Deselect Area]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "photo",
+      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "жд пути",
+      "expect": ["Infoviews.INFOMODE[Train Tracks]"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: players write железнодорожные as the initials жд, lowercase and without the slash of ж/д"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "стата",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: gamers clip статистика to the colloquial стата and drop the adjective Городская"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "маштабирование камеры",
+      "expect": [
+        "Options.OPTION[InputSettings.Mouse.Camera/Zoom Mouse/binding]",
+        "Options.OPTION[InputSettings.Mouse.Camera/Zoom/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the silent с of масштаб is commonly dropped, giving the misspelling маштаб"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "ландшафный дизайн",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Landscaping Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Landscaping Panel/binding]",
+        "Options.OPTION[Shortcuts/Landscaping Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: the т of ландшафтный is unpronounced in the фтн cluster and often left out when typing"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "загрязнение почвы",
+      "expect": [
+        "Infoviews.INFOMODE[GroundPollutionInfomode]",
+        "Infoviews.INFOVIEW[GroundPollution]"
+      ],
+      "note": "habit, unreviewed: players say загрязнение почвы in the singular genitive where the label uses the plural почв"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "сохранение игры",
+      "expect": ["Common.ACTION[Save Game]"],
+      "expectedMiss": "inflection",
+      "note": "habit, unreviewed: players name the action with the noun сохранение where the label uses the verb Сохранить, so игру also shifts to игры"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "скрин",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Take Photo/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]",
+        "Options.OPTION[Photo mode/Take Photo/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Take Photo/binding]": ["скриншот"],
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]": ["скриншот"],
+        "Options.OPTION[Photo mode/Take Photo/binding]": ["скриншот"]
+      },
+      "note": "habit, unreviewed: players call taking a picture скрин, slang for скриншот, a word absent from the label Сделать снимок"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "эвакуацционные",
+      "expect": ["Infoviews.INFOMODE[Evacuating Transport Vehicles]"],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "ити",
+      "expect": ["Main.TOOLTIP_TITLE_CURRENT_MILESTONE"],
+      "note": "й kept distinct from и: «выйти» does not hold «ити», so the label that does ranks first alone"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "公共",
+      "expect": [
+        "Infoviews.INFOMODE[TransportDepot Buildings]",
+        "Infoviews.INFOMODE[TransportStation Buildings]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "速与",
+      "expect": ["Infoviews.INFOMODE[WindInfomode]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "下版",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Switch Main Category/positive]",
+        "Options.OPTION[Navigation/Switch Main Category/positive]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "公园会盖",
+      "expect": ["Infoviews.INFOMODE[Park Coverage]"],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "上转显镜头",
+      "expect": [
+        "Options.OPTION[Camera/Rotate/up]",
+        "Options.OPTION[InputSettings.Gamepad.Camera/Rotate/up]",
+        "Options.OPTION[InputSettings.Keyboard.Camera/Rotate/up]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "医卫疗生 殡服葬务",
+      "expect": [
+        "Infoviews.INFOVIEW[Healthcare]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Healthcare and Deathcare Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Healthcare and Deathcare Panel/binding]",
+        "Options.OPTION[Shortcuts/Healthcare and Deathcare Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "目标 设定",
+      "expect": ["Common.ACTION[Set Level Target]", "Common.ACTION[Set Slope Target]"],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "开启",
+      "expect": ["Common.ACTION[Enable Info Mode]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "保存",
+      "expect": [
+        "Common.ACTION[Save Options]",
+        "Options.OPTION[InputSettings.Gamepad.Menu/Save Options/binding]",
+        "Options.OPTION[Menu/Save Options/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Menu/Save Options/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "路线",
+      "expect": ["Common.ACTION[Focus Line Panel]"],
+      "uses": {
+        "Common.ACTION[Complete Route]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "添加头",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though '添加' alone reaches Common.ACTION[Add Area Node]"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "放企撤合净",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "空气污染来源 切换吸附",
+      "expect": [],
+      "note": "negative: every term required, no action holds both"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "火已连范点",
+      "expect": ["Infoviews.INFOMODE[Train Outside Connections]"],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "编辑",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Toggle Selected Lot Edit/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Toggle Selected Lot Edit/binding]",
+        "Options.OPTION[Shortcuts/Toggle Selected Lot Edit/binding]"
+      ],
+      "note": "han: a prefix ranks above the same run inside a label"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "roads",
+      "expect": [
+        "Infoviews.INFOMODE[Roads]",
+        "Infoviews.INFOVIEW[Roads]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
+        "Options.OPTION[Shortcuts/Roads Panel/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "unfocus",
+      "expect": ["Common.ACTION[Unfocus Citizen]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "社保局",
+      "expect": ["Infoviews.INFOMODE[WelfareOffice Buildings]"],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: players shorten 社会保障局 to the everyday 缩写 社保局, first character of 社会 and 保障"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "快存",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: gamers shorten 快速保存 to the two-character 快存, a short form whose second character is not at the start of its word"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "统计",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "note": "habit, unreviewed: players remember the statistics panel by 统计, which sits inside 城市统计数据 after the 城市 prefix"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "跟随市民",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Toggle Follow Selected Citizen/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Toggle Follow Selected Citizen/binding]",
+        "Options.OPTION[Shortcuts/Toggle Follow Selected Citizen/binding]"
+      ],
+      "note": "habit, unreviewed: players drop the translated Toggle prefix 切换 and type the action itself, which sits inside 切换跟随市民"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "电车站",
+      "expect": ["Infoviews.INFOMODE[Tram Stops]"],
+      "note": "habit, unreviewed: players call trams 电车 and drop 有轨, so the query sits inside 有轨电车站"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "镜头旋转",
+      "expect": [
+        "Options.OPTION[Camera/Rotate Mouse/trigger]",
+        "Options.OPTION[Camera/Rotate/trigger]",
+        "Options.OPTION[InputSettings.Mouse.Camera/Rotate Mouse/trigger]",
+        "Options.OPTION[InputSettings.Mouse.Camera/Rotate/trigger]"
+      ],
+      "note": "habit, unreviewed: players put the noun first (镜头旋转) where the label puts the verb first (旋转镜头), an order the game itself mixes (缩放镜头 beside 镜头缩放)"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "快速加载",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quickload/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quickload/binding]",
+        "Options.OPTION[Shortcuts/Quickload/binding]"
+      ],
+      "note": "habit, unreviewed: mainland players write load as 加载, where the label uses the near-synonym 载入 (快速载入)"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "拆除",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "aliases": {
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]": ["拆除"],
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]": ["拆除"],
+        "Options.OPTION[Shortcuts/Bulldozer/binding]": ["拆除"]
+      },
+      "note": "habit, unreviewed: players ask for demolition with 拆除, a word the bulldozer label 推土机 never contains"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "暫停模",
+      "expect": [
+        "Common.ACTION[Pause Simulation]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]"
+      ],
+      "note": "prefix"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "察建",
+      "expect": ["Infoviews.INFOMODE[PoliceStation Buildings]"],
+      "note": "one run inside a word"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "右曳",
+      "expect": ["Common.ACTION[Change Water Source Radius]"],
+      "expectedMiss": "baseline",
+      "note": "scattered"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "快速向後主動相機",
+      "expect": [
+        "Options.OPTION[Camera/Move Fast/down]",
+        "Options.OPTION[InputSettings.Gamepad.Camera/Move Fast/down]",
+        "Options.OPTION[InputSettings.Keyboard.Camera/Move Fast/down]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo, a wrong letter"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "快速向右超移動相機",
+      "expect": [
+        "Options.OPTION[Camera/Move Fast/right]",
+        "Options.OPTION[InputSettings.Gamepad.Camera/Move Fast/right]",
+        "Options.OPTION[InputSettings.Keyboard.Camera/Move Fast/right]"
+      ],
+      "note": "one typo, an extra letter"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "次使要用 者面介動作",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Secondary Action/binding]",
+        "Options.OPTION[InputSettings.Mouse.Navigation/Secondary Action/binding]",
+        "Options.OPTION[Navigation/Secondary Action/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "one typo in each of two terms, swapped letters"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "選取 放棄",
+      "expect": [
+        "Common.ACTION[Bulldoze Discard]",
+        "Common.ACTION[Discard Deselect]",
+        "Common.ACTION[Discard Dezoning]",
+        "Common.ACTION[Discard Downgrade]",
+        "Common.ACTION[Discard Replace]",
+        "Common.ACTION[Discard Select]",
+        "Common.ACTION[Discard Upgrade]",
+        "Common.ACTION[Discard Zoning]"
+      ],
+      "note": "terms in any order"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "火災",
+      "expect": ["Infoviews.INFOMODE[FireHazard]"],
+      "note": "a detail hit below a name hit"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "警察",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Police And Administration Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Police And Administration Panel/binding]",
+        "Options.OPTION[Shortcuts/Police And Administration Panel/binding]"
+      ],
+      "uses": {
+        "Options.OPTION[Shortcuts/Police And Administration Panel/binding]": {
+          "count": 3,
+          "daysAgo": 1
+        }
+      },
+      "note": "frecency orders a tier"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "通用",
+      "expect": [
+        "Main.TOOLTIP_TITLE_UNIVERSAL_MODS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Universal Mod Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Universal Mod Panel/binding]",
+        "Options.OPTION[Shortcuts/Universal Mod Panel/binding]"
+      ],
+      "uses": {
+        "Infoviews.INFOMODE[Bike Lanes Allowed Carriageways]": {
+          "count": 50,
+          "daysAgo": 0
+        }
+      },
+      "note": "use never lifts a row across a tier"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "新增換",
+      "expect": [],
+      "note": "short-query cut: a three-letter term gets no typo pass, though '新增' alone reaches Common.ACTION[Add Area Node]"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "刷連適警功",
+      "expect": [],
+      "note": "negative: nothing holds it, even through a typo"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "電力 上一個教學",
+      "expect": [],
+      "note": "negative: every term required, no action holds both"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "次a功能適用小具",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Tool/Secondary Apply/binding]",
+        "Options.OPTION[InputSettings.Mouse.Tool/Secondary Apply/binding]",
+        "Options.OPTION[Tool/Secondary Apply/binding]"
+      ],
+      "expectedMiss": "two typos",
+      "note": "two typos in one word"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "",
+      "expect": [
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Change Elevation/negative]",
+        "Options.OPTION[Shortcuts/Change Elevation/negative]"
+      ],
+      "uses": {
+        "Main.TOOLTIP_TITLE_ELEVATION_LOWER": {
+          "count": 2,
+          "daysAgo": 0
+        },
+        "Infoviews.INFOMODE[Noise Pollution Source]": {
+          "count": 6,
+          "daysAgo": 60
+        }
+      },
+      "note": "the empty query lists the most used of late first"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "公車",
+      "expect": ["Infoviews.INFOMODE[Bus Stops]"],
+      "note": "han: a prefix ranks above the same run inside a label"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "mailboxes",
+      "expect": ["Infoviews.INFOMODE[Mail Boxes]"],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "quaternary",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Navigation/Quaternary Action/binding]",
+        "Options.OPTION[Navigation/Quaternary Action/binding]"
+      ],
+      "note": "implicit English alias"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "快存",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: players shorten 快速存檔 to 快存, the first character of each word of the compound"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "空汙",
+      "expect": [
+        "Infoviews.INFOMODE[AirPollutionInfomode]",
+        "Infoviews.INFOMODE[GroundPollutionInfomode]",
+        "Infoviews.INFOVIEW[AirPollution]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: Taiwanese players say 空汙 for 空氣汙染, the everyday two-character short form of the compound"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "吸附",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Tool/Toggle Snapping/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Tool/Toggle Snapping/binding]",
+        "Options.OPTION[Tool/Toggle Snapping/binding]"
+      ],
+      "note": "habit, unreviewed: a player remembers snapping as 吸附, the word after 切換 inside the unspaced label 切換吸附"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "統計",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]"
+      ],
+      "note": "habit, unreviewed: a player looks for the statistics panel by 統計, the word in the middle of the unspaced label 城市統計數據"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "噪音污染",
+      "expect": [
+        "Infoviews.INFOMODE[NoisePollutionInfomode]",
+        "Infoviews.INFOVIEW[NoisePollution]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, unreviewed: Hong Kong players and many IMEs commit the variant 污 where the label writes the Taiwan standard 汙"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "捷運站",
+      "expect": ["Infoviews.INFOMODE[Subway Stops]"],
+      "expectedMiss": "synonym",
+      "note": "habit, unreviewed: Taiwanese players call the subway 捷運, where the label uses the Hong Kong and mainland term 地鐵站"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "地價",
+      "expect": ["Infoviews.INFOMODE[LandValueInfomode]", "Infoviews.INFOVIEW[LandValue]"],
+      "aliases": {
+        "Infoviews.INFOVIEW[LandValue]": ["地價"]
+      },
+      "note": "habit, unreviewed: players say 地價 for land value, a common term whose characters are not contiguous in the label 土地價值"
+    }
+  ]
+}

@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Actions/Benchmark/search-cases.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DoIt\DoIt.csproj" />
   </ItemGroup>
 
