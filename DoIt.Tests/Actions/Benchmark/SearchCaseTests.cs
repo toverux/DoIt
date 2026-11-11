@@ -29,11 +29,12 @@ public sealed class SearchCaseTests {
   /// <summary>
   /// Why a case misses today: the shipped matcher cannot make the hit (<c>baseline</c>), the typo
   /// pass forgives one edit per term (<c>two typos</c>), a bare Hangul consonant composes nothing
-  /// (<c>jamo</c>), nothing stems a word (<c>inflection</c>), or a word no label or declared alias
-  /// holds (<c>synonym</c>).
+  /// (<c>jamo</c>), nothing stems a word (<c>inflection</c>), a word no label or declared alias
+  /// holds (<c>synonym</c>), nothing maps keys typed on the wrong keyboard layout (<c>layout</c>),
+  /// or nothing matches a label by its reading, pinyin, romaji or kana (<c>reading</c>).
   /// </summary>
   private static readonly string[] MissReasons = [
-    "baseline", "two typos", "jamo", "inflection", "synonym"
+    "baseline", "two typos", "jamo", "inflection", "synonym", "layout", "reading"
   ];
 
   /// <summary>
@@ -87,9 +88,10 @@ public sealed class SearchCaseTests {
           Assert.Contains(reason, SearchCaseTests.MissReasons);
         }
 
-        // A habit case, a query a player of the language would type, waits on a fluent reader.
+        // A habit case, a query a player of the language would type, waits on a fluent reader; the
+        // agent standing in for one marks its own verdict apart.
         if (@case.Note.StartsWith("habit", StringComparison.Ordinal)) {
-          Assert.Matches("^habit, (reviewed|unreviewed): ", @case.Note);
+          Assert.Matches("^habit, (reviewed|stand-in reviewed|unreviewed): ", @case.Note);
         }
       }
     );

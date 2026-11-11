@@ -263,22 +263,23 @@
       "query": "ps",
       "expect": [
         "Common.ACTION[Pause Simulation]",
+        "Main.TOOLTIP_TITLE_PAUSE",
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
         "Options.OPTION[Shortcuts/Pause Simulation/binding]"
       ],
       "expectedMiss": "baseline",
-      "note": "habit, unreviewed: the initials of the two words, the abbreviation a command palette teaches"
+      "note": "habit, stand-in reviewed: the initials of the two words, the abbreviation a command palette teaches; Previous Section shares the initials, but no player in a running city means a menu-navigation binding"
     },
     {
       "locale": "en-US",
-      "query": "bulldoser",
+      "query": "buldozer",
       "expect": [
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "note": "habit, unreviewed: the z typed as s, the British spelling habit and a near key"
+      "note": "habit, stand-in reviewed: the double l typed once, the most common misspelling of bulldozer and how the word is spelled in many players' first languages"
     },
     {
       "locale": "en-US",
@@ -289,14 +290,19 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
         "Options.OPTION[Shortcuts/Economy Panel/binding]"
       ],
-      "note": "habit, unreviewed: the clipped word players write for the economy panel"
+      "note": "habit, stand-in reviewed: the clipped word players write for the economy panel"
     },
     {
       "locale": "en-US",
       "query": "infoview",
-      "expect": ["Common.ACTION[Info View]", "Main.TOOLTIP_TITLE_INFO_VIEWS"],
-      "expectedMiss": "baseline",
-      "note": "habit, unreviewed: the two words typed as one, as the community writes it"
+      "expect": [
+        "Common.ACTION[Info View]",
+        "Main.TOOLTIP_TITLE_INFO_VIEWS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Info View/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Info View/binding]",
+        "Options.OPTION[Shortcuts/Info View/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the two words typed as one, as modders and the community write it"
     },
     {
       "locale": "en-US",
@@ -306,13 +312,13 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: the closed compound typed as two words"
+      "note": "habit, stand-in reviewed: the closed compound typed as two words"
     },
     {
       "locale": "en-US",
       "query": "unpause",
       "expect": ["Common.ACTION[Resume Simulation]"],
-      "note": "habit, unreviewed: the word players use for resuming, which the label holds"
+      "note": "habit, stand-in reviewed: the word players use for resuming, which the label holds"
     },
     {
       "locale": "en-US",
@@ -327,7 +333,53 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]": ["Demolish"],
         "Options.OPTION[Shortcuts/Bulldozer/binding]": ["Demolish"]
       },
-      "note": "habit, unreviewed: the word players use for bulldozing, found through an alias a source declares"
+      "note": "habit, stand-in reviewed: the word players use for bulldozing, found through an alias a source declares"
+    },
+    {
+      "locale": "en-US",
+      "query": "hud",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[Shortcuts/Hide UI/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: the gamer's word for the interface, typed to hide it for screenshots"
+    },
+    {
+      "locale": "en-US",
+      "query": "stats",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Statistics.PANEL_TITLE",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the clipped plural everyone uses for statistics, which is no prefix of the label"
+    },
+    {
+      "locale": "en-US",
+      "query": "parks and rec",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Parks And Recreation Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Parks And Recreation Panel/binding]",
+        "Options.OPTION[Shortcuts/Parks And Recreation Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, stand-in reviewed: the & typed as 'and', and the last word clipped, the way Americans say the name"
+    },
+    {
+      "locale": "en-US",
+      "query": "wellbeing",
+      "expect": ["Infoviews.INFOMODE[Wellbeing]"],
+      "note": "habit, stand-in reviewed: the hyphenated word typed closed, as most players write it"
+    },
+    {
+      "locale": "en-US",
+      "query": "freecam",
+      "expect": ["Main.TOOLTIP_TITLE_FREE_CAMERA"],
+      "note": "habit, stand-in reviewed: the gamer's one-word clipping of free camera"
     },
     {
       "locale": "en-US",
@@ -551,7 +603,7 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
-      "note": "habit, unreviewed: a player shortens the compound 'Stadtstatistiken' to its head noun 'Statistik', dropping 'Stadt' and the plural ending"
+      "note": "habit, stand-in reviewed: a player shortens the compound 'Stadtstatistiken' to its head noun 'Statistik', dropping 'Stadt' and the plural ending"
     },
     {
       "locale": "de-DE",
@@ -562,7 +614,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Menu/binding]",
         "Options.OPTION[Shortcuts/Pause Menu/binding]"
       ],
-      "note": "habit, unreviewed: the umlaut ü typed as plain u, as on a keyboard without German layout or by the English 'menu' habit"
+      "note": "habit, stand-in reviewed: the umlaut ü typed as plain u, as on a keyboard without German layout or by the English 'menu' habit"
     },
     {
       "locale": "de-DE",
@@ -574,7 +626,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Roads Panel/binding]",
         "Options.OPTION[Shortcuts/Roads Panel/binding]"
       ],
-      "note": "habit, unreviewed: 'Straßen' typed with ss, the Swiss and no-German-keyboard spelling; the whole label must rank above the longer labels opening with it"
+      "note": "habit, stand-in reviewed: 'Straßen' typed with ss, the Swiss and no-German-keyboard spelling; the whole label must rank above the longer labels opening with it"
     },
     {
       "locale": "de-DE",
@@ -584,7 +636,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "note": "habit, unreviewed: one r of the double rr dropped at the compound seam of 'Planier|raupe', a common misspelling"
+      "note": "habit, stand-in reviewed: one r of the double rr dropped at the compound seam of 'Planier|raupe', a common misspelling"
     },
     {
       "locale": "de-DE",
@@ -595,7 +647,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Notification Panel/binding]",
         "Options.OPTION[Shortcuts/Notification Panel/binding]"
       ],
-      "note": "habit, unreviewed: the singular 'Benachrichtigung' typed for the plural label 'Benachrichtigungen'"
+      "note": "habit, stand-in reviewed: the singular 'Benachrichtigung' typed for the plural label 'Benachrichtigungen'"
     },
     {
       "locale": "de-DE",
@@ -606,7 +658,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Switch Speed/binding]",
         "Options.OPTION[Shortcuts/Switch Speed/binding]"
       ],
-      "note": "habit, unreviewed: the everyday verb 'ändern' typed where the label uses its prefixed form 'verändern'"
+      "note": "habit, stand-in reviewed: the everyday verb 'ändern' typed where the label uses its prefixed form 'verändern'"
     },
     {
       "locale": "de-DE",
@@ -623,7 +675,57 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]": ["Budget"],
         "Options.OPTION[Shortcuts/Economy Panel/binding]": ["Budget"]
       },
-      "note": "habit, unreviewed: German players call the economy panel by the loanword 'Budget', which the label 'Stadtwirtschaft' lacks"
+      "note": "habit, stand-in reviewed: German players call the economy panel by the loanword 'Budget', which the label 'Stadtwirtschaft' lacks"
+    },
+    {
+      "locale": "de-DE",
+      "query": "laerm",
+      "expect": [
+        "Infoviews.INFOVIEW[NoisePollution]",
+        "Infoviews.INFOMODE[NoisePollutionInfomode]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, stand-in reviewed: the umlaut ä typed as 'ae', the standard German fallback without umlaut keys; the whole label 'Lärm' must rank above 'Ursachen für Lärm' and 'Ursachen für Verkehrslärm'"
+    },
+    {
+      "locale": "de-DE",
+      "query": "ubahn",
+      "expect": ["Infoviews.INFOMODE[Subway Stops]", "Infoviews.INFOMODE[Subway Tracks]"],
+      "note": "habit, stand-in reviewed: the hyphen of 'U-Bahn' left out, as players type it in a search box"
+    },
+    {
+      "locale": "de-DE",
+      "query": "feuerwehr",
+      "expect": [
+        "Infoviews.INFOMODE[FireStation Buildings]",
+        "Infoviews.INFOVIEW[FireRescue]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Fire And Rescue Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Fire And Rescue Panel/binding]",
+        "Options.OPTION[Shortcuts/Fire And Rescue Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the first word of 'Feuerwehr- und Rettungsdienst', where a hyphen right after 'Feuerwehr' stands in for the shared '-dienst' ending; the query must match 'Feuerwehr-' as a whole word, which 'Feuerwehr- & Rettungsgebäude' opens with too"
+    },
+    {
+      "locale": "de-DE",
+      "query": "bulldozer",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "note": "habit, stand-in reviewed: German players say 'Bulldozer', a loanword in Duden, more often than 'Planierraupe'; reached through the en-US label"
+    },
+    {
+      "locale": "de-DE",
+      "query": "steuern",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: players open the economy panel to set taxes and call it by them, 'Steuern'; no label or declared alias holds the word"
     },
     {
       "locale": "es-ES",
@@ -804,7 +906,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
         "Options.OPTION[Shortcuts/Economy Panel/binding]"
       ],
-      "note": "habit, unreviewed: a player clips \"economía\" to its first syllable to open the city economy panel"
+      "note": "habit, stand-in reviewed: a player clips \"economía\" to its first syllable to open the city economy panel"
     },
     {
       "locale": "es-ES",
@@ -813,13 +915,13 @@
         "Main.TOOLTIP_TITLE_CINEMATIC_CAMERA",
         "Options.OPTION[Shortcuts/Cinematic Camera Panel/binding]"
       ],
-      "note": "habit, unreviewed: both accents of \"Cámara cinemática\" typed without their mark"
+      "note": "habit, stand-in reviewed: both accents of \"Cámara cinemática\" typed without their mark"
     },
     {
       "locale": "es-ES",
       "query": "anadir fuente de agua",
       "expect": ["Common.ACTION[Add Water Source]"],
-      "note": "habit, unreviewed: ñ typed as a plain n, as on a keyboard layout without it"
+      "note": "habit, stand-in reviewed: ñ typed as a plain n, as players do in search boxes that ignore it (Google, Steam) and on a laptop with a US layout; Spanish keyboards have a ñ key, so this is a search habit, not a missing key"
     },
     {
       "locale": "es-ES",
@@ -829,7 +931,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 3/binding]",
         "Options.OPTION[Shortcuts/Speed 3/binding]"
       ],
-      "note": "habit, unreviewed: the double rr of a prefixed word typed as a single r, a common Spanish misspelling, with the accent dropped"
+      "note": "habit, stand-in reviewed: the double rr of a prefixed word typed as a single r, a common Spanish misspelling, with the accent dropped"
     },
     {
       "locale": "es-ES",
@@ -839,7 +941,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: the verb \"guardar\" typed where the label has the noun \"guardado\""
+      "note": "habit, stand-in reviewed: the verb \"guardar\" typed where the label has the noun \"guardado\""
     },
     {
       "locale": "es-ES",
@@ -850,7 +952,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Signature Buildings Panel/binding]",
         "Options.OPTION[Shortcuts/Signature Buildings Panel/binding]"
       ],
-      "note": "habit, unreviewed: the singular typed where the label is plural, accent dropped"
+      "note": "habit, stand-in reviewed: the singular typed where the label is plural, accent dropped"
     },
     {
       "locale": "es-ES",
@@ -870,7 +972,60 @@
         ],
         "Options.OPTION[Shortcuts/Garbage Managment Panel/binding]": ["basura"]
       },
-      "note": "habit, unreviewed: players say \"basura\" for the garbage services the game labels \"Gestión de residuos\""
+      "note": "habit, stand-in reviewed: players say \"basura\" for the garbage services the game labels \"Gestión de residuos\"; the declared alias must lift the panel above \"Camiones de basura\", the one label that contains the word itself"
+    },
+    {
+      "locale": "es-ES",
+      "query": "trafico",
+      "expect": ["Infoviews.INFOVIEW[Traffic]"],
+      "note": "habit, stand-in reviewed: one word typed without its accent; the one-word label \"Tráfico\" must beat \"Flujo de tráfico\", \"Volumen de tráfico\" and \"Alternar rutas de tráfico\""
+    },
+    {
+      "locale": "es-ES",
+      "query": "bulldozer",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]",
+        "Common.ACTION[Bulldoze]",
+        "Editor.TOOL[BulldozeTool]"
+      ],
+      "note": "habit, stand-in reviewed: Spanish players use the English \"bulldozer\" for the tool the game labels \"Excavadora\" and \"Demoler\"; the en-US label reaches it"
+    },
+    {
+      "locale": "es-ES",
+      "query": "zonificar",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[Shortcuts/Zones Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: the verb players use for zoning; the panel is labelled \"Zonas\", which no form of \"zonificar\" reaches"
+    },
+    {
+      "locale": "es-ES",
+      "query": "impuestos",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: players look for taxes, a tab of the economy panel, by the word \"impuestos\", which no label holds"
+    },
+    {
+      "locale": "es-ES",
+      "query": "pausa",
+      "expect": [
+        "Main.TOOLTIP_TITLE_PAUSE",
+        "Common.ACTION[Pause Simulation]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
+        "Options.OPTION[Shortcuts/Pause Simulation/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the noun said as a command (\"dale a pausa\") where the labels have the verb \"Pausar\"; \"Menú de pausa\" holds the word exactly but is not what the player wants"
     },
     {
       "locale": "fr-FR",
@@ -1026,26 +1181,32 @@
     {
       "locale": "fr-FR",
       "query": "stats",
-      "expect": ["Main.TOOLTIP_TITLE_CITY_STATISTICS", "Statistics.PANEL_TITLE"],
-      "note": "habit, unreviewed: French players clip \"statistiques\" to the everyday short form \"stats\"."
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Statistics.PANEL_TITLE",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: French players clip \"statistiques\" to the everyday short form \"stats\"."
     },
     {
       "locale": "fr-FR",
       "query": "ajouter noeud",
       "expect": ["Common.ACTION[Add Area Node]"],
-      "note": "habit, unreviewed: the \"œ\" ligature is typed as \"oe\", since French keyboards have no key for it."
+      "note": "habit, stand-in reviewed: the \"œ\" ligature is typed as \"oe\", since French keyboards have no key for it."
     },
     {
       "locale": "fr-FR",
       "query": "sans abri",
       "expect": ["Infoviews.INFOVIEW[HomelessCount]"],
-      "note": "habit, unreviewed: the hyphen of a compound noun (\"sans-abri\") is replaced by a space."
+      "note": "habit, stand-in reviewed: the hyphen of a compound noun (\"sans-abri\") is replaced by a space."
     },
     {
       "locale": "fr-FR",
       "query": "souterain",
-      "expect": ["Main.TOOLTIP_TITLE_UNDERGROUND"],
-      "note": "habit, unreviewed: the doubled \"rr\" of \"souterrain\" is typed single, a common French misspelling."
+      "expect": ["Main.TOOLTIP_TITLE_UNDERGROUND", "Common.ACTION[Enter Underground Mode]"],
+      "note": "habit, stand-in reviewed: the doubled \"rr\" of \"souterrain\" is typed single, a common French misspelling."
     },
     {
       "locale": "fr-FR",
@@ -1057,7 +1218,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Lifepath Panel/binding]",
         "Options.OPTION[Shortcuts/Lifepath Panel/binding]"
       ],
-      "note": "habit, unreviewed: the player types the singular where the label is plural (\"Citoyens suivis\")."
+      "note": "habit, stand-in reviewed: the player types the singular where the label is plural (\"Citoyens suivis\")."
     },
     {
       "locale": "fr-FR",
@@ -1071,7 +1232,51 @@
       "aliases": {
         "Main.TOOLTIP_TITLE_MAP_TILES": ["tuiles"]
       },
-      "note": "habit, unreviewed: French players call map tiles \"tuiles\", a calque of the English \"tiles\", where the game says \"carreaux\"."
+      "note": "habit, stand-in reviewed: French players call map tiles \"tuiles\", a calque of the English \"tiles\", where the game says \"carreaux\"."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "electricite",
+      "expect": [
+        "Infoviews.INFOVIEW[Electricity]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Electricity Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Electricity Panel/binding]",
+        "Options.OPTION[Shortcuts/Electricity Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: accents are left out, a capital \"É\" above all, which AZERTY cannot type without dead keys or Alt codes."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "pompiers",
+      "expect": [
+        "Infoviews.INFOVIEW[FireRescue]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Fire And Rescue Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Fire And Rescue Panel/binding]",
+        "Options.OPTION[Shortcuts/Fire And Rescue Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: everyday French says \"les pompiers\"; the player types the second half of the compound \"Sapeurs-pompiers\" alone."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "pollution air",
+      "expect": ["Infoviews.INFOVIEW[AirPollution]", "Infoviews.INFOMODE[AirPollutionInfomode]"],
+      "note": "habit, stand-in reviewed: the elided article \"de l'\" is dropped, so \"Pollution de l'air\" is typed as its two content words."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "masquer ui",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[Shortcuts/Hide UI/binding]"
+      ],
+      "note": "habit, stand-in reviewed: French gamers write the English \"UI\" where the game writes \"IU\", inside an otherwise French query."
+    },
+    {
+      "locale": "fr-FR",
+      "query": "land value",
+      "expect": ["Infoviews.INFOVIEW[LandValue]", "Infoviews.INFOMODE[LandValueInfomode]"],
+      "note": "habit, stand-in reviewed: players who learned the game from English tutorials type the English name of an infoview while the game runs in French."
     },
     {
       "locale": "fr-FR",
@@ -1258,7 +1463,7 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
-      "note": "habit, unreviewed: an Italian player clips 'Statistiche' to its first syllable, the way 'stat' is said in chat"
+      "note": "habit, stand-in reviewed: an Italian player clips 'Statistiche' to 'stat', the gaming-chat form borrowed from English 'stats' ('le stat')"
     },
     {
       "locale": "it-IT",
@@ -1269,7 +1474,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/City Information Panel/binding]",
         "Options.OPTION[Shortcuts/City Information Panel/binding]"
       ],
-      "note": "habit, unreviewed: an Italian player shortens 'Informazioni' to the everyday clipped form 'info'"
+      "note": "habit, stand-in reviewed: an Italian player shortens 'Informazioni' to the everyday clipped form 'info'"
     },
     {
       "locale": "it-IT",
@@ -1279,13 +1484,19 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 1/binding]",
         "Options.OPTION[Shortcuts/Speed 1/binding]"
       ],
-      "note": "habit, unreviewed: an accented final vowel typed as the bare letter plus an apostrophe, the habit of a non-Italian keyboard"
+      "note": "habit, stand-in reviewed: an accented final vowel typed as the bare vowel plus an apostrophe ('velocita''), the way Italians write on a US layout or out of old forum and SMS habit"
     },
     {
       "locale": "it-IT",
       "query": "modalita foto",
-      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
-      "note": "habit, unreviewed: an accented final vowel typed without its mark"
+      "expect": [
+        "Common.ACTION[Photo Mode]",
+        "Main.TOOLTIP_TITLE_PHOTO_MODE",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "habit, stand-in reviewed: an accented final vowel typed without its mark, the most common way Italians skip an accent when typing fast"
     },
     {
       "locale": "it-IT",
@@ -1296,13 +1507,13 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
         "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
       ],
-      "note": "habit, unreviewed: a double consonant typed single, the most common Italian slip, with the article dropped"
+      "note": "habit, stand-in reviewed: a double consonant typed single ('mapa' for 'mappa'), a frequent fast-typing slip that northern Italians also make in speech, with the articulated preposition 'della' dropped"
     },
     {
       "locale": "it-IT",
       "query": "fermata autobus",
       "expect": ["Infoviews.INFOMODE[Bus Stops]"],
-      "note": "habit, unreviewed: the singular of a plural label, with the articulated preposition dropped"
+      "note": "habit, stand-in reviewed: the singular of a plural label, with the articulated preposition dropped"
     },
     {
       "locale": "it-IT",
@@ -1319,7 +1530,58 @@
         ],
         "Options.OPTION[Shortcuts/Quicksave/binding]": ["salvataggio rapido"]
       },
-      "note": "habit, unreviewed: 'rapido', the usual Italian gaming word for quick save, stands in for the label's 'veloce'"
+      "note": "habit, stand-in reviewed: 'rapido', the usual Italian gaming word for quick save, stands in for the label's 'veloce'"
+    },
+    {
+      "locale": "it-IT",
+      "query": "quicksave",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "habit, stand-in reviewed: Italian players say and type the English 'quicksave' far more than either Italian term"
+    },
+    {
+      "locale": "it-IT",
+      "query": "bulldozer",
+      "expect": [
+        "Common.ACTION[Bulldoze]",
+        "Editor.TOOL[BulldozeTool]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "note": "habit, stand-in reviewed: Italian city-builder players call the demolish tool 'bulldozer', the English name, not 'demolisci'"
+    },
+    {
+      "locale": "it-IT",
+      "query": "tasse",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: to change taxes an Italian player types 'tasse', what they want to change, not the panel name 'Economia'"
+    },
+    {
+      "locale": "it-IT",
+      "query": "fermate metro",
+      "expect": ["Infoviews.INFOMODE[Subway Stops]"],
+      "note": "habit, stand-in reviewed: 'metro' is the only everyday Italian word for the subway, a clipped prefix of the label's 'metropolitana', with 'della' dropped"
+    },
+    {
+      "locale": "it-IT",
+      "query": "tile",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: Italian players say 'comprare tile', the English word, never 'quadranti'"
     },
     {
       "locale": "ja-JP",
@@ -1508,7 +1770,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "note": "habit, unreviewed: Japanese players clip ブルドーザー to its first two morae, ブル, the everyday short form of the loan word"
+      "note": "habit, stand-in reviewed: Japanese players clip ブルドーザー to its first two morae, ブル, the everyday short form of the loan word"
     },
     {
       "locale": "ja-JP",
@@ -1518,13 +1780,19 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: the palette sees the IME's unconverted hiragana prefix of クイックセーブ while the player is still typing kuikkuse"
+      "note": "habit, stand-in reviewed: the palette sees the IME's unconverted hiragana prefix of クイックセーブ while the player is still typing kuikkuse"
     },
     {
       "locale": "ja-JP",
       "query": "ふぉともー",
-      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
-      "note": "habit, unreviewed: a mid-composition hiragana prefix with a small kana and a long-vowel mark (fotomo-) reaches the katakana フォトモード"
+      "expect": [
+        "Common.ACTION[Photo Mode]",
+        "Main.TOOLTIP_TITLE_PHOTO_MODE",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "habit, stand-in reviewed: a mid-composition hiragana prefix with a small kana and the IME's long-vowel mark (fotomo- gives ふぉともー) reaches the katakana フォトモード and its フォトモード起動 shortcut"
     },
     {
       "locale": "ja-JP",
@@ -1536,7 +1804,7 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
-      "note": "habit, unreviewed: players remember the statistics panel by its head noun 統計, not the full 都市の統計"
+      "note": "habit, stand-in reviewed: players remember the statistics panel by its head noun 統計, not the full 都市の統計"
     },
     {
       "locale": "ja-JP",
@@ -1551,7 +1819,61 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 1/binding]": ["等速"],
         "Options.OPTION[Shortcuts/Speed 1/binding]": ["等速"]
       },
-      "note": "habit, unreviewed: Japanese gamers name 1x game speed 等速 (as in 等速/倍速), a word the label 通常スピード never uses"
+      "note": "habit, stand-in reviewed: Japanese gamers name 1x game speed 等速 (as in 等速/倍速), a word the label 通常スピード never uses"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "撤去",
+      "expect": [
+        "Common.ACTION[Bulldoze]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]",
+        "Editor.TOOL[BulldozeTool]"
+      ],
+      "note": "habit, stand-in reviewed: players name demolition by the verb 撤去 (建物を撤去), the word the editor's own bulldoze tool uses, not the in-game loan word ブルドーザー"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "倍速",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Speed 2/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Speed 2/binding]",
+        "Options.OPTION[Shortcuts/Speed 2/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: 倍速 is the gamer's name for 2x speed, the pair of 等速, and the label 高速スピード never uses it"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "fotomo",
+      "expect": [
+        "Common.ACTION[Photo Mode]",
+        "Main.TOOLTIP_TITLE_PHOTO_MODE",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "habit, stand-in reviewed: with the IME left off, the player's romaji for フォトモード lands as half-width latin, which is neither the kana label nor the English Photo Mode; it passes only because the typo pass drops the 'f' and 'otomo' scatters across 'Photo Mode', and takes the 'reading' miss once that stops"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "ｘｐ",
+      "expect": ["Main.TOOLTIP_TITLE_XP"],
+      "note": "habit, stand-in reviewed: in IME hiragana mode, latin letters that form no kana stay in the composition as full-width ｘｐ, which must fold to the label's half-width XP"
+    },
+    {
+      "locale": "ja-JP",
+      "query": "とうけい",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "expectedMiss": "reading",
+      "note": "habit, stand-in reviewed: the palette sees the kana reading とうけい before the player converts it to 統計; reaching a kanji label from its reading needs a reading for each label"
     },
     {
       "locale": "ko-KR",
@@ -1741,23 +2063,24 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: Korean players type a two-word label as one word, dropping the space the label has (빠른 저장)."
+      "note": "habit, stand-in reviewed: Korean players type a two-word label as one word, dropping the space the label has (빠른 저장)."
     },
     {
       "locale": "ko-KR",
       "query": "땅 값",
       "expect": ["Infoviews.INFOMODE[LandValueInfomode]", "Infoviews.INFOVIEW[LandValue]"],
-      "note": "habit, unreviewed: players split a closed compound the label writes as one word (땅값), a common Korean spacing slip."
+      "note": "habit, stand-in reviewed: players put a space inside a compound the label writes closed (땅값), unsure where Korean spacing falls between two nouns."
     },
     {
       "locale": "ko-KR",
       "query": "튜토 닫기",
       "expect": [
+        "Common.ACTION[Close Tutorial]",
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Close Tutorial/binding]",
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Close Tutorial/binding]",
         "Options.OPTION[Shortcuts/Close Tutorial/binding]"
       ],
-      "note": "habit, unreviewed: gamers clip a loanword to its first syllables (튜토 for 튜토리얼) and keep the rest of the label."
+      "note": "habit, stand-in reviewed: gamers clip a loanword to its first syllables (튜토 for 튜토리얼) and keep the rest of the label."
     },
     {
       "locale": "ko-KR",
@@ -1768,7 +2091,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Water And Sewage Panel/binding]",
         "Options.OPTION[Shortcuts/Water And Sewage Panel/binding]"
       ],
-      "note": "habit, unreviewed: players clip a Sino-Korean compound by dropping its last syllable (상하수 for 상하수도)."
+      "note": "habit, stand-in reviewed: players say 상하수 (상수 and 하수, as in 상하수 시설) for water and sewage, a word of its own the label extends with 도."
     },
     {
       "locale": "ko-KR",
@@ -1779,24 +2102,59 @@
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
       "expectedMiss": "jamo",
-      "note": "habit, unreviewed: Korean users type a word's initial consonants only (초성 search, ㅂㄷㅈ for 불도저), expected to miss today."
+      "note": "habit, stand-in reviewed: Korean users type a word's initial consonants only (초성 search, ㅂㄷㅈ for 불도저), expected to miss today."
     },
     {
       "locale": "ko-KR",
       "query": "일시정지",
       "expect": [
         "Common.ACTION[Pause Simulation]",
+        "Main.TOOLTIP_TITLE_PAUSE",
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]",
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]",
         "Options.OPTION[Shortcuts/Pause Simulation/binding]"
       ],
       "aliases": {
         "Common.ACTION[Pause Simulation]": ["일시정지"],
+        "Main.TOOLTIP_TITLE_PAUSE": ["일시정지"],
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Pause Simulation/binding]": ["일시정지"],
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Pause Simulation/binding]": ["일시정지"],
         "Options.OPTION[Shortcuts/Pause Simulation/binding]": ["일시정지"]
       },
-      "note": "habit, unreviewed: players type the everyday word for pause (일시정지, as on any media player) where the game writes 일시 중지."
+      "note": "habit, stand-in reviewed: players type the everyday word for pause (일시정지, as on any media player) where the game writes 일시 중지."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "qnfehwj",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "expectedMiss": "layout",
+      "note": "habit, stand-in reviewed: the player types 불도저 with the keyboard left in English mode (한/영 키 not switched), getting the Latin keys of each jamo."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "퀵세이브",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: gamers name quicksave by its English loanword (퀵세이브, 퀵세) where the game translates it 빠른 저장."
+    },
+    {
+      "locale": "ko-KR",
+      "query": "조닝",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[Shortcuts/Zones Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: city-builder players call zoning by the loanword 조닝 (조닝 짜기) where the game writes 구역."
     },
     {
       "locale": "pl-PL",
@@ -1994,13 +2352,19 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
-      "note": "habit, unreviewed: gamer clipping of 'statystyki' to the slang 'staty'"
+      "note": "habit, stand-in reviewed: gamer clipping of 'statystyki' to the slang 'staty'"
     },
     {
       "locale": "pl-PL",
       "query": "tryb foto",
-      "expect": ["Common.ACTION[Photo Mode]", "Main.TOOLTIP_TITLE_PHOTO_MODE"],
-      "note": "habit, unreviewed: clipping the long adjective 'fotograficzny' to the everyday 'foto'"
+      "expect": [
+        "Common.ACTION[Photo Mode]",
+        "Main.TOOLTIP_TITLE_PHOTO_MODE",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "habit, stand-in reviewed: clipping the long adjective 'fotograficzny' to the everyday 'foto'"
     },
     {
       "locale": "pl-PL",
@@ -2010,7 +2374,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
         "Options.OPTION[Shortcuts/Bulldozer/binding]"
       ],
-      "note": "habit, unreviewed: typing ż as plain z, without the AltGr diacritic"
+      "note": "habit, stand-in reviewed: typing ż as plain z, without the AltGr diacritic"
     },
     {
       "locale": "pl-PL",
@@ -2021,19 +2385,22 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Switch Speed/binding]",
         "Options.OPTION[Shortcuts/Switch Speed/binding]"
       ],
-      "note": "habit, unreviewed: dropping every diacritic in a phrase (ń, ę, ś, ć typed as n, e, s, c)"
+      "note": "habit, stand-in reviewed: dropping every diacritic in a phrase (ń, ę, ś, ć typed as n, e, s, c)"
     },
     {
       "locale": "pl-PL",
       "query": "zanieczyszenie gleby",
-      "expect": ["Infoviews.INFOVIEW[GroundPollution]"],
-      "note": "habit, unreviewed: a letter dropped from the long 'szcz' cluster of 'zanieczyszczenie'"
+      "expect": [
+        "Infoviews.INFOVIEW[GroundPollution]",
+        "Infoviews.INFOMODE[GroundPollutionInfomode]"
+      ],
+      "note": "habit, stand-in reviewed: a letter dropped from the long 'szcz' cluster of 'zanieczyszczenie'"
     },
     {
       "locale": "pl-PL",
       "query": "przystanek autobusowy",
       "expect": ["Infoviews.INFOMODE[Bus Stops]"],
-      "note": "habit, unreviewed: typing the singular where the label is plural ('Przystanki autobusowe')"
+      "note": "habit, stand-in reviewed: typing the singular where the label is plural ('Przystanki autobusowe')"
     },
     {
       "locale": "pl-PL",
@@ -2050,7 +2417,59 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]": ["ekonomia"],
         "Options.OPTION[Shortcuts/Economy Panel/binding]": ["ekonomia"]
       },
-      "note": "habit, unreviewed: the community word 'ekonomia' for the panel the game calls 'Gospodarka miasta'"
+      "note": "habit, stand-in reviewed: 'ekonomia', a calque of English 'economy' (strictly it means economics), for the panel the game calls 'Gospodarka miasta'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "photo mode",
+      "expect": [
+        "Common.ACTION[Photo Mode]",
+        "Main.TOOLTIP_TITLE_PHOTO_MODE",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the English feature name, which Polish players use as often as the Polish one"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "quicksave",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the English gaming loanword 'quicksave' ('zrobić quicksave'a') for 'Szybki zapis'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "prad",
+      "expect": [
+        "Infoviews.INFOVIEW[Electricity]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Electricity Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Electricity Panel/binding]",
+        "Options.OPTION[Shortcuts/Electricity Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: 'prąd' (typed without ą), the everyday word for electricity, where the game says 'Elektryczność'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "metro",
+      "expect": ["Infoviews.INFOMODE[Subway Stops]", "Infoviews.INFOMODE[Subway Tracks]"],
+      "expectedMiss": "baseline",
+      "note": "habit, stand-in reviewed: the nominative 'metro' where the labels hold the genitive 'metra'"
+    },
+    {
+      "locale": "pl-PL",
+      "query": "ochrona ppoz",
+      "expect": [
+        "Infoviews.INFOVIEW[FireRescue]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Fire And Rescue Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Fire And Rescue Panel/binding]",
+        "Options.OPTION[Shortcuts/Fire And Rescue Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: the standard abbreviation 'ppoż.' for 'przeciwpożarowa', typed without the dot and the ż"
     },
     {
       "locale": "pt-BR",
@@ -2234,7 +2653,7 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
-      "note": "habit, unreviewed: a player clips the long word 'Estatísticas' to its first syllables, as 'estat' is commonly written for it."
+      "note": "habit, stand-in reviewed: a player types the first letters of the long word 'Estatísticas' and stops once the palette should know what they mean; no other label has a word starting with 'estat' ('estado' splits off at 'esta')."
     },
     {
       "locale": "pt-BR",
@@ -2245,7 +2664,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/City Information Panel/binding]",
         "Options.OPTION[Shortcuts/City Information Panel/binding]"
       ],
-      "note": "habit, unreviewed: a player clips 'Informações' to the everyday 'info' and drops the 'da' between the words."
+      "note": "habit, stand-in reviewed: a player clips 'Informações' to the everyday 'info' and drops the 'da' between the words."
     },
     {
       "locale": "pt-BR",
@@ -2256,17 +2675,17 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Water And Sewage Panel/binding]",
         "Options.OPTION[Shortcuts/Water And Sewage Panel/binding]"
       ],
-      "note": "habit, unreviewed: a player types 'Água' without its acute accent, the way most type on a keyboard without dead keys."
+      "note": "habit, stand-in reviewed: a player leaves the acute off 'Água' out of search-box habit, as Brazilians do in Google and chat, even on an ABNT2 keyboard that has the dead key."
     },
     {
       "locale": "pt-BR",
-      "query": "paisagimo",
+      "query": "paizagismo",
       "expect": [
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Landscaping Panel/binding]",
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Landscaping Panel/binding]",
         "Options.OPTION[Shortcuts/Landscaping Panel/binding]"
       ],
-      "note": "habit, unreviewed: a player typing fast drops the second 's' of 'Paisagismo', a frequent slip in the 'sm' cluster."
+      "note": "habit, stand-in reviewed: a player writes 'z' for the 's' of 'Paisagismo', since an 's' between vowels sounds like /z/: one edit in one word."
     },
     {
       "locale": "pt-BR",
@@ -2276,7 +2695,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: a player types the verb 'salvar' where the label has the noun 'Salvamento', as one says 'salvar rápido' for a quicksave."
+      "note": "habit, stand-in reviewed: a player types the verb 'salvar' where the label has the noun 'Salvamento', as one says 'salvar rápido' for a quicksave."
     },
     {
       "locale": "pt-BR",
@@ -2287,7 +2706,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
         "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
       ],
-      "note": "habit, unreviewed: a player who wants to buy one tile types the singular 'quadrado' where the label has the plural 'Quadrados'."
+      "note": "habit, stand-in reviewed: a player who wants to buy one tile types the singular 'quadrado' where the panel has the plural 'Quadrados'; 'Sair da visualização de quadrado do mapa' holds the exact phrase, yet leaving the view is not what they want."
     },
     {
       "locale": "pt-BR",
@@ -2302,7 +2721,65 @@
         "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]": ["print"],
         "Options.OPTION[Photo mode/Take Photo/binding]": ["print"]
       },
-      "note": "habit, unreviewed: Brazilians call a screenshot a 'print' ('tirar print'), a word absent from the label 'Tirar foto'."
+      "note": "habit, stand-in reviewed: Brazilians call a screenshot a 'print' ('tirar print'), a word absent from the label 'Tirar foto'."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "tiles",
+      "expect": [
+        "Main.TOOLTIP_TITLE_MAP_TILES",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Map Tile Purchase Panel/binding]",
+        "Options.OPTION[Shortcuts/Map Tile Purchase Panel/binding]"
+      ],
+      "note": "habit, stand-in reviewed: Brazilian players say 'comprar tiles' and use the English word, not the translated 'Quadrados', so they find the panel by its en-US label."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "demolir",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]",
+        "Editor.TOOL[BulldozeTool]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: a player who wants to knock a building down types the verb 'demolir'; the tool is labelled 'Buldôzer' and its action 'Escavar'."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "zoneamento",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[Shortcuts/Zones Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: a player names the zoning tool by the activity, 'zoneamento', where the panel is 'Zonas'; 'Fatores de zoneamento' holds the word but is not the tool they want."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "energia",
+      "expect": [
+        "Infoviews.INFOVIEW[Electricity]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Electricity Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Electricity Panel/binding]",
+        "Options.OPTION[Shortcuts/Electricity Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: Brazilians say 'energia' (the 'conta de energia') far more than 'eletricidade'; only infomode labels such as 'Usinas de energia' hold the word, and they must not outrank the panel."
+    },
+    {
+      "locale": "pt-BR",
+      "query": "impostos",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_ECONOMY",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Economy Panel/binding]",
+        "Options.OPTION[Shortcuts/Economy Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: a player who wants to change taxes types 'impostos'; the taxes live in 'Economia da cidade', and no label holds the word."
     },
     {
       "locale": "ru-RU",
@@ -2475,7 +2952,7 @@
       "query": "жд пути",
       "expect": ["Infoviews.INFOMODE[Train Tracks]"],
       "expectedMiss": "baseline",
-      "note": "habit, unreviewed: players write железнодорожные as the initials жд, lowercase and without the slash of ж/д"
+      "note": "habit, stand-in reviewed: players write железнодорожные as the initials жд, lowercase and without the slash of ж/д"
     },
     {
       "locale": "ru-RU",
@@ -2488,7 +2965,7 @@
         "Statistics.PANEL_TITLE"
       ],
       "expectedMiss": "synonym",
-      "note": "habit, unreviewed: gamers clip статистика to the colloquial стата and drop the adjective Городская"
+      "note": "habit, stand-in reviewed: gamers clip статистика to the colloquial стата and drop the adjective Городская"
     },
     {
       "locale": "ru-RU",
@@ -2497,7 +2974,7 @@
         "Options.OPTION[InputSettings.Mouse.Camera/Zoom Mouse/binding]",
         "Options.OPTION[InputSettings.Mouse.Camera/Zoom/binding]"
       ],
-      "note": "habit, unreviewed: the silent с of масштаб is commonly dropped, giving the misspelling маштаб"
+      "note": "habit, stand-in reviewed: the silent с of масштаб is commonly dropped, giving the misspelling маштаб"
     },
     {
       "locale": "ru-RU",
@@ -2507,7 +2984,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Landscaping Panel/binding]",
         "Options.OPTION[Shortcuts/Landscaping Panel/binding]"
       ],
-      "note": "habit, unreviewed: the т of ландшафтный is unpronounced in the фтн cluster and often left out when typing"
+      "note": "habit, stand-in reviewed: ландшафный, without the т, is a frequent misspelling of ландшафтный: the т of the фтн cluster blurs in fast speech, and writers drop it"
     },
     {
       "locale": "ru-RU",
@@ -2516,14 +2993,14 @@
         "Infoviews.INFOMODE[GroundPollutionInfomode]",
         "Infoviews.INFOVIEW[GroundPollution]"
       ],
-      "note": "habit, unreviewed: players say загрязнение почвы in the singular genitive where the label uses the plural почв"
+      "note": "habit, stand-in reviewed: players say загрязнение почвы in the singular genitive where the label uses the plural почв"
     },
     {
       "locale": "ru-RU",
       "query": "сохранение игры",
       "expect": ["Common.ACTION[Save Game]"],
       "expectedMiss": "inflection",
-      "note": "habit, unreviewed: players name the action with the noun сохранение where the label uses the verb Сохранить, so игру also shifts to игры"
+      "note": "habit, stand-in reviewed: players name the action with the noun сохранение where the label uses the verb Сохранить, so игру also shifts to игры"
     },
     {
       "locale": "ru-RU",
@@ -2538,7 +3015,54 @@
         "Options.OPTION[InputSettings.Keyboard.Photo mode/Take Photo/binding]": ["скриншот"],
         "Options.OPTION[Photo mode/Take Photo/binding]": ["скриншот"]
       },
-      "note": "habit, unreviewed: players call taking a picture скрин, slang for скриншот, a word absent from the label Сделать снимок"
+      "note": "habit, stand-in reviewed: players call taking a picture скрин, slang for скриншот, a word absent from the label Сделать снимок"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "cnfnbcnbrf",
+      "expect": [
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE"
+      ],
+      "expectedMiss": "layout",
+      "note": "habit, stand-in reviewed: players type статистика with the keyboard still on the English layout, giving cnfnbcnbrf; Russian users switch layouts dozens of times a day and expect search to undo it (Yandex, Google, Punto Switcher all do)"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "квиксейв",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
+        "Options.OPTION[Shortcuts/Quicksave/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: gamers say квиксейв, the English quicksave written in Cyrillic, rather than the label's Быстрое сохранение"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "фото режим",
+      "expect": [
+        "Common.ACTION[Photo Mode]",
+        "Main.TOOLTIP_TITLE_PHOTO_MODE",
+        "Options.OPTION[InputSettings.Gamepad.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Photo mode/Enter Photo Mode/binding]",
+        "Options.OPTION[Photo mode/Enter Photo Mode/binding]"
+      ],
+      "note": "habit, stand-in reviewed: players split compounds in фото- into two words, writing фото режим where the label has Фоторежим"
+    },
+    {
+      "locale": "ru-RU",
+      "query": "зонирование",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Zones Panel/binding]",
+        "Options.OPTION[Shortcuts/Zones Panel/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: players call the zoning tool зонирование, the word of the guides, where the label says Зоны; Факторы, влияющие на зонирование holds the word but is not what they want"
     },
     {
       "locale": "ru-RU",
@@ -2721,7 +3245,7 @@
       "locale": "zh-HANS",
       "query": "社保局",
       "expect": ["Infoviews.INFOMODE[WelfareOffice Buildings]"],
-      "note": "habit, unreviewed: players shorten 社会保障局 to the everyday 缩写 社保局, first character of 社会 and 保障"
+      "note": "habit, stand-in reviewed: players shorten 社会保障局 to the everyday 缩写 社保局, first character of 社会 and 保障"
     },
     {
       "locale": "zh-HANS",
@@ -2731,7 +3255,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: gamers shorten 快速保存 to the two-character 快存, a short form whose second character is not at the start of its word"
+      "note": "habit, stand-in reviewed: gamers shorten 快速保存 to the two-character 快存, a short form whose second character is not at the start of its word"
     },
     {
       "locale": "zh-HANS",
@@ -2741,7 +3265,7 @@
         "Options.OPTION[Shortcuts/Statistic Panel/binding]",
         "Statistics.PANEL_TITLE"
       ],
-      "note": "habit, unreviewed: players remember the statistics panel by 统计, which sits inside 城市统计数据 after the 城市 prefix"
+      "note": "habit, stand-in reviewed: players remember the statistics panel by 统计, which sits inside 城市统计数据 after the 城市 prefix"
     },
     {
       "locale": "zh-HANS",
@@ -2751,13 +3275,13 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Toggle Follow Selected Citizen/binding]",
         "Options.OPTION[Shortcuts/Toggle Follow Selected Citizen/binding]"
       ],
-      "note": "habit, unreviewed: players drop the translated Toggle prefix 切换 and type the action itself, which sits inside 切换跟随市民"
+      "note": "habit, stand-in reviewed: players drop the translated Toggle prefix 切换 and type the action itself, which sits inside 切换跟随市民"
     },
     {
       "locale": "zh-HANS",
       "query": "电车站",
       "expect": ["Infoviews.INFOMODE[Tram Stops]"],
-      "note": "habit, unreviewed: players call trams 电车 and drop 有轨, so the query sits inside 有轨电车站"
+      "note": "habit, stand-in reviewed: players call trams 电车 and drop 有轨, so the query sits inside 有轨电车站"
     },
     {
       "locale": "zh-HANS",
@@ -2768,7 +3292,7 @@
         "Options.OPTION[InputSettings.Mouse.Camera/Rotate Mouse/trigger]",
         "Options.OPTION[InputSettings.Mouse.Camera/Rotate/trigger]"
       ],
-      "note": "habit, unreviewed: players put the noun first (镜头旋转) where the label puts the verb first (旋转镜头), an order the game itself mixes (缩放镜头 beside 镜头缩放)"
+      "note": "habit, stand-in reviewed: players put the noun first (镜头旋转) where the label puts the verb first (旋转镜头), an order the game itself mixes (缩放镜头 beside 镜头缩放)"
     },
     {
       "locale": "zh-HANS",
@@ -2778,7 +3302,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quickload/binding]",
         "Options.OPTION[Shortcuts/Quickload/binding]"
       ],
-      "note": "habit, unreviewed: mainland players write load as 加载, where the label uses the near-synonym 载入 (快速载入)"
+      "note": "habit, stand-in reviewed: many mainland game translations say 快速加载, so players type 加载 where this label says 载入 (快速载入); both words are mainland, 加载 is the more common one in software"
     },
     {
       "locale": "zh-HANS",
@@ -2793,7 +3317,58 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]": ["拆除"],
         "Options.OPTION[Shortcuts/Bulldozer/binding]": ["拆除"]
       },
-      "note": "habit, unreviewed: players ask for demolition with 拆除, a word the bulldozer label 推土机 never contains"
+      "note": "habit, stand-in reviewed: players ask for demolition with 拆除, a word the bulldozer label 推土机 never contains"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "旋转视角",
+      "expect": [
+        "Options.OPTION[Camera/Rotate Mouse/trigger]",
+        "Options.OPTION[Camera/Rotate/trigger]",
+        "Options.OPTION[InputSettings.Mouse.Camera/Rotate Mouse/trigger]",
+        "Options.OPTION[InputSettings.Mouse.Camera/Rotate/trigger]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: Chinese gamers call the camera 视角, not 镜头, and no label holds 视角"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "快读",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quickload/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quickload/binding]",
+        "Options.OPTION[Shortcuts/Quickload/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: 快读 (快速读档) pairs with 快存; gamers load a save with 读, which no label holds"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "读档",
+      "expect": ["Common.ACTION[Load Game]"],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: 存档/读档 are the gamer verbs for save and load; the label says 载入游戏"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "隐藏ui",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Hide UI/binding]",
+        "Options.OPTION[Shortcuts/Hide UI/binding]"
+      ],
+      "note": "habit, stand-in reviewed: with a pinyin IME, Latin letters typed mid-word come out lowercase, so mixed labels like 隐藏UI are typed 隐藏ui"
+    },
+    {
+      "locale": "zh-HANS",
+      "query": "tlj",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "expectedMiss": "reading",
+      "note": "habit, stand-in reviewed: Chinese launchers and command palettes (Everything, the Obsidian pinyin plugin) match pinyin initials; tlj is 推土机 without opening the IME"
     },
     {
       "locale": "zh-HANT",
@@ -2981,7 +3556,7 @@
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quicksave/binding]",
         "Options.OPTION[Shortcuts/Quicksave/binding]"
       ],
-      "note": "habit, unreviewed: players shorten 快速存檔 to 快存, the first character of each word of the compound"
+      "note": "habit, stand-in reviewed: players shorten 快速存檔 to 快存, the first character of each word of the compound"
     },
     {
       "locale": "zh-HANT",
@@ -2991,7 +3566,7 @@
         "Infoviews.INFOMODE[GroundPollutionInfomode]",
         "Infoviews.INFOVIEW[AirPollution]"
       ],
-      "note": "habit, unreviewed: Taiwanese players say 空汙 for 空氣汙染, the everyday two-character short form of the compound"
+      "note": "habit, stand-in reviewed: Taiwanese players say 空汙 for 空氣汙染, the everyday two-character short form of the compound"
     },
     {
       "locale": "zh-HANT",
@@ -3001,7 +3576,7 @@
         "Options.OPTION[InputSettings.Keyboard.Tool/Toggle Snapping/binding]",
         "Options.OPTION[Tool/Toggle Snapping/binding]"
       ],
-      "note": "habit, unreviewed: a player remembers snapping as 吸附, the word after 切換 inside the unspaced label 切換吸附"
+      "note": "habit, stand-in reviewed: a player remembers snapping as 吸附, the word after 切換 inside the unspaced label 切換吸附"
     },
     {
       "locale": "zh-HANT",
@@ -3009,9 +3584,11 @@
       "expect": [
         "Options.OPTION[InputSettings.Gamepad.Shortcuts/Statistic Panel/binding]",
         "Options.OPTION[InputSettings.Keyboard.Shortcuts/Statistic Panel/binding]",
-        "Options.OPTION[Shortcuts/Statistic Panel/binding]"
+        "Options.OPTION[Shortcuts/Statistic Panel/binding]",
+        "Statistics.PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_CITY_STATISTICS"
       ],
-      "note": "habit, unreviewed: a player looks for the statistics panel by 統計, the word in the middle of the unspaced label 城市統計數據"
+      "note": "habit, stand-in reviewed: a player looks for the statistics panel by 統計, the word in the middle of the unspaced label 城市統計數據; the panel's own title 城市資料 and its tooltip 城市數據 open the same panel"
     },
     {
       "locale": "zh-HANT",
@@ -3020,23 +3597,70 @@
         "Infoviews.INFOMODE[NoisePollutionInfomode]",
         "Infoviews.INFOVIEW[NoisePollution]"
       ],
-      "note": "habit, unreviewed: Hong Kong players and many IMEs commit the variant 污 where the label writes the Taiwan standard 汙"
+      "note": "habit, stand-in reviewed: the label writes the Ministry of Education standard 汙, but 污 is the everyday form in Taiwan (the law itself is the 空氣污染防制法) and the only form in Hong Kong, and Zhuyin and Cangjie IMEs commit 污 for 污染"
     },
     {
       "locale": "zh-HANT",
       "query": "捷運站",
       "expect": ["Infoviews.INFOMODE[Subway Stops]"],
       "expectedMiss": "synonym",
-      "note": "habit, unreviewed: Taiwanese players call the subway 捷運, where the label uses the Hong Kong and mainland term 地鐵站"
+      "note": "habit, stand-in reviewed: Taiwanese players call the subway 捷運, where the label uses the Hong Kong and mainland term 地鐵站"
     },
     {
       "locale": "zh-HANT",
       "query": "地價",
       "expect": ["Infoviews.INFOMODE[LandValueInfomode]", "Infoviews.INFOVIEW[LandValue]"],
-      "aliases": {
-        "Infoviews.INFOVIEW[LandValue]": ["地價"]
-      },
-      "note": "habit, unreviewed: players say 地價 for land value, a common term whose characters are not contiguous in the label 土地價值"
+      "note": "habit, stand-in reviewed: players say 地價 (as in 公告地價) for land value; the label 土地價值 holds it as a contiguous run that crosses the word boundary 土地|價值, so a search that segments words would miss it"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "快讀",
+      "expect": [
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Quickload/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Quickload/binding]",
+        "Options.OPTION[Shortcuts/Quickload/binding]"
+      ],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: 快讀 (quick read) pairs with 快存 in gamer slang, where the label says 快速載入 and holds no 讀"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "電臺",
+      "expect": [
+        "Radio.PANEL_TITLE",
+        "Main.TOOLTIP_TITLE_RADIO",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Radio Panel/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Radio Panel/binding]",
+        "Options.OPTION[Shortcuts/Radio Panel/binding]"
+      ],
+      "expectedMiss": "baseline",
+      "note": "habit, stand-in reviewed: 臺 is the Taiwan standard form and many players and IMEs commit it, where the label writes the common variant 台"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "巴士站",
+      "expect": ["Infoviews.INFOMODE[Bus Stops]"],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: Hong Kong players say 巴士 for bus, where the label uses the Taiwan term 公車站"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "腳踏車",
+      "expect": ["Infoviews.INFOVIEW[Bicycles]"],
+      "expectedMiss": "synonym",
+      "note": "habit, stand-in reviewed: Taiwanese say 腳踏車 for bicycle in everyday speech, where the labels use 單車"
+    },
+    {
+      "locale": "zh-HANT",
+      "query": "bulldoze",
+      "expect": [
+        "Common.ACTION[Bulldoze]",
+        "Editor.TOOL[BulldozeTool]",
+        "Options.OPTION[InputSettings.Gamepad.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[InputSettings.Keyboard.Shortcuts/Bulldozer/binding]",
+        "Options.OPTION[Shortcuts/Bulldozer/binding]"
+      ],
+      "note": "habit, stand-in reviewed: players who learned the game from English guides and videos type the English tool name without switching the IME out of English mode"
     }
   ]
 }
