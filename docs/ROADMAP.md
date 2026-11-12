@@ -6,17 +6,11 @@ Every entry opens with a triage line: **Priority** (high, medium, low) and **Cos
 
 An entry is removed once its work is done.
 
-## State and sub-actions in the results
-
-**Priority:** high · **Cost:** moderate
-
-The registry already hands a row and a pin their state: its shape (a toggle, a number, a choice, a text), its live value, and whether the player can set it. What is left is the UI. A result row shows, on its right, the state the action holds (a toggle on or off, the current value, the active mode) and its sub-actions where it has several, so the player reads the state and changes it without leaving the row: a toggle flips in place, a value edits inline, a sub-action is picked with the arrow keys. A pinned action shows the same state on its toolbar button. Which key reaches the row's control is settled against the running UI: one that types into the query box cannot be it, and moving focus into the row is the first candidate.
-
 ## Actions that take over the palette
 
 **Priority:** high · **Cost:** large
 
-An action can do more than call up the vanilla panel it stands for: invoked, it replaces the results with a view of its own, inside the palette. Load Game is the first case: instead of opening the game's load panel, it lists the saves where the results were, the query filters them, and Enter loads the one picked; Escape steps back to the actions. The search bar is a dynamic environment: what the box searches, what the rows are and what Enter does belong to the action in charge. The action model was built for a bare invoke and changes wherever this needs it: no choice already made closes a door here. A free-text subject, a prefix scope and a named thing picked as a subject are the same mechanism seen from other entries.
+An action can do more than call up the vanilla panel it stands for: invoked, it replaces the results with a view of its own, inside the palette. Load Game is the first case: instead of opening the game's load panel, it lists the saves where the results were, the query filters them, and Enter loads the one picked; Escape steps back to the actions. The search bar is a dynamic environment: what the box searches, what the rows are and what Enter does belong to the action in charge. The action model was built for a bare invoke and changes wherever this needs it: no choice already made closes a door here. A free-text subject, a prefix scope and a named thing picked as a subject are the same mechanism seen from other entries. The palette's scopes, an option list for a choice and a prompt for a value, are what takeover extends. Open: Tab entering a row's scope when a row holds both an act and a scope, the footer naming both keys.
 
 ## Settings as actions
 
@@ -28,7 +22,7 @@ The game's and the mods' settings are searchable like actions, with a quick inli
 
 **Priority:** high · **Cost:** moderate
 
-When an action needs a subject and is invoked bare, Do It activates a pick tool, the action runs on what the player clicks, and Escape cancels and restores the previous tool. Only where possible: an entity the player can click qualifies, a prefab opens the asset search instead, a free-text subject prompts in the palette. FindIt's picker and the game's `Selection Tool` are the models.
+When an action needs a subject and is invoked bare, Do It activates a pick tool, the action runs on what the player clicks, and Escape cancels and restores the previous tool. Only where possible: an entity the player can click qualifies, a prefab opens the asset search instead, a free-text subject prompts in the palette, and so does a number, on the palette's value prompt. FindIt's picker and the game's `Selection Tool` are the models.
 
 ## Game actions as the first source
 
@@ -36,13 +30,19 @@ When an action needs a subject and is invoked bare, Do It activates a pick tool,
 
 Hook into the game's own actions: the input actions of the tool system and the UI (open a panel, pick a tool, a photo mode toggle), the simulation controls, selection operations. Reach each one by a direct call where the API is public, by reflection where it is not; `DoIt/Reflection` holds the accessors. The input manager enumerates every action with its current keys, and the Shortcuts map's action names are the UI's alias names, so the catalogue starts from it. Catalogue what the game exposes before picking the first batch, and keep the catalogue in a doc an agent can grow.
 
-The seed pause action fires `Pause Simulation`, which the game handles only while the simulation runs: Enter on it does nothing while paused, though its toggle reads on and resumes from the row's control. An input channel falling back to `Resume Simulation` when `Pause Simulation` has no handler would make Enter toggle.
+The main menu and the editor have their seed actions and wait on their catalogue.
 
 ## Isolating the game's systems from each other
 
 **Priority:** high · **Cost:** moderate
 
 `GameActionSource` will grow into one source over many unrelated game systems, and the registry isolates failures per source: a game update that retires or changes one system throws from the source's `List()` and takes every game action down with it. Contain a failure to the system it comes from, by splitting the game source into one source per system or by isolating each system's actions inside it, so the rest of the game's actions keep working and the log names the system that broke. Settle it before the game source grows past its seed actions.
+
+## Action outcomes and feedback
+
+**Priority:** high · **Cost:** large
+
+An action that takes time or fails shows the player nothing: Enter closes the palette at once, and a throw only logs and greys the row. Give an invoke an outcome and a place to show it, settled before the bridges and the registration API are written against the invoke contract, so worked right after the palette. Its spec answers: a reported failure against a fault that disables the action; a task that never ends, and cancelling it; a task ending after the screen changed; the thread a foreign task completes on; and a feedback surface that serves a pinned button, a bound key and a macro step as well as the palette. Two ideas to weigh: a toast outside the palette, running then done or failed with its reason, and a spinner on the row while the palette stays open. It opens with research on what the best palettes show after an invoke.
 
 ## Bridges to installed mods
 
@@ -66,7 +66,7 @@ Opened by a key binding, `Alt+Space` the first candidate, rebindable in the sett
 
 **Priority:** high · **Cost:** large
 
-Pin any palette action to a toolbar for one-click access, from its palette row with one key, with the same availability rules, ordered and grouped by the player by drag, persisted in the settings. A pinned action without an icon shows its initials. Where it docks is the next entry's.
+Pin any palette action to a toolbar for one-click access, from its palette row with one key, with the same availability rules, ordered and grouped by the player by drag, persisted in the settings. A pinned action without an icon shows its initials, and shows its state on its button: a toggle on or off, the current value, the active mode. The toolbar takes over the button that opens the palette. Where it docks is the next entry's.
 
 ## Docking the toolbar
 
@@ -108,7 +108,7 @@ Bind a key to any palette action from its row, so Do It is also the shortcuts hu
 
 **Priority:** medium · **Cost:** cheap
 
-A leading character switches what the query searches, VS Code style: actions by default, `#` settings, `@` named things in the city, `/` prefabs. One key binding, one box. A hint row lists the prefixes while the box is empty, so a player finds them without reading anything.
+A leading character switches what the query searches, VS Code style: actions by default, `#` settings, `@` named things in the city, `/` prefabs. One key binding, one box. A hint row lists the prefixes while the box is empty, so a player finds them without reading anything. A prefix scope extends the scope the palette's query carries, and Tab is kept free for it or for takeover.
 
 ## Named things as subjects
 
@@ -132,7 +132,7 @@ A toolbar that appears with a tool or a selection, like the game's own tool opti
 
 **Priority:** low · **Cost:** cheap
 
-Load a save by name, open an options page, start the editor: the game's screens and `menu.*` triggers cover it, and the availability predicate already knows the main menu. Check with players whether the main menu is where they want a palette before polishing it.
+The palette opens on the main menu with its seed actions. What is left: load a save by name, which the takeover entry carries, open an options page, start the editor, and continue or exit once an action can ask for a confirmation or carry the vanilla button's checks; the game's screens and `menu.*` triggers cover it.
 
 ## Macros
 
@@ -145,3 +145,15 @@ A pinned sequence of actions as one toolbar item. The hard parts are passing a s
 **Priority:** low · **Cost:** moderate
 
 Since every row shows the game's own key, the palette teaches the shortcuts. A "show me" on a row highlights where the action lives in the game's UI. Highlighting a vanilla element from a mod must survive the game's restyles, so anchor on the element's binding or action name rather than its class names.
+
+## A state with several values on at once
+
+**Priority:** medium · **Cost:** moderate
+
+A fifth state shape beside toggle, number, choice and text: a set of options with several on at once, shown as a scope whose rows tick, as Linear's command menu does. Until then a mod registers one toggle action per option. Open: the key that ticks a row, since Space types into the box.
+
+## The palette on a controller
+
+**Priority:** low · **Cost:** unsure
+
+The palette is keyboard and mouse only and closes when a gamepad takes over. What it becomes on a controller is open, with two paths: typing through the game's virtual keyboard, which its own text field supports, or a browsable list of recent and pinned actions with no typing, which waits on the toolbar's pins.
