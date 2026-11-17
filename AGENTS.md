@@ -54,7 +54,7 @@ TypeScript, one root `tsconfig.json` covering `DoIt/UI` and `scripts`:
 - `DoIt/UI/cs2-types`: the game's own `cs2/*` type declarations, copied as they are. Copy them again after a game update, never edit them by hand.
 - `DoIt.Tests`: the off-engine C# tests, with the native-call shim (`Shim`).
 - `scripts`: bun scripts behind mise tasks, their tests colocated.
-- `docs/ROADMAP.md`: planned work no ticket holds yet, each entry with a priority and a cost; `docs/agents`: `dependency-updates.md`, the packages a sweep left behind and why; `cantrips-loop.md`, where the cantrips skills keep their specs and tickets.
+- `docs/agents`: `dependency-updates.md`, the packages a sweep left behind and why; `cantrips-loop.md`, where the cantrips skills keep their specs and tickets.
 
 ## Commands
 
