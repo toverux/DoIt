@@ -23,7 +23,7 @@ The game must be closed for the build steps.
 ## 3. What the mod anchors into
 
 - **The UI test harness.** `mise test:ui`: an "anchor not found" error means the bundle's React wrapper modules moved, and the `doit-ui-testing` skill's harness internals say how to find them again.
-- **The vanilla stubs.** Each module path and export under [`UI/src/vanilla-modules`](../../../DoIt/UI/src/vanilla-modules) still exists in the readable bundle, with the props the stub declares. A missing one falls back at runtime and reports once in the game's error dialog, so a broken stub can pass every test.
+- **The vanilla stubs.** Each module path and export under [`UI/src/vanilla-modules`](../../../DoIt/UI/src/vanilla-modules) still exists in the readable bundle, with the props the stub declares. A missing one falls back at runtime and reports once in the game's error dialog; `vanilla-modules.test.ts` fails on a missing module or export, and a prop the stub declares is checked against the bundle by hand.
 - **The reflection accessors.** Each private member a class of [`Reflection`](../../../DoIt/Reflection) reaches still exists in the decompile under that name, with that signature: a missing one fails only when the mod first reaches it.
 - **The UI anchors.** Every location the mod's registrars append to or extend is still a registry location in the bundle, and what the mod adds there shows in the game (step 5).
 - **The toolchain hooks.** The csproj relies on the toolchain's `Mod.targets` (in `$CSII_TOOLPATH`) for the `DeployWIP` and `ModPostProcessorConfig` targets, the `NeedBuild` property its cleanup and post-build targets check, and the ` -p macOS` and ` -p Linux` flags of `ModPostProcessorArgs` the Debug Burst trim strips: each is still there under that name.

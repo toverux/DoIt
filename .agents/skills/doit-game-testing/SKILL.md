@@ -7,7 +7,7 @@ description: Write and run the mod's in-game test scenarios, which the game's ow
 
 An in-game **scenario** is a class the game's test framework (`Colossal.TestFramework`) runs inside the game: it loads what it needs, drives the mod's systems, and logs one line per check to `Logs/TestScenarios.log` in the game's user data folder.
 It is the slowest layer, a full game boot per run: pin here only what needs the live game, and test pure logic off-engine.
-The `cs2-modding` skill's test-framework reference holds the framework's traps, the scenarios it reports a success without running a test among them: read it before writing a scenario or reading a run.
+The `cs2-modding` skill's game cycle holds the framework's traps, a success reported for a scenario that ran no test among them: read it before writing a scenario or reading a run.
 
 ## Run
 
@@ -30,12 +30,14 @@ A scenario takes this shape:
 - The framework runs, in order: the constructor, `OnPrepare`, then for each `[Test]` method its `[TestPrepare]` method, the test and its `[TestCleanup]` method, then `OnCleanup`, whatever failed before.
   Test methods are private, return `void` or `Task` (a returned task is awaited, and the exception it holds fails the test) and carry `[UsedImplicitly]`.
   The framework takes one `[TestPrepare]` method per scenario, and `ModTestScenario` holds it: what a test needs first goes at the start of the test.
-- Start a new city with `await this.StartNewCity(<map guid>, <city name>)`, after setting what a new city reads at creation, `TimeSystem.startingYear` for one; Archipelago, `bf8036b291428535b986c757fda3e627`, is in the base game. No save ships with the mod.
-  The load ends a few frames after it returns, when `SimulationSystem` sets the speed from the player's paused-after-loading setting: `await this.WaitFrames(60)` before setting `selectedSpeed`, which that write overrides otherwise.
+- Start a new city with `await this.StartNewCity(ModTestScenario.Archipelago, <city name>)`, which sets what a new city reads at creation, its starting year among them (the current one unless passed), and returns once the load has ended. Archipelago is in the base game; no save ships with the mod.
 - **Start every other load from the game loop**, as `StartNewCity` does: `await this.WaitFrames(2)` before `GameManager.instance.Load`. A load started from the scenario's caller, the unity eval for one, holds the main thread the load needs, and the game must be killed.
+- The tests of one scenario can share its city: each opens on a guard that starts the city unless an earlier test did, as [`PaletteScenario`](../../../DoIt/Scenarios/PaletteScenario.cs)'s `EnsureCity` does, and its `[TestCleanup]` method puts back what a test leaves, so the next one starts clean.
 - Put back in `OnCleanup` whatever the scenario changed that outlives it (a setting, a saved value), then return `base.OnCleanup()`, which returns to the main menu.
 - [`ModTestScenario`](../../../DoIt/Scenarios/ModTestScenario.cs) dismisses in its constructor the errors pending from before the scenario, which would abort it, and logs how many; an error of the mod's among them still fails the `test` run.
-- Reach the UI side with `GameManager.instance.userInterface.view.View.ExecuteScript(<js>)`, then `await this.WaitFrames(5)` for the view to deliver what the script fired, as [`ActionsScenario`](../../../DoIt/Scenarios/ActionsScenario.cs) does: `engine.trigger('<group>.<name>', ...)` fires a binding's trigger, and `doItDebug.<entry>(...)` calls a Debug entry point of the UI, which a Debug bundle mounts in the game's view from [`DoIt/UI/src/debug`](../../../DoIt/UI/src/debug), the UI-side executors among them. Check the effect from C#.
+- Reach the UI side with `await this.RunScript(<js>)`, which runs the script in the game's view and waits for the view to deliver what it fired: `engine.trigger('<group>.<name>', ...)` fires a binding's trigger, and `doItDebug.<entry>(...)` calls a Debug entry point of the UI, which a Debug bundle defines from the feature it drives, the UI-side executors among them, each declared in [`entry-points.ts`](../../../DoIt/UI/src/debug/entry-points.ts). Check the effect from C#.
+- Send keys and pointer moves as the player's devices do through a [`NativeInput`](../../../DoIt/Scenarios/NativeInput.cs), disposed at the test's end, which reaches the game with its window in the background. `this.WaitSeconds` waits real time where `WaitFrames` counts frames, whose length the frame cap sets: a key's repeat delay is in seconds.
+- A check that nothing happened carries its control, as `AGENTS.md`'s test rule says: run the same input where it does happen right after it, in the same test.
 - Time UI-side work with `Date.now()` over a batch of runs: `performance.now()` holds still within one script run (`~/Documents/grimoire/notes/gameface-quirks.md`).
 - Report each check with `this.Check(<passed>, <what was read>)`, which logs a `[PASSED]` or `[FAILED]` line, and end each test on `this.Finish()`, which fails it when one of its checks failed: a run reports every check and not only the first.
 - Keep a check's expected values in the mod's code, beside the logic, when an off-engine test can check them too: one table that the off-engine tests and the scenario both read.
