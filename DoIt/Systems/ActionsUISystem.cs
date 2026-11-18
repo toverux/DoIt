@@ -26,6 +26,7 @@ namespace DoIt.Systems;
 /// running game, searches it on the query trigger, runs its C# calls on the invoke trigger, sets a
 /// state on the set-state trigger, and records the use of an action the UI fired on its side on the
 /// invoked trigger.
+/// It also carries the palette's open key, as an <see cref="InputActionBinding"/>.
 /// </para>
 /// <para>
 /// It re-reads the live parts of the current rows and of the pinned actions right after each of
@@ -130,6 +131,16 @@ internal sealed partial class ActionsUISystem : UISystemBase {
           ActionsUISystem.BindingGroup,
           "setState",
           this.OnSetState
+        )
+      );
+
+      // The UI subscribes to the key's phase only where the palette can open, which is what enables
+      // its action.
+      this.AddBinding(
+        new InputActionBinding(
+          ActionsUISystem.BindingGroup,
+          "openPalette",
+          Mod.Settings.OpenPaletteBinding
         )
       );
 

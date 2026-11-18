@@ -6,7 +6,7 @@ import {
   InputRootContext,
   type RootInputController
 } from '../../vanilla-modules/game-ui/common/input-events/input-controller';
-import type { ProxyBinding } from './input-action';
+import { bindInputAction, type ProxyBinding } from './input-action';
 import { lazyBindValue } from './lazy-value-binding';
 
 const GROUP = 'doIt.actions';
@@ -173,6 +173,13 @@ const nullEntity: Entity = { index: 0, version: 0 };
 const results$ = lazyBindValue<ActionResults>(GROUP, 'results', { sequence: 0, rows: [] });
 
 const pinnedLive$ = lazyBindValue<readonly ActionLive[]>(GROUP, 'pinnedLive', []);
+
+/**
+ * The key that opens the palette, see C# `DoIt.Settings.OpenPaletteBinding`.
+ * Its action is enabled only while a component subscribes to its phase, so subscribe only where the
+ * palette can open.
+ */
+export const openPaletteAction = bindInputAction(GROUP, 'openPalette');
 
 /**
  * Subscribes to the results of the latest query C# answered.

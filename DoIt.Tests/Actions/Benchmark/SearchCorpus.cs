@@ -13,8 +13,6 @@ namespace DoIt.Tests.Actions.Benchmark;
 /// install at test time: no game text is committed.
 /// </summary>
 internal sealed class SearchCorpus {
-  private const string InstallVariable = "CSII_INSTALLATIONPATH";
-
   /// <summary>
   /// The families of labels that name something a player does: shortcuts, the actions of the game's
   /// input hints, info views and their modes, tool modes, editor tools, and panel titles.
@@ -38,7 +36,7 @@ internal sealed class SearchCorpus {
   ];
 
   private static readonly Lazy<(SearchCorpus? Corpus, string Why)> Installed =
-    new(static () => SearchCorpus.Load(SearchCorpus.ReadInstallPath()));
+    new(static () => SearchCorpus.Load(GameInstall.ReadPath()));
 
   // [PERF] Each locale's labels, filtered and sorted once, in place of on every call.
   private readonly ConcurrentDictionary<string, List<CorpusLabel>> labels = new();
@@ -72,7 +70,7 @@ internal sealed class SearchCorpus {
   /// </summary>
   internal static (SearchCorpus? Corpus, string Why) Load(string? installPath) {
     if (string.IsNullOrEmpty(installPath)) {
-      return (null, SearchCorpus.NotRun($"{SearchCorpus.InstallVariable} is not set"));
+      return (null, SearchCorpus.NotRun($"{GameInstall.Variable} is not set"));
     }
 
     var archive = Path.Combine(installPath, "Cities2_Data", "Content", "Game", "Locale.cok");
@@ -121,16 +119,6 @@ internal sealed class SearchCorpus {
       .FirstOrDefault();
 
   private static string NotRun(string reason) => $"The search benchmark did not run: {reason}.";
-
-  /// <summary>
-  /// Read user scope first, then from the process, as Linux has no user scope.
-  /// </summary>
-  private static string? ReadInstallPath() {
-    const string name = SearchCorpus.InstallVariable;
-
-    return Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.User) ??
-      Environment.GetEnvironmentVariable(name);
-  }
 }
 
 /// <summary>

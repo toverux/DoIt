@@ -1,11 +1,8 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Colossal;
 using Colossal.TestFramework;
 using DoIt.Actions;
 using DoIt.Systems;
-using Game.SceneFlow;
 using Game.Simulation;
 using Game.Tools;
 using Game.UI.InGame;
@@ -19,8 +16,6 @@ namespace DoIt.Scenarios;
 /// </summary>
 [TestDescriptor("DoIt: Actions", ScenarioRegistry.ScenarioCategory)]
 internal sealed class ActionsScenario : ModTestScenario {
-  private static readonly Hash128 Archipelago = Hash128.Parse("bf8036b291428535b986c757fda3e627");
-
   [Test]
   [UsedImplicitly]
   private async Task QueryAndInvoke_ActivateTheBulldozer() {
@@ -106,9 +101,6 @@ internal sealed class ActionsScenario : ModTestScenario {
     var pauseId = new ActionId("game", "Pause Simulation").ToString();
     var speedId = new ActionId("game", "Simulation Speed").ToString();
 
-    // The load sets the speed a few frames after it returns, which would override the one below.
-    await this.WaitFrames(60);
-
     // Runs at the second speed, the game's index 1, so the speed row has a value to show.
     simulationSystem.selectedSpeed = 2;
 
@@ -148,33 +140,18 @@ internal sealed class ActionsScenario : ModTestScenario {
     await this.Finish();
   }
 
-  private async Task StartCity() {
-    // The new game screen sets the starting year, which a scenario's load does not: left at zero,
-    // reading the city's date throws, for the game and every mod reading it.
-    this.World.GetExistingSystemManaged<TimeSystem>().startingYear = DateTime.Now.Year;
-
-    await this.StartNewCity(ActionsScenario.Archipelago, "Do It Actions");
-  }
+  private Task StartCity() => this.StartNewCity(ModTestScenario.Archipelago, "Do It Actions");
 
   /// <summary>
   /// Runs an action of the latest results as the palette would, through the UI's Debug entry point,
   /// then waits a few frames for the view to deliver what it fired.
   /// </summary>
-  private async Task RunInTheUI(string id) {
-    GameManager.instance.userInterface.view.View.ExecuteScript($"doItDebug.runAction('{id}');");
-
-    await this.WaitFrames(5);
-  }
+  private Task RunInTheUI(string id) => this.RunScript($"doItDebug.runAction('{id}');");
 
   /// <summary>
   /// Fires a trigger of the actions group from the UI's script context, its arguments written as
   /// JavaScript, then waits a few frames: the view delivers the trigger on its own update.
   /// </summary>
-  private async Task Trigger(string name, params string[] args) {
-    GameManager.instance.userInterface.view.View.ExecuteScript(
-      $"engine.trigger('doIt.actions.{name}', {string.Join(", ", args)});"
-    );
-
-    await this.WaitFrames(5);
-  }
+  private Task Trigger(string name, params string[] args) =>
+    this.RunScript($"engine.trigger('doIt.actions.{name}', {string.Join(", ", args)});");
 }

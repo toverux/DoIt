@@ -44,6 +44,8 @@
 
   <ItemGroup>
     <None Update="Actions/Benchmark/search-cases.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\DoIt\UI\src\palette\key-codes.json" Link="UI\key-codes.json"
+          CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

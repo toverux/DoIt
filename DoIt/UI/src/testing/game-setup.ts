@@ -168,6 +168,10 @@ function bootstrap(): void {
   // oxlint-disable-next-line typescript/no-extraneous-class - minimal stub the bundle needs at load
   globals.CanvasRenderingContext2D = class CanvasRenderingContext2D {};
 
+  // The tests run what a Debug bundle holds, Debug entry points included: `build.ts` defines this
+  // for a Debug build.
+  globals.DEBUG = true;
+
   // The cohtml engine the bundle binds to. Defining it before load flips the bundle to its
   // "attached" mode; a no-op `BindingsReady` keeps the app from auto-booting (its `whenReady` never
   // fires), so only our test trees render.

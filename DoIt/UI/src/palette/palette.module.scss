@@ -1,0 +1,33 @@
+@use "sass:color";
+@use "../vanilla-vars" as vanilla;
+
+// The layer over the whole screen, which takes every click outside the panel.
+.palette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 160rem;
+  pointer-events: auto;
+
+  &-panel {
+    width: 640rem;
+    padding: 8rem;
+    border-radius: 4rem;
+    background-color: vanilla.$panel-color-normal;
+    backdrop-filter: vanilla.$panel-blur;
+  }
+
+  &-box {
+    width: 100%;
+    padding: 8rem 12rem;
+    border-radius: 4rem;
+    background-color: color.change(vanilla.$panel-color-dark, $alpha: 0.6);
+    color: vanilla.$text-color;
+    font-size: vanilla.$font-size-l;
+  }
+}

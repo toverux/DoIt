@@ -1,6 +1,7 @@
 using Colossal.IO.AssetDatabase;
 using Colossal.UI.Binding;
 using DoIt.Utils;
+using Game.Input;
 using Game.Modding;
 using Game.Settings;
 using JetBrains.Annotations;
@@ -8,8 +9,20 @@ using JetBrains.Annotations;
 namespace DoIt;
 
 [FileLocation($"{Settings.Folder}/{nameof(DoIt)}")]
-[SettingsUIGroupOrder(Settings.GroupAdvanced)]
-[SettingsUIShowGroupName(Settings.GroupAdvanced)]
+[SettingsUIGroupOrder(Settings.GroupKeyBindings, Settings.GroupAdvanced)]
+[SettingsUIShowGroupName(Settings.GroupKeyBindings, Settings.GroupAdvanced)]
+// Usages only scope the game's conflict check: the default set is the city's, plus the two other
+// screens the palette opens on.
+[SettingsUIKeyboardAction(
+  Settings.OpenPaletteAction,
+  Usages.kDefaultUsage,
+  Usages.kOverlayUsage,
+  Usages.kToolUsage,
+  Usages.kCancelableToolUsage,
+  Usages.kDiscardableToolUsage,
+  Usages.kMenuUsage,
+  Usages.kEditorUsage
+)]
 public sealed class Settings : ModSetting, IJsonWritable {
   /// <summary>
   /// The mod's folder under the game's user data, which holds the settings file and the mod's own
@@ -17,11 +30,25 @@ public sealed class Settings : ModSetting, IJsonWritable {
   /// </summary>
   internal const string Folder = $"ModsSettings/{nameof(DoIt)}";
 
+  /// <summary>
+  /// The input action of <see cref="OpenPaletteBinding"/>, in the mod's action map.
+  /// </summary>
+  internal const string OpenPaletteAction = "OpenPalette";
+
+  private const string GroupKeyBindings = "KeyBindings";
+
   private const string GroupAdvanced = "Advanced";
 
   public Settings(IMod mod) : base(mod) {
     this.SetDefaults();
   }
+
+  /// <summary>
+  /// The key that opens the command palette, and closes it again.
+  /// </summary>
+  [SettingsUISection(Settings.GroupKeyBindings)]
+  [SettingsUIKeyboardBinding(BindingKeyboard.K, Settings.OpenPaletteAction, ctrl: true)]
+  public ProxyBinding OpenPaletteBinding { get; set; }
 
   [SettingsUIButton]
   [SettingsUIConfirmation]
