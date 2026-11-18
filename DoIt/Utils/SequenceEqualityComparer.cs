@@ -9,7 +9,7 @@ namespace DoIt.Utils;
 /// </summary>
 internal sealed class SequenceEqualityComparer<T> : EqualityComparer<IReadOnlyList<T>> {
   public override bool Equals(IReadOnlyList<T>? x, IReadOnlyList<T>? y) =>
-    ReferenceEquals(x, y) || (x is not null && y is not null && x.SequenceEqual(y));
+    object.ReferenceEquals(x, y) || (x is not null && y is not null && x.SequenceEqual(y));
 
   public override int GetHashCode(IReadOnlyList<T> list) => list.Count;
 }
